@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: Movish
+    version: 1.0
+
+  datasource:
+    url: ${POSTGRES_MOVISH_URL}
+    username: ${POSTGRES_MOVISH_USER}
+    password: ${POSTGRES_MOVISH_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+api:
+  catalog:
+    base-url: ${PROV1_MOVISH_URL}
+    token: ${PROV1_MOVISH_K}
