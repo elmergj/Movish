@@ -1,13 +1,19 @@
 package io.github.elmergj.movish.api.interfaces.rest.library;
 
+import io.github.elmergj.movish.api.application.Result.FailureResult;
+import io.github.elmergj.movish.api.application.Result.SuccessResult;
 import io.github.elmergj.movish.api.application.library.LibraryService;
 import io.github.elmergj.movish.api.application.library.command.DeleteUserTitleCommand;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.UserTitleAlreadyInLibrary;
 import io.github.elmergj.movish.api.application.library.command.SaveTitleToLibraryCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleFavoriteStatusCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrackingStatusCommand;
 import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -28,9 +35,11 @@ import java.net.URI;
 public class LibraryController {
 
     private final LibraryService libraryService;
+    private final ResponseEntityExceptionHandler responseEntityExceptionHandler;
 
     @PostMapping("/title")
-    public ResponseEntity<UserTitleCreationResponse> addTitleToLibrary(
+//    public ResponseEntity<ApiResponse> addTitleToLibrary(
+    public ResponseEntity<?> addTitleToLibrary(
             @AuthenticationPrincipal String userId,
             @Valid @RequestBody AddTitleToLibraryRequest request) {
 
@@ -38,19 +47,21 @@ public class LibraryController {
 
         var outcome = libraryService.createUserTitle(command);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{uriResponse}")
-                .buildAndExpand(outcome.id()).toUri();
-
-        var response = new UserTitleCreationResponse(
-                outcome.tmdbId(),
-                outcome.titleName(),
-                outcome.TrackingStatus(),
-                outcome.dateAdded(),
-                outcome.tmdbRating()
-        );
-
-        return ResponseEntity.created(location).body(response);
+        return switch (outcome){
+            case SuccessResult(var result) ->
+                    ResponseEntity.created(
+                            ServletUriComponentsBuilder
+                                    .fromCurrentRequest()
+                                    .path("/{uriResponse}")
+                                    .buildAndExpand(result.id()).toUri())
+                            .body(new UserTitleCreationResponse(
+                                    result.tmdbId(),
+                                    result.titleName(),
+                                    result.TrackingStatus(),
+                                    result.dateAdded(),
+                                    result.tmdbRating()));
+            case FailureResult(UserTitleAlreadyInLibrary reason) -> ResponseEntity.badRequest().body("The title with id" + reason.userTitleId() + " already exists");
+        };
     }
 
     @GetMapping("/{titleId}")

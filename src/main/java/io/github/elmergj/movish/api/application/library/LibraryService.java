@@ -1,14 +1,17 @@
 package io.github.elmergj.movish.api.application.library;
 
+import io.github.elmergj.movish.api.application.Result;
+import io.github.elmergj.movish.api.application.Result.FailureReason;
 import io.github.elmergj.movish.api.application.catalog.TitleCatalogService;
+import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleCreationOutcome;
+import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleDeletionOutcome;
+import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleFavoriteOutcome;
+import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleTrackingUpdateOutcome;
 import io.github.elmergj.movish.api.application.library.command.DeleteUserTitleCommand;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.UserTitleAlreadyInLibrary;
 import io.github.elmergj.movish.api.application.library.command.SaveTitleToLibraryCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleFavoriteStatusCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrackingStatusCommand;
-import io.github.elmergj.movish.api.application.library.command.UserTitleCreationOutcome;
-import io.github.elmergj.movish.api.application.library.command.UserTitleDeletionOutcome;
-import io.github.elmergj.movish.api.application.library.command.UserTitleFavoriteOutcome;
-import io.github.elmergj.movish.api.application.library.command.UserTitleTrackingUpdateOutcome;
 import io.github.elmergj.movish.api.application.library.query.TitleDetails;
 import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsQuery;
 import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsView;
@@ -37,7 +40,7 @@ public class LibraryService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public UserTitleCreationOutcome createUserTitle(SaveTitleToLibraryCommand command){
+    public Result<UserTitleCreationOutcome, UserTitleAlreadyInLibrary> createUserTitle(SaveTitleToLibraryCommand command){
 
         UserId userId = UserId.from(command.userId());
 
@@ -51,16 +54,20 @@ public class LibraryService {
 
         userTitleRepository.save(userTitle);
 
-        return new UserTitleCreationOutcome(
-                userTitle.id().value(),
-                title.name(),
-                //Ignore title.imdbId(),
-                title.id().value(),
-                //Ignore title.imdbTitleRating().value(),
-                title.tmdbTitleRating().value(),
-                userTitle.getTrackingStatus().name(),
-                userTitle.getDateAdded().toString()
-        );
+        if (true){
+            return Result.success(new UserTitleCreationOutcome(
+                    userTitle.id().value(),
+                    title.name(),
+                    //Ignore title.imdbId(),
+                    title.id().value(),
+                    //Ignore title.imdbTitleRating().value(),
+                    title.tmdbTitleRating().value(),
+                    userTitle.getTrackingStatus().name(),
+                    userTitle.getDateAdded().toString()
+            ));
+        }
+
+        return Result.failure(new UserTitleAlreadyInLibrary(userTitle.id().value()));
     }
 
     public UserTitleDetailsView getUserTitleDetails(UserTitleDetailsQuery query){
@@ -87,7 +94,7 @@ public class LibraryService {
     }
 
     @Transactional
-    public UserTitleFavoriteOutcome updateUserTitleFavoriteStatus(UpdateTitleFavoriteStatusCommand command){
+    public Result<UserTitleFavoriteOutcome, FailureReason> updateUserTitleFavoriteStatus(UpdateTitleFavoriteStatusCommand command){
 
         UserId userId = UserId.from(command.userId());
 
@@ -101,14 +108,14 @@ public class LibraryService {
 
         userTitle.pullEvents().forEach(publisher::publishEvent);
 
-        return new UserTitleFavoriteOutcome(
+        return Result.success(new UserTitleFavoriteOutcome(
                 userTitle.getTitleId().value(),
                 userTitle.isFavorite()
-        );
+        ));
     }
 
     @Transactional
-    public UserTitleTrackingUpdateOutcome updateUserTitleTrackingStatus(UpdateTitleTrackingStatusCommand command){
+    public Result<UserTitleTrackingUpdateOutcome, FailureReason> updateUserTitleTrackingStatus(UpdateTitleTrackingStatusCommand command){
 
         UserTitle userTitle = userTitleRepository.findByIdAndUserOwnerId(
                         UserTitleId.from(command.userTitleId()), UserId.from(command.userId()))
@@ -121,16 +128,16 @@ public class LibraryService {
 
         userTitleRepository.save(userTitle);
 
-        return new UserTitleTrackingUpdateOutcome(
+        return Result.success(new LibraryManagementOutcome.UserTitleTrackingUpdateOutcome(
                 userTitle.getTitleId().value(),
                 userTitle.getTrackingStatus().name(),
                 userTitle.getDateAdded().toString(),
                 userTitle.isFavorite()
-        );
+        ));
     }
 
     @Transactional
-    public UserTitleDeletionOutcome deleteUserTitle(DeleteUserTitleCommand command){
+    public Result<UserTitleDeletionOutcome, FailureReason> deleteUserTitle(DeleteUserTitleCommand command){
 
         UserId userId = UserId.from(command.userTitleId());
 
@@ -140,12 +147,13 @@ public class LibraryService {
 
         userTitle.delete(userId);
 
-        var outcome = new UserTitleDeletionOutcome(userTitle.id().value());
+        var outcome = new LibraryManagementOutcome.UserTitleDeletionOutcome(userTitle.id().value());
 
         userTitleRepository.delete(userTitle);
 
         userTitle.pullEvents().forEach(publisher::publishEvent);
 
-        return outcome;
+//        return outcome;
+        return null;
     }
 }
