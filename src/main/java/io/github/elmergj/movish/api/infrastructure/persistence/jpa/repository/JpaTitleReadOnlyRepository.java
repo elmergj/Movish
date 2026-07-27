@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
-import io.github.elmergj.movish.api.application.catalog.query.TitleSummaryQueryResult;
+import io.github.elmergj.movish.api.application.library.query.TitleSummaryQueryResult;
 import io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity.TitleEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
@@ -13,9 +13,9 @@ public interface JpaTitleReadOnlyRepository extends Repository<TitleEntity, Stri
 
     @Query("""
         SELECT t.id as titleId,
-               t.name as name,
-               t.tmdbRating as tmdbRating,
-               t.releaseDate as releaseDate
+               t.mediaId as mediaId,
+               t.status as trackingStatus,
+               t.titleUserRating as titleUserRating
         FROM TitleEntity t
         WHERE t.id IN :ids
         """)

@@ -1,7 +1,15 @@
 package io.github.elmergj.movish.api.application;
 
 /**
- * Represents the result of an application operation.
+ * Represents the result of a command execution that has explicit success and
+ * failure outcomes.
+ *
+ * <p>
+ * A {@code Result} belongs to the {@link CommandResult} family and is intended
+ * for commands where multiple business outcomes must be represented explicitly.
+ * The operation can either complete successfully or fail due to an expected
+ * business condition.
+ * </p>
  *
  * <p>A Result has only two possible states:</p>
  *
@@ -17,17 +25,22 @@ package io.github.elmergj.movish.api.application;
  *     <li>{@code F} belongs to the {@link FailureReason} family.</li>
  * </ul>
  *
- * <p>This means that the operation can either:</p>
+ * <p>This means that an operation can either:</p>
  *
  * <ul>
- *     <li>Return {@code BookAdded} when successful.</li>
- *     <li>Return {@code BookAdditionFailure} when rejected.</li>
+ *     <li>Return a successful outcome such as {@code BookAdded}.</li>
+ *     <li>Return a business failure such as {@code BookAdditionFailure}.</li>
  * </ul>
  *
  * <p>
- * Domain rules should not depend on this abstraction.
- * The Application layer is responsible for translating
- * domain outcomes into Result values.
+ * Simpler commands that do not require explicit failure modeling may implement
+ * {@link CommandResult} directly with their own concrete outcome type.
+ * </p>
+ *
+ * <p>
+ * Domain rules should not depend directly on this abstraction. The Application
+ * layer is responsible for translating domain outcomes into command results
+ * when explicit success and failure modeling is required.
  * </p>
  *
  * @param <S> the type representing a successful outcome
@@ -35,17 +48,18 @@ package io.github.elmergj.movish.api.application;
  */
 public sealed interface Result<
         S extends Result.SuccessOutcome,
-        F extends Result.FailureReason> {
+        F extends Result.FailureReason>
+        extends CommandResult {
 
     /**
      * Marker interface for successful outcomes.
      *
      * <p>
-     * Implementations represent the positive result
-     * of an application operation.
+     * Implementations represent the positive result of an application
+     * operation.
      * </p>
      */
-    interface SuccessOutcome{
+    interface SuccessOutcome {
     }
 
 
@@ -53,45 +67,23 @@ public sealed interface Result<
      * Marker interface for expected failures.
      *
      * <p>
-     * Implementations represent business conditions
-     * where the operation cannot be completed.
+     * Implementations represent business conditions where the operation cannot
+     * be completed.
      * </p>
      */
     interface FailureReason {
     }
 
-    /**
-     * Represents the absence of an expected failure.
-     *
-     * <p>
-     * This marker value is used when an application operation
-     * cannot produce a business failure represented by a
-     * {@link FailureReason}.
-     * </p>
-     *
-     * <p>
-     * It allows the {@link Result} contract to remain consistent
-     * by providing a failure type for operations that only have
-     * a successful outcome.
-     * </p>
-     *
-     * <pre>
-     * Result&lt;OperationOutcome, Result.NoFailure&gt;
-     * </pre>
-     */
-    enum NoFailure implements FailureReason {
-        INSTANCE
-    }
 
     /**
      * Creates a successful Result containing the given outcome.
      *
      * <p>
-     * This factory method provides a more expressive alternative
-     * to directly instantiating {@link SuccessResult}.
+     * This factory method provides a more expressive alternative to directly
+     * instantiating {@link SuccessResult}.
      * </p>
      *
-     * @param value the successful outcome outcome
+     * @param value the successful outcome
      * @param <S> the type of the success outcome
      * @param <F> the type of the expected failure
      * @return a successful Result containing the provided outcome
@@ -103,18 +95,19 @@ public sealed interface Result<
         return new SuccessResult<>(value);
     }
 
+
     /**
-     * Creates a failed Result containing the given value.
+     * Creates a failed Result containing the given failure reason.
      *
      * <p>
-     * This factory method provides a more expressive alternative
-     * to directly instantiating {@link FailureResult}.
+     * This factory method provides a more expressive alternative to directly
+     * instantiating {@link FailureResult}.
      * </p>
      *
      * @param value the failure information
      * @param <S> the type of the success outcome
-     * @param <F> the type of the expected value
-     * @return a failed Result containing the provided value
+     * @param <F> the type of the expected failure
+     * @return a failed Result containing the provided failure reason
      */
     static <
             S extends SuccessOutcome,
@@ -123,8 +116,9 @@ public sealed interface Result<
         return new FailureResult<>(value);
     }
 
+
     /**
-     * Represents a successful operation.
+     * Represents a successful command execution.
      *
      * <p>
      * Contains the outcome produced by the operation.
@@ -137,12 +131,13 @@ public sealed interface Result<
     record SuccessResult<
             S extends SuccessOutcome,
             F extends FailureReason>(
-                    S outcome
+            S outcome
     ) implements Result<S, F> {
     }
 
+
     /**
-     * Represents a failed operation.
+     * Represents a failed command execution.
      *
      * <p>
      * Contains the expected failure information.
@@ -155,7 +150,7 @@ public sealed interface Result<
     record FailureResult<
             S extends SuccessOutcome,
             F extends FailureReason>(
-                    F reason
+            F reason
     ) implements Result<S, F> {
     }
 }

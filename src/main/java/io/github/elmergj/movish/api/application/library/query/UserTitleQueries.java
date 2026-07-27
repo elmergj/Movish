@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserTitleQueries {
 
-    Optional<UserTitleSummaryQueryResult> getUserTitleSummary(String id);
+    Optional<TitleSummaryQueryResult> getUserTitleSummary(String id);
 
-    List<UserTitleSummaryQueryResult> getUserTitleSummaryMatching(Collection<String> ids);
+    List<TitleSummaryQueryResult> getUserTitleSummaryMatching(Collection<String> ids);
 }

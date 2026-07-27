@@ -1,10 +1,10 @@
 package io.github.elmergj.movish.api.application.listing.query;
 
-import io.github.elmergj.movish.api.application.catalog.query.TitleQueries;
-import io.github.elmergj.movish.api.application.catalog.query.TitleSummaryQueryResult;
+import io.github.elmergj.movish.api.application.catalog.query.CatalogMediaQueries;
+import io.github.elmergj.movish.api.application.catalog.query.MediaSummaryQueryResult;
 import io.github.elmergj.movish.api.application.library.query.UserTitleQueries;
-import io.github.elmergj.movish.api.application.library.query.UserTitleSummaryQueryResult;
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.application.library.query.TitleSummaryQueryResult;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,37 +19,37 @@ import java.util.stream.Collectors;
 public class ListingQueryService {
 
     private final UserTitleQueries userTitleQueries;
-    private final TitleQueries titleQueries;
+    private final CatalogMediaQueries catalogMediaQueries;
 
     public ListItemsDetailsView getListItemsDetails(TitleList titleList){
 
-        List<UserTitleSummaryQueryResult> userTitleSummary =
+        List<TitleSummaryQueryResult> userTitleSummary =
                 userTitleQueries.getUserTitleSummaryMatching(titleList.getUserTitleIdReferences()
                         .stream()
-                        .map(UserTitleId::value)
+                        .map(TitleId::value)
                         .toList());
 
         List<String> externalTitleIds = userTitleSummary.stream()
-                .map(UserTitleSummaryQueryResult::getTitleId)
+                .map(TitleSummaryQueryResult::getTitleId)
                 .filter(Objects::nonNull)
                 .distinct()
                 .toList();
 
-        Map<String, TitleSummaryQueryResult> titleSummaryMap = titleQueries.getTitleSummaryMatching(externalTitleIds)
+        Map<String, MediaSummaryQueryResult> mediaSummaryMap = catalogMediaQueries.getMediaSummaryMatching(externalTitleIds)
                 .stream()
-                .collect(Collectors.toMap(TitleSummaryQueryResult::getTitleId, t -> t));
+                .collect(Collectors.toMap(MediaSummaryQueryResult::getTitleId, t -> t));
 
         List<ListItemsDetailsView.Items> itemsDetails = userTitleSummary
                 .stream()
-                .map(userTitle -> {
-                    var title = titleSummaryMap.get(userTitle.getTitleId());
+                .map(title -> {
+                    var media = mediaSummaryMap.get(title.getTitleId());
                     return new ListItemsDetailsView.Items(
-                            userTitle.getUserTitleId(),
-                            title.getName(),
-                            userTitle.getTrackingStatus(),
-                            userTitle.getUserTitleRating(),
-                            title.getTmdbRating(),
-                            title.getReleaseDate()
+                            title.getUserTitleId(),
+                            media.getName(),
+                            title.getTrackingStatus(),
+                            title.getUserTitleRating(),
+                            media.getTmdbRating(),
+                            media.getReleaseDate()
                     );
                 })
                 .toList();

@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.domain.repository;
 
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
@@ -18,7 +18,7 @@ public interface TitleListRepository {
 
     Optional<TitleList> findByUserOwnerId(UserId userId);
 
-    void removeReferenceFromAllLists(UserTitleId userTitleId);
+    void removeReferenceFromAllLists(TitleId titleId);
 
     Optional<TitleList> findByUserOwnerIdAndListType(UserId userId, TitleListType titleListType);
 

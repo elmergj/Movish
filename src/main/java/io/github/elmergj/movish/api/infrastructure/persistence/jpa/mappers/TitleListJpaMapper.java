@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers;
 
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
@@ -26,7 +26,7 @@ public class TitleListJpaMapper {
         titleListEntity.setDateCreated(titleList.getDateCreated());
         titleListEntity.setListType(titleList.getListType());
         titleListEntity.setUserTitleIds(titleList.getUserTitleIdReferences().stream()
-                .map(UserTitleId::value)
+                .map(TitleId::value)
                 .collect(Collectors.toSet())
         );
 
@@ -41,7 +41,7 @@ public class TitleListJpaMapper {
                 jpaTitleList.getDateCreated(),
                 jpaTitleList.getListType(),
                 //Passing a mutable list
-                jpaTitleList.getUserTitleIds().stream().map(UserTitleId::from)
+                jpaTitleList.getUserTitleIds().stream().map(TitleId::from)
                         .collect(Collectors.toSet())
         );
     }

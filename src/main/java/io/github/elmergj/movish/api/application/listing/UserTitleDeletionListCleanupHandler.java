@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.application.listing;
 
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleDeletionEvent;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleUnlinkedEvent;
 import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -15,7 +15,7 @@ public class UserTitleDeletionListCleanupHandler {
 
     @EventListener
     @Transactional
-    public void handle(UserTitleDeletionEvent event){
-        repository.removeReferenceFromAllLists(event.userTitleId());
+    public void handle(TitleUnlinkedEvent event){
+        repository.removeReferenceFromAllLists(event.titleId());
     }
 }

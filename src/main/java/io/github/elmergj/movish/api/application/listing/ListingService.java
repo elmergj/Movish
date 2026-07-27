@@ -15,7 +15,7 @@ import io.github.elmergj.movish.api.application.listing.query.ListDetailsView;
 import io.github.elmergj.movish.api.application.listing.query.ListItemsDetailsView;
 import io.github.elmergj.movish.api.application.listing.query.ListItemsQuery;
 import io.github.elmergj.movish.api.application.listing.query.ListingQueryService;
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.CustomListFactory;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
@@ -86,7 +86,7 @@ public class ListingService {
                         TitleListId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserTitleList.addUserTitle(UserTitleId.from(command.titleId()));
+        customUserTitleList.addUserTitle(TitleId.from(command.titleId()));
 
         titleListRepository.save(customUserTitleList);
 
@@ -114,7 +114,7 @@ public class ListingService {
                 .orElseThrow();
 
 
-        customUserTitleList.removeUserTitle(UserTitleId.from(command.titleId()));
+        customUserTitleList.removeUserTitle(TitleId.from(command.titleId()));
 
         titleListRepository.save(customUserTitleList);
 

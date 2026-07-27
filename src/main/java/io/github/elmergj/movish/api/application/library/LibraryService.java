@@ -2,7 +2,7 @@ package io.github.elmergj.movish.api.application.library;
 
 import io.github.elmergj.movish.api.application.Result;
 import io.github.elmergj.movish.api.application.Result.FailureReason;
-import io.github.elmergj.movish.api.application.catalog.TitleCatalogService;
+import io.github.elmergj.movish.api.application.catalog.MediaCatalogService;
 import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleCreationOutcome;
 import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleDeletionOutcome;
 import io.github.elmergj.movish.api.application.library.LibraryManagementOutcome.UserTitleFavoriteOutcome;
@@ -15,13 +15,13 @@ import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrack
 import io.github.elmergj.movish.api.application.library.query.TitleDetails;
 import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsQuery;
 import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsView;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.MediaType;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.Title;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.media.Media;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaType;
+import io.github.elmergj.movish.api.domain.model.entity.library.Title;
 import io.github.elmergj.movish.api.domain.model.entity.library.TrackingStatus;
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitle;
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
-import io.github.elmergj.movish.api.domain.repository.TitleRepository;
+import io.github.elmergj.movish.api.domain.repository.MediaRepository;
 import io.github.elmergj.movish.api.domain.repository.UserTitleRepository;
 import io.github.elmergj.movish.api.domain.shared.EntityIdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -34,61 +34,59 @@ import org.springframework.transaction.annotation.Transactional;
 public class LibraryService {
 
     private final UserTitleRepository userTitleRepository;
-    private final TitleRepository titleRepository;
-    private final TitleCatalogService titleCatalogService;
+    private final MediaRepository mediaRepository;
+    private final MediaCatalogService mediaCatalogService;
     private final EntityIdGenerator entityIdGenerator;
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public Result<UserTitleCreationOutcome, UserTitleAlreadyInLibrary> createUserTitle(SaveTitleToLibraryCommand command){
+    public Result<UserTitleCreationOutcome, UserTitleAlreadyInLibrary> addMediaToLibrary(SaveTitleToLibraryCommand command){
 
         UserId userId = UserId.from(command.userId());
 
-        Title title = titleCatalogService.getTitleDetails(command.externalTitleId(), MediaType.valueOf(command.mediaType()));
+        Media media = mediaCatalogService.getMedia(command.externalTitleId(), MediaType.valueOf(command.mediaType()));
 
-        UserTitle userTitle = UserTitle.create(
-                entityIdGenerator.generate(UserTitleId::from),
-                title.id(),
+        Title title = Title.create(
+                entityIdGenerator.generate(TitleId::from),
+                media.id(),
                 userId
         );
 
-        userTitleRepository.save(userTitle);
+        userTitleRepository.save(title);
 
         if (true){
             return Result.success(new UserTitleCreationOutcome(
-                    userTitle.id().value(),
-                    title.name(),
-                    //Ignore title.imdbId(),
                     title.id().value(),
-                    //Ignore title.imdbTitleRating().value(),
-                    title.tmdbTitleRating().value(),
-                    userTitle.getTrackingStatus().name(),
-                    userTitle.getDateAdded().toString()
+                    media.name(),
+                    media.id().value(),
+                    10.0, // Bug: to solve!
+                    title.getTrackingStatus().name(),
+                    title.getDateAdded().toString()
             ));
         }
 
-        return Result.failure(new UserTitleAlreadyInLibrary(userTitle.id().value()));
+        return Result.failure(new UserTitleAlreadyInLibrary(title.id().value()));
     }
 
     public UserTitleDetailsView getUserTitleDetails(UserTitleDetailsQuery query){
 
-        UserTitle userTitle = userTitleRepository.findByIdAndUserOwnerId(
-                UserTitleId.from(query.userTitleId()), UserId.from(query.userId()))
+        Title title = userTitleRepository.findByIdAndUserOwnerId(
+                TitleId.from(query.userTitleId()), UserId.from(query.userId()))
                 .orElseThrow();
 
-        Title title = titleRepository.findById(userTitle.getTitleId()).orElseThrow();
+        Media media = mediaRepository.findById(title.getMediaId()).orElseThrow();
 
         TitleDetails titleDetails = new TitleDetails(
-                title.id().value(),
-                title.name(),
-                title.releaseDate().toString()
+                media.id().value(),
+                media.name(),
+                media.releaseDate().toString()
         );
 
         return new UserTitleDetailsView(
-                userTitle.id().value(),
-                userTitle.getTrackingStatus().name(),
-                userTitle.getDateAdded().toString(),
-                userTitle.isFavorite(),
+                title.id().value(),
+                title.getTrackingStatus().name(),
+                title.getDateAdded().toString(),
+                title.isFavorite(),
                 titleDetails
         );
     }
@@ -98,41 +96,41 @@ public class LibraryService {
 
         UserId userId = UserId.from(command.userId());
 
-        UserTitle userTitle = userTitleRepository.findByIdAndUserOwnerId(
-                        UserTitleId.from(command.userTitleId()), userId)
+        Title title = userTitleRepository.findByIdAndUserOwnerId(
+                        TitleId.from(command.userTitleId()), userId)
                 .orElseThrow();
 
-        userTitle.updateFavoriteStatus(userId, command.favorite());
+        title.updateFavoriteStatus(userId, command.favorite());
 
-        userTitleRepository.save(userTitle);
+        userTitleRepository.save(title);
 
-        userTitle.pullEvents().forEach(publisher::publishEvent);
+        title.pullEvents().forEach(publisher::publishEvent);
 
         return Result.success(new UserTitleFavoriteOutcome(
-                userTitle.getTitleId().value(),
-                userTitle.isFavorite()
+                title.getMediaId().value(),
+                title.isFavorite()
         ));
     }
 
     @Transactional
+//    public Result<UserTitleTrackingUpdateOutcome, FailureReason> updateUserTitleTrackingStatus(UpdateTitleTrackingStatusCommand command){
     public Result<UserTitleTrackingUpdateOutcome, FailureReason> updateUserTitleTrackingStatus(UpdateTitleTrackingStatusCommand command){
-
-        UserTitle userTitle = userTitleRepository.findByIdAndUserOwnerId(
-                        UserTitleId.from(command.userTitleId()), UserId.from(command.userId()))
+        Title title = userTitleRepository.findByIdAndUserOwnerId(
+                        TitleId.from(command.userTitleId()), UserId.from(command.userId()))
                 .orElseThrow();
 
 
         //Optimize: Verify the format of the incoming value, or change to enums with codes and use @JasonValue in request to
         String formatedValued = String.format(command.trackingStatus()).toUpperCase();
-        userTitle.updateTrackingStatus(TrackingStatus.valueOf(formatedValued));
+        title.updateTrackingStatus(TrackingStatus.valueOf(formatedValued));
 
-        userTitleRepository.save(userTitle);
+        userTitleRepository.save(title);
 
         return Result.success(new LibraryManagementOutcome.UserTitleTrackingUpdateOutcome(
-                userTitle.getTitleId().value(),
-                userTitle.getTrackingStatus().name(),
-                userTitle.getDateAdded().toString(),
-                userTitle.isFavorite()
+                title.getMediaId().value(),
+                title.getTrackingStatus().name(),
+                title.getDateAdded().toString(),
+                title.isFavorite()
         ));
     }
 
@@ -141,17 +139,17 @@ public class LibraryService {
 
         UserId userId = UserId.from(command.userTitleId());
 
-        UserTitle userTitle = userTitleRepository.findByIdAndUserOwnerId(
-                        UserTitleId.from(command.userTitleId()), UserId.from(command.userId()))
+        Title title = userTitleRepository.findByIdAndUserOwnerId(
+                        TitleId.from(command.userTitleId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        userTitle.delete(userId);
+        title.remove(userId);
 
-        var outcome = new LibraryManagementOutcome.UserTitleDeletionOutcome(userTitle.id().value());
+        var outcome = new LibraryManagementOutcome.UserTitleDeletionOutcome(title.id().value());
 
-        userTitleRepository.delete(userTitle);
+        userTitleRepository.delete(title);
 
-        userTitle.pullEvents().forEach(publisher::publishEvent);
+        title.pullEvents().forEach(publisher::publishEvent);
 
 //        return outcome;
         return null;

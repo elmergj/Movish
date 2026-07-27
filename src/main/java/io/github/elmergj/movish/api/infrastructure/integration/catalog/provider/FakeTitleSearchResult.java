@@ -1,9 +1,8 @@
 package io.github.elmergj.movish.api.infrastructure.integration.catalog.provider;
 
+import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaType;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaSummaryResult;
 import io.github.elmergj.movish.api.domain.model.entity.catalog.search.SearchResultSet;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.TitleSummaryResult;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.MediaType;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.TitleRating;
 import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;
@@ -13,16 +12,16 @@ import java.util.List;
 public class FakeTitleSearchResult {
 
     // Test: Using a Fake Test Double
-    public static SearchResultSet<TitleSummaryResult> getFakeTitleSearchResult(){
+    public static SearchResultSet<MediaSummaryResult> getFakeTitleSearchResult(){
 
-        List<TitleSummaryResult> results = new ArrayList<>();
-        TitleSummaryResult fakeTitleSummaryResult = new TitleSummaryResult(
+        List<MediaSummaryResult> results = new ArrayList<>();
+        MediaSummaryResult fakeMediaSummaryResult = new MediaSummaryResult(
                 "597",
                 "Titanic",
                 "/image.jpg",
-                TitleRating.of(8.0).value(),
+                null, //Bug: to solve!
                 MediaType.MOVIE.name());
-        results.add(fakeTitleSummaryResult);
+        results.add(fakeMediaSummaryResult);
 
         return new SearchResultSet<>(results, 1, 12, false);
     }

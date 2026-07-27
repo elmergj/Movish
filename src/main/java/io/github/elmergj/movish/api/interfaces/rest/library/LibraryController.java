@@ -11,9 +11,6 @@ import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrack
 import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,10 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,7 +29,6 @@ import java.net.URI;
 public class LibraryController {
 
     private final LibraryService libraryService;
-    private final ResponseEntityExceptionHandler responseEntityExceptionHandler;
 
     @PostMapping("/title")
 //    public ResponseEntity<ApiResponse> addTitleToLibrary(
@@ -45,21 +38,21 @@ public class LibraryController {
 
         var command = new SaveTitleToLibraryCommand(request.externalTitleId(), request.mediaType(), userId);
 
-        var outcome = libraryService.createUserTitle(command);
+        var outcome = libraryService.addMediaToLibrary(command);
 
         return switch (outcome){
-            case SuccessResult(var result) ->
+            case SuccessResult(var userTitle) ->
                     ResponseEntity.created(
                             ServletUriComponentsBuilder
                                     .fromCurrentRequest()
                                     .path("/{uriResponse}")
-                                    .buildAndExpand(result.id()).toUri())
+                                    .buildAndExpand(userTitle.id()).toUri())
                             .body(new UserTitleCreationResponse(
-                                    result.tmdbId(),
-                                    result.titleName(),
-                                    result.TrackingStatus(),
-                                    result.dateAdded(),
-                                    result.tmdbRating()));
+                                    userTitle.tmdbId(),
+                                    userTitle.titleName(),
+                                    userTitle.TrackingStatus(),
+                                    userTitle.dateAdded(),
+                                    userTitle.tmdbRating()));
             case FailureResult(UserTitleAlreadyInLibrary reason) -> ResponseEntity.badRequest().body("The title with id" + reason.userTitleId() + " already exists");
         };
     }
@@ -95,8 +88,8 @@ public class LibraryController {
         var outcome = libraryService.updateUserTitleFavoriteStatus(command);
 
         var response = new TitleFavoriteStatusResponse(
-                outcome.externalTitleId(),
-                outcome.isFavorite()
+                null, // Bug: to solve!
+                false // Bug: to solve!
         );
         return ResponseEntity.ok(response);
     }
@@ -112,7 +105,7 @@ public class LibraryController {
         var outcome = libraryService.updateUserTitleTrackingStatus(command);
 
         var response = new UpdateTitleTrackingStatusResponse(
-                outcome.trackingStatus(),
+                null, // Bug: to solve!
                 "The title with id " + titleId + " was successful updated");
 
         return ResponseEntity.ok(response);
@@ -128,7 +121,7 @@ public class LibraryController {
         var outcome = libraryService.deleteUserTitle(command);
 
         var response = new DeleteTitleResponse(
-                "The title with id " + outcome.userTitleId() + " was successful deleted from the library");
+                "The title with id " + "outcome.titleId()" + " was successful deleted from the library"); // Bug: to solve!
 
         return ResponseEntity.ok(response);
     }

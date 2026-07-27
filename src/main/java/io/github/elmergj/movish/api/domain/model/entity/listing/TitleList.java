@@ -1,7 +1,7 @@
 package io.github.elmergj.movish.api.domain.model.entity.listing;
 
 import io.github.elmergj.movish.api.domain.exception.DomainRuleViolationException;
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 import io.github.elmergj.movish.api.domain.shared.BaseEntity;
 import io.github.elmergj.movish.api.domain.shared.UserAsset;
@@ -13,32 +13,32 @@ import java.util.Set;
 public class TitleList extends BaseEntity<TitleList, TitleListId> implements UserAsset {
 
     private final UserId userOwnerId;
-    private final Set<UserTitleId> userTitleIdReferences;
+    private final Set<TitleId> titleIdReferences;
     private final TitleListType listType;
     private final LocalDate dateCreated;
     private String name;
 
     private TitleList(TitleListId id, UserId userOwnerId, String name, LocalDate dateCreated, TitleListType listType,
-                      Set<UserTitleId> userTitleIdReferences){
+                      Set<TitleId> titleIdReferences){
         super(id);
         this.userOwnerId = userOwnerId;
         this.name = name;
         this.dateCreated = dateCreated;
         this.listType = listType;
-        this.userTitleIdReferences = new HashSet<>(userTitleIdReferences);
+        this.titleIdReferences = new HashSet<>(titleIdReferences);
     }
 
     public static TitleList create(TitleListId id, UserId userOwnerId, String name, TitleListType listType){
 
-        Set<UserTitleId> userTitleIds = new HashSet<>();
+        Set<TitleId> titleIds = new HashSet<>();
         LocalDate dateCreated = LocalDate.now();
-        return new TitleList(id, userOwnerId, name, dateCreated, listType, userTitleIds);
+        return new TitleList(id, userOwnerId, name, dateCreated, listType, titleIds);
     }
 
     public static TitleList fromExisting(TitleListId id, UserId userOwnerId, String name, LocalDate dateCreated,
                                          TitleListType listType,
-                                         Set<UserTitleId> userTitleIds){
-        return new TitleList(id, userOwnerId, name, dateCreated,listType, userTitleIds);
+                                         Set<TitleId> titleIds){
+        return new TitleList(id, userOwnerId, name, dateCreated,listType, titleIds);
     }
 
     //Getters
@@ -60,8 +60,8 @@ public class TitleList extends BaseEntity<TitleList, TitleListId> implements Use
         return dateCreated;
     }
 
-    public Set<UserTitleId> getUserTitleIdReferences(){
-        return Set.copyOf(userTitleIdReferences);
+    public Set<TitleId> getUserTitleIdReferences(){
+        return Set.copyOf(titleIdReferences);
     }
 
     public TitleListType getListType(){
@@ -82,44 +82,44 @@ public class TitleList extends BaseEntity<TitleList, TitleListId> implements Use
         this.name = name;
     }
 
-    public void addUserTitle(UserTitleId userTitleId) {
+    public void addUserTitle(TitleId titleId) {
 
         if (listType != TitleListType.USER_CUSTOM_LIST){
             throw new DomainRuleViolationException("Unable to add the user title to the list");
         }
 
-        if (userTitleIdReferences.contains(userTitleId)){
+        if (titleIdReferences.contains(titleId)){
             throw new DomainRuleViolationException("User title is already in the list");
         }
-        userTitleIdReferences.add(userTitleId);
+        titleIdReferences.add(titleId);
     }
 
-    public void removeUserTitle(UserTitleId userTitleId) {
+    public void removeUserTitle(TitleId titleId) {
 
         if (listType != TitleListType.USER_CUSTOM_LIST){
             throw new DomainRuleViolationException("Unable to remove the user title from the list");
         }
 
-        if (!userTitleIdReferences.contains(userTitleId)){
+        if (!titleIdReferences.contains(titleId)){
             throw new DomainRuleViolationException("Unable to remove user title, it is not in the list");
         }
-        userTitleIdReferences.remove(userTitleId);
+        titleIdReferences.remove(titleId);
     }
 
-    public void applyAddTitleToDefaultList(UserTitleId userTitleId) {
+    public void applyAddTitleToDefaultList(TitleId titleId) {
 
-        if (userTitleIdReferences.contains(userTitleId)){
-            throw new DomainRuleViolationException("UserTitle is already in the list");
+        if (titleIdReferences.contains(titleId)){
+            throw new DomainRuleViolationException("Title is already in the list");
         }
-        userTitleIdReferences.add(userTitleId);
+        titleIdReferences.add(titleId);
     }
 
-    public void applyRemoveTitleFromDefaultList(UserTitleId userTitleId) {
+    public void applyRemoveTitleFromDefaultList(TitleId titleId) {
 
-        if (!userTitleIdReferences.contains(userTitleId)){
+        if (!titleIdReferences.contains(titleId)){
             throw new DomainRuleViolationException("Unable to remove user title, this is not in the list");
         }
-        userTitleIdReferences.remove(userTitleId);
+        titleIdReferences.remove(titleId);
     }
 
     public void canBeDeleted(){

@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleId;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
 import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
@@ -43,8 +43,8 @@ public class TitleListRepositoryJpaAdapter implements TitleListRepository {
     }
 
     @Override
-    public void removeReferenceFromAllLists(UserTitleId userTitleId) {
-        jpaTitleListRepository.removeReferenceFromAllLists(userTitleId.value());
+    public void removeReferenceFromAllLists(TitleId titleId) {
+        jpaTitleListRepository.removeReferenceFromAllLists(titleId.value());
     }
 
     @Override

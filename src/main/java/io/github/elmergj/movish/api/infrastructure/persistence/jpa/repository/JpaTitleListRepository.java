@@ -21,5 +21,5 @@ public interface JpaTitleListRepository extends JpaRepository<TitleListEntity, S
 
     @Modifying
     @Query(value = "DELETE FROM list_titles_ids WHERE user_title_id = :userTitleId", nativeQuery = true)
-    void removeReferenceFromAllLists(@Param("userTitleId") String titleId);
+    void removeReferenceFromAllLists(@Param("titleId") String titleId);
 }

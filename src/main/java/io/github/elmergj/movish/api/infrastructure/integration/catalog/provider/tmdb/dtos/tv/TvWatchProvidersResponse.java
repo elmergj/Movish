@@ -31,7 +31,7 @@ public record TvWatchProvidersResponse(
             @JsonProperty("rent") List<ProviderDetail> rent
     ) {}
 
-        //Provider technical detail(e.g. HBO Max, Netflix)
+        //MediaProvider technical detail(e.g. HBO Max, Netflix)
         public record ProviderDetail(
             @JsonProperty("logo_path") String logoPath,
             @JsonProperty("provider_id") Integer providerId,

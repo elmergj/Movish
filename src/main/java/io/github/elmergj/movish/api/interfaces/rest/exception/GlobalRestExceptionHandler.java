@@ -41,7 +41,7 @@ public class GlobalRestExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
-        log.warn(ex.getMessage()); // Add a more detailed message about what was not validated correctly.
+        log.warn(ex.getMessage()); //Optimize: Add a more detailed message about what was not validated correctly.
         RestApiException restEx = new BadRequestException("Invalid request body");
 
         return ResponseEntity.status(restEx.getStatus()).body(buildErrorResponse(restEx, restEx, request));
@@ -58,6 +58,4 @@ public class GlobalRestExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
     }
-
-    //Comment
 }
