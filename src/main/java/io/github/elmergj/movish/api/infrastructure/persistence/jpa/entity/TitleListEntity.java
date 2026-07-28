@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity;
 
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -43,7 +43,7 @@ public class TitleListEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TitleListType listType;
+    private WatchlistType listType;
 
     @Column(nullable = false)
     private LocalDate dateCreated;

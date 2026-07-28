@@ -1,9 +1,9 @@
 package io.github.elmergj.movish.api.application.user;
 
 import io.github.elmergj.movish.api.domain.exception.ValidationException;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.model.entity.user.AuthId;
 import io.github.elmergj.movish.api.domain.model.entity.user.Email;
 import io.github.elmergj.movish.api.domain.model.entity.user.ProfileImagePolicy;
@@ -49,11 +49,11 @@ public class UserRegistrationService {
 
 
         // userProvisioningService.provisionUser(user.id());
-        TitleList favoriteList = TitleList.create( // Test: creating the default favorite list
-                entityIdGenerator.generate(TitleListId::from),
+        Watchlist favoriteList = Watchlist.create( // Test: creating the default favorite list
+                entityIdGenerator.generate(WatchlistId::from),
                 user.id(),
                 "Favorites",
-                TitleListType.FAVORITE_LIST
+                WatchlistType.FAVORITE_LIST
         );
         //end
         userRepository.save(user);

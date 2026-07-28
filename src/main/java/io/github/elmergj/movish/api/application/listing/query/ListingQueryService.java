@@ -2,10 +2,10 @@ package io.github.elmergj.movish.api.application.listing.query;
 
 import io.github.elmergj.movish.api.application.catalog.query.CatalogMediaQueries;
 import io.github.elmergj.movish.api.application.catalog.query.MediaSummaryQueryResult;
-import io.github.elmergj.movish.api.application.library.query.UserTitleQueries;
+import io.github.elmergj.movish.api.application.library.query.TitleQueries;
 import io.github.elmergj.movish.api.application.library.query.TitleSummaryQueryResult;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ListingQueryService {
 
-    private final UserTitleQueries userTitleQueries;
+    private final TitleQueries titleQueries;
     private final CatalogMediaQueries catalogMediaQueries;
 
-    public ListItemsDetailsView getListItemsDetails(TitleList titleList){
+    public ListItemsDetailsView getListItemsDetails(Watchlist watchlist){
 
         List<TitleSummaryQueryResult> userTitleSummary =
-                userTitleQueries.getUserTitleSummaryMatching(titleList.getUserTitleIdReferences()
+                titleQueries.getTitleSummaryMatching(watchlist.getUserTitleIdReferences()
                         .stream()
                         .map(TitleId::value)
                         .toList());
@@ -56,9 +56,9 @@ public class ListingQueryService {
 
 
         return new ListItemsDetailsView(
-                titleList.id().value(),
-                titleList.getName(),
-                titleList.getUserTitleIdReferences().size(),
+                watchlist.id().value(),
+                watchlist.getName(),
+                watchlist.getUserTitleIdReferences().size(),
                 itemsDetails
         );
     }

@@ -1,8 +1,8 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers;
 
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 import io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity.TitleListEntity;
 import io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity.UserEntity;
@@ -14,18 +14,18 @@ import java.util.stream.Collectors;
 @Component
 public class TitleListJpaMapper {
 
-    public @NonNull TitleListEntity toJpaTitleList(TitleList titleList){
+    public @NonNull TitleListEntity toJpaTitleList(Watchlist watchlist){
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(titleList.getUserOwnerId().value());
+        userEntity.setId(watchlist.getUserOwnerId().value());
 
         TitleListEntity titleListEntity = new TitleListEntity();
         titleListEntity.setUserEntity(userEntity);
 
-        titleListEntity.setId(titleList.id().value());
-        titleListEntity.setName(titleList.getName());
-        titleListEntity.setDateCreated(titleList.getDateCreated());
-        titleListEntity.setListType(titleList.getListType());
-        titleListEntity.setUserTitleIds(titleList.getUserTitleIdReferences().stream()
+        titleListEntity.setId(watchlist.id().value());
+        titleListEntity.setName(watchlist.getName());
+        titleListEntity.setDateCreated(watchlist.getDateCreated());
+        titleListEntity.setListType(watchlist.getListType());
+        titleListEntity.setUserTitleIds(watchlist.getUserTitleIdReferences().stream()
                 .map(TitleId::value)
                 .collect(Collectors.toSet())
         );
@@ -33,9 +33,9 @@ public class TitleListJpaMapper {
         return titleListEntity;
     }
 
-    public TitleList toDomain(TitleListEntity jpaTitleList){
-        return TitleList.fromExisting(
-                TitleListId.from(jpaTitleList.getId()),
+    public Watchlist toDomain(TitleListEntity jpaTitleList){
+        return Watchlist.fromExisting(
+                WatchlistId.from(jpaTitleList.getId()),
                 UserId.from(jpaTitleList.getUserEntity().getId()),
                 jpaTitleList.getName(),
                 jpaTitleList.getDateCreated(),

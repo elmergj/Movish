@@ -1,33 +1,28 @@
-package io.github.elmergj.movish.api.application.library;
+package io.github.elmergj.movish.api.application.library.command;
 
 import io.github.elmergj.movish.api.application.Result;
 
 public sealed interface LibraryManagementOutcome extends Result.SuccessOutcome{
 
-    record UserTitleCreationOutcome(
-            String id,
+    record TitleAdditionOutcome(
+            String titleId,
             String titleName,
-            //Ignore String imdbId,
-            String tmdbId,
-            //Ignore  double tmdbRating,
-            double tmdbRating,
-            String TrackingStatus,
             String dateAdded
     ) implements LibraryManagementOutcome {
     }
 
-    record UserTitleDeletionOutcome(
+    record TitleRemovalOutcome(
             String userTitleId
     ) implements LibraryManagementOutcome {
     }
 
-    record UserTitleFavoriteOutcome(
+    record TitleFavoriteOutcome(
             String externalTitleId,
             boolean isFavorite
     ) implements LibraryManagementOutcome {
     }
 
-    record UserTitleTrackingUpdateOutcome(
+    record TitleTrackingUpdateOutcome(
             String externalTitleId,
             String trackingStatus,
             String dateAdded,

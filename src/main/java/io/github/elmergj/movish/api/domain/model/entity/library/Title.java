@@ -99,11 +99,6 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
         return userOwnerId;
     }
 
-    @Override
-    public String getAssetName() {
-        return "title";
-    }
-
     // Methods
     public void updateTrackingStatus(TrackingStatus trackingStatus) {
         this.trackingStatus = trackingStatus;

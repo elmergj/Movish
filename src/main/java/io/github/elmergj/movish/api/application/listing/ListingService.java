@@ -16,9 +16,9 @@ import io.github.elmergj.movish.api.application.listing.query.ListItemsDetailsVi
 import io.github.elmergj.movish.api.application.listing.query.ListItemsQuery;
 import io.github.elmergj.movish.api.application.listing.query.ListingQueryService;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
-import io.github.elmergj.movish.api.domain.model.entity.listing.CustomListFactory;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.CustomListFactory;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class ListingService {
     @Transactional
     public CustomListCreationOutcome createCustomTitleList(CreateCustomTitleListCommand command){
 
-        TitleList customListCreated = customListFactory.create(
+        Watchlist customListCreated = customListFactory.create(
                 UserId.from(command.userId()),
                 command.name());
 
@@ -51,94 +51,94 @@ public class ListingService {
 
     public ListDetailsView getListDetails(ListDetailsQuery query){
 
-        TitleList titleList = titleListRepository.findByIdAndUserOwnerId(
-                TitleListId.from(query.titleListId()), UserId.from(query.userId()))
+        Watchlist watchlist = titleListRepository.findByIdAndUserOwnerId(
+                WatchlistId.from(query.titleListId()), UserId.from(query.userId()))
                 .orElseThrow();
 
         return new ListDetailsView(
-                titleList.id().value(),
-                titleList.getName(),
-                titleList.getUserTitleIdReferences().size()
+                watchlist.id().value(),
+                watchlist.getName(),
+                watchlist.getUserTitleIdReferences().size()
         );
     }
 
     @Transactional
     public CustomListDeletionOutcome deleteCustomTitleList(DeleteCustomListCommand command){
 
-        TitleList customUserTitleList = titleListRepository.findByIdAndUserOwnerId(
-                TitleListId.from(command.customListId()), UserId.from(command.userId()))
+        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+                WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserTitleList.canBeDeleted();
+        customUserWatchlist.canBeDeleted();
 
-        titleListRepository.delete(customUserTitleList);
+        titleListRepository.delete(customUserWatchlist);
 
         return new CustomListDeletionOutcome(
-                customUserTitleList.id().value(),
-                customUserTitleList.getName()
+                customUserWatchlist.id().value(),
+                customUserWatchlist.getName()
         );
     }
 
     @Transactional
     public UserTitleAdditionToListOutcome addTitleToList(AddTitleToListCommand command){
 
-        TitleList customUserTitleList = titleListRepository.findByIdAndUserOwnerId(
-                        TitleListId.from(command.customListId()), UserId.from(command.userId()))
+        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+                        WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserTitleList.addUserTitle(TitleId.from(command.titleId()));
+        customUserWatchlist.addUserTitle(TitleId.from(command.titleId()));
 
-        titleListRepository.save(customUserTitleList);
+        titleListRepository.save(customUserWatchlist);
 
         return new UserTitleAdditionToListOutcome(
-                customUserTitleList.id().value(),
+                customUserWatchlist.id().value(),
                 command.titleId(),
-                customUserTitleList.getUserTitleIdReferences().size()
+                customUserWatchlist.getUserTitleIdReferences().size()
         );
     }
 
 
     public ListItemsDetailsView getListItemsDetails(ListItemsQuery query){
-        TitleList titleList = titleListRepository.findByIdAndUserOwnerId(
-                        TitleListId.from(query.titleListId()), UserId.from(query.userId()))
+        Watchlist watchlist = titleListRepository.findByIdAndUserOwnerId(
+                        WatchlistId.from(query.titleListId()), UserId.from(query.userId()))
                 .orElseThrow();
 
-        return listingQueryService.getListItemsDetails(titleList);
+        return listingQueryService.getListItemsDetails(watchlist);
     }
 
     @Transactional
     public UserTitleRemovalFromListOutcome removeTitleFromList(RemoveTitleFromListCommand command){
 
-        TitleList customUserTitleList = titleListRepository.findByIdAndUserOwnerId(
-                        TitleListId.from(command.customListId()), UserId.from(command.userId()))
+        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+                        WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
 
-        customUserTitleList.removeUserTitle(TitleId.from(command.titleId()));
+        customUserWatchlist.removeUserTitle(TitleId.from(command.titleId()));
 
-        titleListRepository.save(customUserTitleList);
+        titleListRepository.save(customUserWatchlist);
 
         return new UserTitleRemovalFromListOutcome(
-                customUserTitleList.id().value(),
+                customUserWatchlist.id().value(),
                 command.titleId(),
-                customUserTitleList.getUserTitleIdReferences().size()
+                customUserWatchlist.getUserTitleIdReferences().size()
         );
     }
 
     @Transactional
     public ListNameUpdateOutcome updateCustomTitleListName(UpdateCustomListNameCommand command){
 
-        TitleList customUserTitleList = titleListRepository.findByIdAndUserOwnerId(
-                        TitleListId.from(command.customListId()), UserId.from(command.userId()))
+        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+                        WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserTitleList.updateListName(command.newName());
+        customUserWatchlist.updateListName(command.newName());
 
-        titleListRepository.save(customUserTitleList);
+        titleListRepository.save(customUserWatchlist);
 
         return new ListNameUpdateOutcome(
-                customUserTitleList.id().value(),
-                customUserTitleList.getName(),
-                customUserTitleList.getUserTitleIdReferences().size());
+                customUserWatchlist.id().value(),
+                customUserWatchlist.getName(),
+                customUserWatchlist.getUserTitleIdReferences().size());
     }
 }

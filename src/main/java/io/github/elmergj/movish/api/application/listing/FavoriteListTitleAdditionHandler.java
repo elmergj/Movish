@@ -2,8 +2,8 @@ package io.github.elmergj.movish.api.application.listing;
 
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleMarkedAsFavoriteEvent;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleUnmarkedAsFavoriteEvent;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
 import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -20,7 +20,7 @@ public class FavoriteListTitleAdditionHandler {
     @Transactional
     public void handle(TitleMarkedAsFavoriteEvent event){
 
-        TitleList favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), TitleListType.FAVORITE_LIST).orElseThrow();
+        Watchlist favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), WatchlistType.FAVORITE_LIST).orElseThrow();
 
         favoriteList.applyAddTitleToDefaultList(event.titleId());
 
@@ -30,7 +30,7 @@ public class FavoriteListTitleAdditionHandler {
     @EventListener
     @Transactional
     public void handle(TitleUnmarkedAsFavoriteEvent event){
-        TitleList favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), TitleListType.FAVORITE_LIST).orElseThrow();
+        Watchlist favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), WatchlistType.FAVORITE_LIST).orElseThrow();
 
         favoriteList.applyRemoveTitleFromDefaultList(event.titleId());
 

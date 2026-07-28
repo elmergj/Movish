@@ -3,12 +3,12 @@ package io.github.elmergj.movish.api.interfaces.rest.library;
 import io.github.elmergj.movish.api.application.Result.FailureResult;
 import io.github.elmergj.movish.api.application.Result.SuccessResult;
 import io.github.elmergj.movish.api.application.library.LibraryService;
-import io.github.elmergj.movish.api.application.library.command.DeleteUserTitleCommand;
-import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.UserTitleAlreadyInLibrary;
-import io.github.elmergj.movish.api.application.library.command.SaveTitleToLibraryCommand;
+import io.github.elmergj.movish.api.application.library.command.RemoveTitleCommand;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.TitleAlreadyInLibrary;
+import io.github.elmergj.movish.api.application.library.command.AddTitleToLibraryCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleFavoriteStatusCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrackingStatusCommand;
-import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsQuery;
+import io.github.elmergj.movish.api.application.library.query.TitleDetailsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class LibraryController {
             @AuthenticationPrincipal String userId,
             @Valid @RequestBody AddTitleToLibraryRequest request) {
 
-        var command = new SaveTitleToLibraryCommand(request.externalTitleId(), request.mediaType(), userId);
+        var command = new AddTitleToLibraryCommand(request.externalTitleId(), request.mediaType(), userId);
 
         var outcome = libraryService.addMediaToLibrary(command);
 
@@ -53,7 +53,7 @@ public class LibraryController {
                                     userTitle.TrackingStatus(),
                                     userTitle.dateAdded(),
                                     userTitle.tmdbRating()));
-            case FailureResult(UserTitleAlreadyInLibrary reason) -> ResponseEntity.badRequest().body("The title with id" + reason.userTitleId() + " already exists");
+            case FailureResult(TitleAlreadyInLibrary reason) -> ResponseEntity.badRequest().body("The title with id" + reason.userTitleId() + " already exists");
         };
     }
 
@@ -62,12 +62,12 @@ public class LibraryController {
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId){
 
-        var query = new UserTitleDetailsQuery(userId, titleId);
+        var query = new TitleDetailsQuery(userId, titleId);
 
         var view = libraryService.getUserTitleDetails(query);
 
         var response = new UserTitleDetailsResponse(
-                view.userTitleId(),
+                view.titleId(),
                 view.trackingStatus(),
                 view.dateAdded(),
                 view.isFavorite(),
@@ -116,7 +116,7 @@ public class LibraryController {
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId){
 
-        var command = new DeleteUserTitleCommand(userId, titleId);
+        var command = new RemoveTitleCommand(userId, titleId);
 
         var outcome = libraryService.deleteUserTitle(command);
 

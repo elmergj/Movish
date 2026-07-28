@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity.TitleListEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,7 +13,7 @@ public interface JpaTitleListRepository extends JpaRepository<TitleListEntity, S
 
     Optional<TitleListEntity> findByUserEntity_Id(String userEntityId);
 
-    Optional<TitleListEntity> findByUserEntity_IdAndListTypeEquals(String userEntityId, TitleListType listType);
+    Optional<TitleListEntity> findByUserEntity_IdAndListTypeEquals(String userEntityId, WatchlistType listType);
 
     boolean existsByUserEntity_IdAndName(String userEntityId, String name);
 

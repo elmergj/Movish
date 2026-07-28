@@ -1,4 +1,4 @@
-package io.github.elmergj.movish.api.domain.model.entity.listing;
+package io.github.elmergj.movish.api.domain.model.entity.watchlist;
 
 import io.github.elmergj.movish.api.domain.exception.DomainRuleViolationException;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
@@ -18,17 +18,17 @@ public class CustomListFactory{
         this.entityIdGenerator = entityIdGenerator;
     }
 
-    public TitleList create(UserId userId, String name) {
+    public Watchlist create(UserId userId, String name) {
 
         if (titleListRepository.existByUserOwnerIdAndListName(userId, name)){
             throw new DomainRuleViolationException("The list name " + name + " is already in use");
         }
 
-        return TitleList.create(
-                entityIdGenerator.generate(TitleListId::from),
+        return Watchlist.create(
+                entityIdGenerator.generate(WatchlistId::from),
                 userId,
                 name,
-                TitleListType.USER_CUSTOM_LIST);
+                WatchlistType.CUSTOM_USER_WATCHLIST);
     }
 
 }

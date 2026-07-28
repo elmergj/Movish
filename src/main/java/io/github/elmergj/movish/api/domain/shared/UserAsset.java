@@ -6,5 +6,7 @@ public interface UserAsset {
 
     UserId getUserOwnerId();
 
-    String getAssetName();
+    default String getAssetName(){
+        return this.getClass().getSimpleName();
+    }
 }

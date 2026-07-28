@@ -1,4 +1,4 @@
-package io.github.elmergj.movish.api.domain.model.entity.listing;
+package io.github.elmergj.movish.api.domain.model.entity.watchlist;
 
 import io.github.elmergj.movish.api.domain.exception.DomainRuleViolationException;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
@@ -10,15 +10,15 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TitleList extends BaseEntity<TitleList, TitleListId> implements UserAsset {
+public class Watchlist extends BaseEntity<Watchlist, WatchlistId> implements UserAsset {
 
     private final UserId userOwnerId;
     private final Set<TitleId> titleIdReferences;
-    private final TitleListType listType;
+    private final WatchlistType listType;
     private final LocalDate dateCreated;
     private String name;
 
-    private TitleList(TitleListId id, UserId userOwnerId, String name, LocalDate dateCreated, TitleListType listType,
+    private Watchlist(WatchlistId id, UserId userOwnerId, String name, LocalDate dateCreated, WatchlistType listType,
                       Set<TitleId> titleIdReferences){
         super(id);
         this.userOwnerId = userOwnerId;
@@ -28,28 +28,23 @@ public class TitleList extends BaseEntity<TitleList, TitleListId> implements Use
         this.titleIdReferences = new HashSet<>(titleIdReferences);
     }
 
-    public static TitleList create(TitleListId id, UserId userOwnerId, String name, TitleListType listType){
+    public static Watchlist create(WatchlistId id, UserId userOwnerId, String name, WatchlistType listType){
 
         Set<TitleId> titleIds = new HashSet<>();
         LocalDate dateCreated = LocalDate.now();
-        return new TitleList(id, userOwnerId, name, dateCreated, listType, titleIds);
+        return new Watchlist(id, userOwnerId, name, dateCreated, listType, titleIds);
     }
 
-    public static TitleList fromExisting(TitleListId id, UserId userOwnerId, String name, LocalDate dateCreated,
-                                         TitleListType listType,
+    public static Watchlist fromExisting(WatchlistId id, UserId userOwnerId, String name, LocalDate dateCreated,
+                                         WatchlistType listType,
                                          Set<TitleId> titleIds){
-        return new TitleList(id, userOwnerId, name, dateCreated,listType, titleIds);
+        return new Watchlist(id, userOwnerId, name, dateCreated,listType, titleIds);
     }
 
     //Getters
     @Override
     public UserId getUserOwnerId(){
         return userOwnerId;
-    }
-
-    @Override
-    public String getAssetName() {
-        return "title list";
     }
 
     public String getName(){
@@ -64,12 +59,12 @@ public class TitleList extends BaseEntity<TitleList, TitleListId> implements Use
         return Set.copyOf(titleIdReferences);
     }
 
-    public TitleListType getListType(){
+    public WatchlistType getListType(){
         return this.listType;
     }
 
     public boolean isDefaultList(){
-        return listType != TitleListType.USER_CUSTOM_LIST;
+        return listType != WatchlistType.CUSTOM_USER_WATCHLIST;
     }
 
     // Public Methods
@@ -84,7 +79,7 @@ public class TitleList extends BaseEntity<TitleList, TitleListId> implements Use
 
     public void addUserTitle(TitleId titleId) {
 
-        if (listType != TitleListType.USER_CUSTOM_LIST){
+        if (listType != WatchlistType.CUSTOM_USER_WATCHLIST){
             throw new DomainRuleViolationException("Unable to add the user title to the list");
         }
 
@@ -96,7 +91,7 @@ public class TitleList extends BaseEntity<TitleList, TitleListId> implements Use
 
     public void removeUserTitle(TitleId titleId) {
 
-        if (listType != TitleListType.USER_CUSTOM_LIST){
+        if (listType != WatchlistType.CUSTOM_USER_WATCHLIST){
             throw new DomainRuleViolationException("Unable to remove the user title from the list");
         }
 

@@ -1,5 +1,7 @@
 package io.github.elmergj.movish.api.application;
 
+import io.github.elmergj.movish.api.application.Result.FailureOutcome;
+
 /**
  * Represents the result of a command execution that has explicit success and
  * failure outcomes.
@@ -22,7 +24,7 @@ package io.github.elmergj.movish.api.application;
  *
  * <ul>
  *     <li>{@code S} belongs to the {@link SuccessOutcome} family.</li>
- *     <li>{@code F} belongs to the {@link FailureReason} family.</li>
+ *     <li>{@code F} belongs to the {@link FailureOutcome} family.</li>
  * </ul>
  *
  * <p>This means that an operation can either:</p>
@@ -48,7 +50,7 @@ package io.github.elmergj.movish.api.application;
  */
 public sealed interface Result<
         S extends Result.SuccessOutcome,
-        F extends Result.FailureReason>
+        F extends FailureOutcome>
         extends CommandResult {
 
     /**
@@ -71,7 +73,7 @@ public sealed interface Result<
      * be completed.
      * </p>
      */
-    interface FailureReason {
+    interface FailureOutcome {
     }
 
 
@@ -90,14 +92,14 @@ public sealed interface Result<
      */
     static <
             S extends SuccessOutcome,
-            F extends FailureReason>
+            F extends FailureOutcome>
     Result<S, F> success(S value) {
         return new SuccessResult<>(value);
     }
 
 
     /**
-     * Creates a failed Result containing the given failure reason.
+     * Creates a failed Result containing the given failure outcome.
      *
      * <p>
      * This factory method provides a more expressive alternative to directly
@@ -107,11 +109,11 @@ public sealed interface Result<
      * @param value the failure information
      * @param <S> the type of the success outcome
      * @param <F> the type of the expected failure
-     * @return a failed Result containing the provided failure reason
+     * @return a failed Result containing the provided failure outcome
      */
     static <
             S extends SuccessOutcome,
-            F extends FailureReason>
+            F extends FailureOutcome>
     Result<S, F> failure(F value) {
         return new FailureResult<>(value);
     }
@@ -130,7 +132,7 @@ public sealed interface Result<
      */
     record SuccessResult<
             S extends SuccessOutcome,
-            F extends FailureReason>(
+            F extends FailureOutcome>(
             S outcome
     ) implements Result<S, F> {
     }
@@ -143,14 +145,14 @@ public sealed interface Result<
      * Contains the expected failure information.
      * </p>
      *
-     * @param reason the failure information
+     * @param outcome the failure information
      * @param <S> the type of the success outcome
      * @param <F> the type of the expected failure
      */
     record FailureResult<
             S extends SuccessOutcome,
-            F extends FailureReason>(
-            F reason
+            F extends FailureOutcome>(
+            F outcome
     ) implements Result<S, F> {
     }
 }

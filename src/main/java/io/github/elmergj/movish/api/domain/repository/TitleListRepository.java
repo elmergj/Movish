@@ -1,28 +1,28 @@
 package io.github.elmergj.movish.api.domain.repository;
 
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListId;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 
 import java.util.Optional;
 
 public interface TitleListRepository {
 
-    void save(TitleList list);
+    void save(Watchlist list);
 
-    Optional<TitleList> findById(TitleListId id);
+    Optional<Watchlist> findById(WatchlistId id);
 
-    Optional<TitleList> findByIdAndUserOwnerId(TitleListId id, UserId userId);
+    Optional<Watchlist> findByIdAndUserOwnerId(WatchlistId id, UserId userId);
 
-    Optional<TitleList> findByUserOwnerId(UserId userId);
+    Optional<Watchlist> findByUserOwnerId(UserId userId);
 
     void removeReferenceFromAllLists(TitleId titleId);
 
-    Optional<TitleList> findByUserOwnerIdAndListType(UserId userId, TitleListType titleListType);
+    Optional<Watchlist> findByUserOwnerIdAndListType(UserId userId, WatchlistType watchlistType);
 
     boolean existByUserOwnerIdAndListName(UserId userId, String name);
 
-    void delete(TitleList titleList);
+    void delete(Watchlist watchlist);
 }

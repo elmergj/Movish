@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.application.library.query;
 
-public record UserTitleDetailsQuery(
+public record TitleDetailsQuery(
         String userId,
         String userTitleId
 ) {

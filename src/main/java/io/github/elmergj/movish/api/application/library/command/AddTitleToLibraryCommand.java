@@ -1,7 +1,7 @@
 package io.github.elmergj.movish.api.application.library.command;
 
-public record SaveTitleToLibraryCommand(
-        String externalTitleId,
+public record AddTitleToLibraryCommand(
+        String mediaId,
         String mediaType,
         String userId
 ) {
