@@ -1,11 +1,15 @@
 package io.github.elmergj.movish.api.interfaces.rest.library;
 
+import io.github.elmergj.movish.api.application.Result.FailureResult;
+import io.github.elmergj.movish.api.application.Result.SuccessResult;
 import io.github.elmergj.movish.api.application.library.LibraryService;
-import io.github.elmergj.movish.api.application.library.command.DeleteUserTitleCommand;
-import io.github.elmergj.movish.api.application.library.command.SaveTitleToLibraryCommand;
+import io.github.elmergj.movish.api.application.library.command.AddTitleToLibraryCommand;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.TitleAlreadyInLibrary;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementOutcome.TitleAdditionOutcome;
+import io.github.elmergj.movish.api.application.library.command.RemoveTitleCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleFavoriteStatusCommand;
 import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrackingStatusCommand;
-import io.github.elmergj.movish.api.application.library.query.UserTitleDetailsQuery;
+import io.github.elmergj.movish.api.application.library.query.TitleDetailsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,50 +24,48 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/library/")
 public class LibraryController {
 
     private final LibraryService libraryService;
+    private final LibraryCommandAssembler commandAssembler;
+    private final LibraryResponseAssembler responseAssembler;
 
     @PostMapping("/title")
-    public ResponseEntity<UserTitleCreationResponse> addTitleToLibrary(
+//    public ResponseEntity<ApiResponse or TitleAdditionResponse{I}> addTitleToLibrary(
+    public ResponseEntity<?> addTitleToLibrary(
             @AuthenticationPrincipal String userId,
             @Valid @RequestBody AddTitleToLibraryRequest request) {
 
-        var command = new SaveTitleToLibraryCommand(request.externalTitleId(), request.mediaType(), userId);
+        AddTitleToLibraryCommand command = commandAssembler.assemble(request, userId);
 
-        var outcome = libraryService.createUserTitle(command);
+        var outcome = libraryService.addTitleToLibrary(command);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{uriResponse}")
-                .buildAndExpand(outcome.id()).toUri();
-
-        var response = new UserTitleCreationResponse(
-                outcome.tmdbId(),
-                outcome.titleName(),
-                outcome.TrackingStatus(),
-                outcome.dateAdded(),
-                outcome.tmdbRating()
-        );
-
-        return ResponseEntity.created(location).body(response);
+        return switch (outcome){
+            case SuccessResult(TitleAdditionOutcome result) ->
+                    ResponseEntity.created(
+                            ServletUriComponentsBuilder
+                                    .fromCurrentRequest()
+                                    .path("/{uriResponse}")
+                                    .buildAndExpand(result.titleId()).toUri())
+                            .body(responseAssembler.assemble(result));
+            case FailureResult(TitleAlreadyInLibrary failure) -> ResponseEntity.badRequest().body("The title with id" + failure.titleId() + " already exists");
+        };
     }
 
     @GetMapping("/{titleId}")
-    public ResponseEntity<UserTitleDetailsResponse> getTitleDetails(
+    public ResponseEntity<TitleDetailsResponse> getTitleDetails(
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId){
 
-        var query = new UserTitleDetailsQuery(userId, titleId);
+        var query = new TitleDetailsQuery(userId, titleId);
 
-        var view = libraryService.getUserTitleDetails(query);
+        var view = libraryService.getTitleDetails(query);
 
-        var response = new UserTitleDetailsResponse(
-                view.userTitleId(),
+        var response = new TitleDetailsResponse(
+                view.titleId(),
                 view.trackingStatus(),
                 view.dateAdded(),
                 view.isFavorite(),
@@ -77,15 +79,15 @@ public class LibraryController {
     public ResponseEntity<TitleFavoriteStatusResponse> updateFavoriteTitle(
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId,
-            @Valid @RequestBody MarkTitleAsFavoriteRequest request){
+            @Valid @RequestBody UpdateTitleFavoriteRequest request){
 
         var command = new UpdateTitleFavoriteStatusCommand(titleId, userId, request.favorite());
 
-        var outcome = libraryService.updateUserTitleFavoriteStatus(command);
+        var outcome = libraryService.updateTitleFavoriteStatus(command);
 
         var response = new TitleFavoriteStatusResponse(
-                outcome.externalTitleId(),
-                outcome.isFavorite()
+                null, // Bug: to solve!
+                false // Bug: to solve!
         );
         return ResponseEntity.ok(response);
     }
@@ -94,30 +96,30 @@ public class LibraryController {
     public ResponseEntity<UpdateTitleTrackingStatusResponse> updateTrackingStatus(
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId,
-            @Valid @RequestBody ChangeTitleTrackingStatusRequest request){
+            @Valid @RequestBody UpdateTitleTrackingStatusRequest request){
 
         var command = new UpdateTitleTrackingStatusCommand(userId, titleId, request.trackingStatus());
 
-        var outcome = libraryService.updateUserTitleTrackingStatus(command);
+        var outcome = libraryService.updateTitleTrackingStatus(command);
 
         var response = new UpdateTitleTrackingStatusResponse(
-                outcome.trackingStatus(),
+                null, // Bug: to solve!
                 "The title with id " + titleId + " was successful updated");
 
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/title/{titleId}")
-    public ResponseEntity<DeleteTitleResponse> deleteTitle(
+    public ResponseEntity<RemoveTitleResponse> removeTitle(
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId){
 
-        var command = new DeleteUserTitleCommand(userId, titleId);
+        var command = new RemoveTitleCommand(userId, titleId);
 
-        var outcome = libraryService.deleteUserTitle(command);
+        var outcome = libraryService.deleteTitle(command);
 
-        var response = new DeleteTitleResponse(
-                "The title with id " + outcome.userTitleId() + " was successful deleted from the library");
+        var response = new RemoveTitleResponse(
+                "The title with id " + "outcome.titleId()" + " was successful deleted from the library"); // Bug: to solve!
 
         return ResponseEntity.ok(response);
     }

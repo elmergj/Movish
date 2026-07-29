@@ -1,8 +1,9 @@
 package io.github.elmergj.movish.api.interfaces.rest.library;
 
+import java.util.Collection;
+
 public record AddTitleToLibraryRequest(
-        String externalTitleId,
-        String mediaType,
-        String providerName
+        Collection<MediaExternalIdPair> mediaExternalIdPairs,
+        String mediaType
 ) {
 }

@@ -5,32 +5,64 @@ import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
+/**
+ * Generates compact, time-ordered identifiers composed of:
+ *
+ * <pre>
+ * [current time in milliseconds, encoded in base36]
+ * [10 random base36 characters]
+ * </pre>
+ *
+ * <p>Example:
+ *
+ * <pre>
+ * mec1i0f3k8n4x9q2v7
+ * </pre>
+ *
+ * <p>The timestamp portion provides approximate chronological ordering,
+ * while the random portion greatly reduces the probability of collisions.
+ *
+ * <p>Characteristics:
+ * <ul>
+ *   <li>Independent of any database sequence or auto-increment column.</li>
+ *   <li>Roughly sortable by creation time.</li>
+ *   <li>Uses a cryptographically strong random source ({@link SecureRandom}).</li>
+ *   <li>Produces shorter identifiers than UUID while remaining highly unique.</li>
+ * </ul>
+ *
+ * <p>This generator is suitable for application-level entity identifiers in
+ * systems where globally unique, human-readable, and time-ordered IDs are
+ * preferred over database-generated numeric identifiers.
+ */
 @Component
 public class TimeRandomIdGenerator implements EntityIdGenerator {
-    private final static SecureRandom random = new SecureRandom();
-    private final static String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+    private static final SecureRandom RANDOM = new SecureRandom();
+    private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
+    private static final int RANDOM_LENGTH = 10;
 
     /**
-     * Generates a 12-character ID (6 time-based + 6 random).
+     * Generates a new identifier consisting of:
      *
-     * <p>The time part helps with database insertion performance, while the random
-     * part provides security against vulnerabilities by exposing the ID externally.</p>
-     * <p>In 2039, the time-based part will change to 7 characters.
-     * If you're reading this in 2039: Hello! I hope cars fly by now.</p><br>
-     * <p>Sincerely, @elmergj from 2026.</p>
+     * <ol>
+     *   <li>The current Unix timestamp in milliseconds encoded in base36.</li>
+     *   <li>A 10-character random suffix using base36 characters
+     *       ({@code 0-9a-z}).</li>
+     * </ol>
+     *
+     * @return a new time-ordered identifier
      */
     @Override
     public String nextId() {
-        // Current Unix time in seconds since 1970-01-01 (UTC)
-        long seconds = System.currentTimeMillis() / 1000;
-        // Unix epoch seconds encoded in base36 (6 chars until 2039)
-        String timePart = Long.toString(seconds, 36);
+        // Current Unix time in milliseconds since 1970-01-01 (UTC)
+        long millis = System.currentTimeMillis();
 
-        // Random part (Set for 6 digits)
-        int randomLength = 6;
-        StringBuilder randomPart = new StringBuilder(randomLength);
-        for (int i = 0; i < randomPart.capacity(); i++) {
-            randomPart.append(ALPHABET.charAt(random.nextInt(36)));
+        // Unix epoch milliseconds encoded in base36
+        String timePart = Long.toString(millis, 36);
+
+        StringBuilder randomPart = new StringBuilder(RANDOM_LENGTH);
+        for (int i = 0; i < RANDOM_LENGTH; i++) {
+            randomPart.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
         }
 
         return timePart + randomPart;

@@ -1,9 +1,9 @@
 package io.github.elmergj.movish.api.application.listing;
 
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleMarkedAsFavoriteEvent;
-import io.github.elmergj.movish.api.domain.model.entity.library.UserTitleUnmarkedAsFavoriteEvent;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleListType;
-import io.github.elmergj.movish.api.domain.model.entity.listing.TitleList;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleMarkedAsFavoriteEvent;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleUnmarkedAsFavoriteEvent;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
 import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -18,21 +18,21 @@ public class FavoriteListTitleAdditionHandler {
 
     @EventListener
     @Transactional
-    public void handle(UserTitleMarkedAsFavoriteEvent event){
+    public void handle(TitleMarkedAsFavoriteEvent event){
 
-        TitleList favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), TitleListType.FAVORITE_LIST).orElseThrow();
+        Watchlist favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), WatchlistType.FAVORITE_LIST).orElseThrow();
 
-        favoriteList.applyAddTitleToDefaultList(event.userTitleId());
+        favoriteList.applyAddTitleToDefaultList(event.titleId());
 
         repository.save(favoriteList);
     }
 
     @EventListener
     @Transactional
-    public void handle(UserTitleUnmarkedAsFavoriteEvent event){
-        TitleList favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), TitleListType.FAVORITE_LIST).orElseThrow();
+    public void handle(TitleUnmarkedAsFavoriteEvent event){
+        Watchlist favoriteList = repository.findByUserOwnerIdAndListType(event.userId(), WatchlistType.FAVORITE_LIST).orElseThrow();
 
-        favoriteList.applyRemoveTitleFromDefaultList(event.userTitleId());
+        favoriteList.applyRemoveTitleFromDefaultList(event.titleId());
 
         repository.save(favoriteList);
     }

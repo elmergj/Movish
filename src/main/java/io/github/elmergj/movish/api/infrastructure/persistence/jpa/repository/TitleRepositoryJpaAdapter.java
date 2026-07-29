@@ -1,13 +1,16 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.MediaType;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.Title;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.TitleId;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaExternalId;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaId;
+import io.github.elmergj.movish.api.domain.model.entity.library.Title;
+import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
+import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 import io.github.elmergj.movish.api.domain.repository.TitleRepository;
 import io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers.TitleJpaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @Repository
@@ -23,14 +26,35 @@ public class TitleRepositoryJpaAdapter implements TitleRepository {
     }
 
     @Override
-    public Optional<Title> findById(TitleId titleId){
-        return jpaTitleRepository.findById(titleId.value())
+    public Optional<Title> findById(TitleId id) {
+        return jpaTitleRepository.findById(id.value())
                 .map(titleJpaMapper::toDomain);
     }
 
     @Override
-    public Optional<Title> findByExternalIdAndMediaType(String externalId, MediaType mediaType) {
-        return jpaTitleRepository.findByIdAndMediaType(externalId, mediaType)
+    public Optional<Title> findByIdAndUserId(TitleId id, UserId userId) {
+        return jpaTitleRepository.findByIdAndUserEntity_Id(id.value(), userId.value())
                 .map(titleJpaMapper::toDomain);
+    }
+
+    @Override
+    public Optional<Title> findByMediaIdAndUserId(MediaId mediaId, UserId userId) {
+        return jpaTitleRepository.findByMediaIdAndUserEntity_Id(mediaId.value(), userId.value())
+                .map(titleJpaMapper::toDomain);
+    }
+
+    @Override
+    public boolean existsByMediaIdAndUserId(MediaId id, UserId userId) {
+        return jpaTitleRepository.existsByMediaIdAndUserEntity_Id(id.value(), userId.value());
+    }
+
+    @Override
+    public boolean existsByMediaExternalIds(UserId userId, Collection<MediaExternalId> externalIds) {
+        return false;
+    }
+
+    @Override
+    public void delete(Title title) {
+        jpaTitleRepository.delete(titleJpaMapper.toJpaTitle(title));
     }
 }

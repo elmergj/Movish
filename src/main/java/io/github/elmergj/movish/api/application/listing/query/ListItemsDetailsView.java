@@ -10,7 +10,7 @@ public record ListItemsDetailsView(
         List<Items> itemsDetails
 ) {
     public record Items(
-            String userTitleId,
+            String titleId,
             String name,
             String trackingStatus,
             double userRating,

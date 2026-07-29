@@ -37,4 +37,7 @@ out/
 .vscode/
 
 ### Other
+*.ig.file
 *ig.md
+*ig.dir
+.aider*

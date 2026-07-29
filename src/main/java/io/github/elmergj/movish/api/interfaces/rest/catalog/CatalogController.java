@@ -1,7 +1,7 @@
 package io.github.elmergj.movish.api.interfaces.rest.catalog;
 
-import io.github.elmergj.movish.api.application.catalog.command.SearchTitleCommand;
-import io.github.elmergj.movish.api.application.catalog.TitleCatalogService;
+import io.github.elmergj.movish.api.application.catalog.command.SearchMediaCommand;
+import io.github.elmergj.movish.api.application.catalog.MediaCatalogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/search")
 public class CatalogController {
 
-    private final TitleCatalogService titleCatalogService;
+    private final MediaCatalogService mediaCatalogService;
 
     @GetMapping()
-    public ResponseEntity<TitleSearchResponse> getTitleSearchResults(@Valid TitleSearchRequest request) {
-        var command = new SearchTitleCommand(request.query(), request.page(), request.size());
+    public ResponseEntity<MediaSearchResponse> getTitleSearchResults(@Valid MediaSearchRequest request) {
+        var command = new SearchMediaCommand(request.query(), request.page(), request.size());
 
-        var results = titleCatalogService.searchTitleByQuery(command);
+        var results = mediaCatalogService.searchMediaByQuery(command);
 
-        var response = new TitleSearchResponse(results);
+        var response = new MediaSearchResponse(results);
 
         return ResponseEntity.ok(response);
     }

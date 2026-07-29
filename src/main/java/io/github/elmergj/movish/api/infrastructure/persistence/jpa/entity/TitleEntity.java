@@ -1,12 +1,16 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.title.MediaType;
+
+import io.github.elmergj.movish.api.domain.model.entity.library.TrackingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,26 +21,38 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "title")
-public class TitleEntity{
+@Table(
+        name = "user_media",
+        uniqueConstraints = @UniqueConstraint(name = "unique_title_constraint", columnNames = {"user_id", "media_id"}
+))
+public class TitleEntity {
 
     @Id
     @Column(nullable = false, updatable = false)
     private String id;
 
-    @Column(nullable = false, updatable = false)
-    private String externalTitleId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
 
     @Column(nullable = false)
-    private String name;
+    private String mediaId;
 
     @Column(nullable = false)
-    private LocalDate releaseDate;
+    private LocalDate createdDate;
 
     @Column(nullable = false)
-    private Double tmdbRating;
+    private boolean isFavorite;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MediaType mediaType;
+    private TrackingStatus status;
+
+    @Column(nullable = false)
+    private int timesWatched;
+
+    private int titleUserRating;
+
+    private String titleReview;
+
 }

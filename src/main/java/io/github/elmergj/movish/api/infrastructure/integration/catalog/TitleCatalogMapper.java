@@ -1,8 +1,8 @@
 package io.github.elmergj.movish.api.infrastructure.integration.catalog;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.TitleDetailsResult;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaDetailsResult;
 
 public interface TitleCatalogMapper<I>{
 
-    TitleDetailsResult toCatalogResult(I providerMediaInput);
+    MediaDetailsResult toCatalogResult(I providerMediaInput);
 }
