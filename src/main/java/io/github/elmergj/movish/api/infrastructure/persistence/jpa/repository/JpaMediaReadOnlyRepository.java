@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaMediaReadOnlyRepository extends Repository<MediaEntity, String> {
 
@@ -20,4 +21,8 @@ public interface JpaMediaReadOnlyRepository extends Repository<MediaEntity, Stri
         WHERE t.id IN :ids
         """)
     List<MediaSummaryQueryResult> findAllByIdIn(@Param("ids") Collection<String> ids);
+
+    @Query("""
+        
+    Optional<String> findByExternalIds(Collection<String> ids);
 }

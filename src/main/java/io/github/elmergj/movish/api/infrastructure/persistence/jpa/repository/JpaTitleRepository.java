@@ -8,4 +8,10 @@ import java.util.Optional;
 public interface JpaTitleRepository extends JpaRepository<TitleEntity, String> {
 
     Optional<TitleEntity> findByIdAndUserEntity_Id(String id, String userEntityId);
+
+    Optional<TitleEntity> findByMediaIdAndUserEntity_Id(String mediaId, String userEntityId);
+
+    boolean existsByMediaIdAndUserEntity_Id(String mediaId, String userEntityId);
+
+    boolean existsByE (String mediaId, String userEntityId);
 }

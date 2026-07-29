@@ -43,11 +43,11 @@ public class TmdbCatalogSourceProvider implements MediaCatalogSource {
     }
 
     @Override
-    public MediaDetailsResult fetchMediaDetails(String externalTitleId, MediaType mediaType) {
+    public MediaDetailsResult fetchMediaDetails(String mediaExternalId, MediaType mediaType) {
         return switch (mediaType) {
             case MOVIE -> {
                 var clientResponse = restClient.get()
-                        .uri("/movie/{id}", externalTitleId)
+                        .uri("/movie/{id}", mediaExternalId)
                         .retrieve()
                         .body(MovieDetailsResponse.class);
 
@@ -55,7 +55,7 @@ public class TmdbCatalogSourceProvider implements MediaCatalogSource {
             }
             case TV_SHOW -> {
                 var clientResponse = restClient.get()
-                        .uri("/tv/{id}", externalTitleId)
+                        .uri("/tv/{id}", mediaExternalId)
                         .retrieve()
                         .body(TvDetailsResponse.class);
 

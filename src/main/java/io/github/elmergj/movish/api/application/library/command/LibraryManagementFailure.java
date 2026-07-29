@@ -5,7 +5,7 @@ import io.github.elmergj.movish.api.application.Result.FailureOutcome;
 public sealed interface LibraryManagementFailure extends FailureOutcome {
 
     record TitleAlreadyInLibrary(
-            String userTitleId
+            String titleId
     ) implements LibraryManagementFailure {
     }
 

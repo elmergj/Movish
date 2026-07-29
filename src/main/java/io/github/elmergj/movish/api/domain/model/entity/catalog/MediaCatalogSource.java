@@ -12,5 +12,5 @@ public interface MediaCatalogSource {
 
     SearchResultSet<MediaSummaryResult> searchTitleByFilters(SearchFilter filter, int page, int pageSize);
 
-    MediaDetailsResult fetchMediaDetails(String externalTitleId, MediaType mediaType);
+    MediaDetailsResult fetchMediaDetails(String mediaExternalId, MediaType mediaType);
 }

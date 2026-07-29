@@ -1,6 +1,6 @@
 # Aggregate Specification: [User]
 
-> **Definition:** High-level description of what this aggregate represents in the business world.
+> **Definition:** High-level fullName of what this aggregate represents in the business world.
 
 ---
 

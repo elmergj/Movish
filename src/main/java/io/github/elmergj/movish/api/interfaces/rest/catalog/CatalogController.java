@@ -17,12 +17,12 @@ public class CatalogController {
     private final MediaCatalogService mediaCatalogService;
 
     @GetMapping()
-    public ResponseEntity<TitleSearchResponse> getTitleSearchResults(@Valid TitleSearchRequest request) {
+    public ResponseEntity<MediaSearchResponse> getTitleSearchResults(@Valid MediaSearchRequest request) {
         var command = new SearchMediaCommand(request.query(), request.page(), request.size());
 
         var results = mediaCatalogService.searchMediaByQuery(command);
 
-        var response = new TitleSearchResponse(results);
+        var response = new MediaSearchResponse(results);
 
         return ResponseEntity.ok(response);
     }

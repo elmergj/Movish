@@ -23,31 +23,31 @@ public class ListingQueryService {
 
     public ListItemsDetailsView getListItemsDetails(Watchlist watchlist){
 
-        List<TitleSummaryQueryResult> userTitleSummary =
-                titleQueries.getTitleSummaryMatching(watchlist.getUserTitleIdReferences()
+        List<TitleSummaryQueryResult> titleSummary =
+                titleQueries.getTitleSummaryMatching(watchlist.getTitleIdReferences()
                         .stream()
                         .map(TitleId::value)
                         .toList());
 
-        List<String> externalTitleIds = userTitleSummary.stream()
+        List<String> mediaExternalIds = titleSummary.stream()
                 .map(TitleSummaryQueryResult::getTitleId)
                 .filter(Objects::nonNull)
                 .distinct()
                 .toList();
 
-        Map<String, MediaSummaryQueryResult> mediaSummaryMap = catalogMediaQueries.getMediaSummaryMatching(externalTitleIds)
+        Map<String, MediaSummaryQueryResult> mediaSummaryMap = catalogMediaQueries.getMediaSummaryMatching(mediaExternalIds)
                 .stream()
                 .collect(Collectors.toMap(MediaSummaryQueryResult::getTitleId, t -> t));
 
-        List<ListItemsDetailsView.Items> itemsDetails = userTitleSummary
+        List<ListItemsDetailsView.Items> itemsDetails = titleSummary
                 .stream()
                 .map(title -> {
                     var media = mediaSummaryMap.get(title.getTitleId());
                     return new ListItemsDetailsView.Items(
-                            title.getUserTitleId(),
+                            title.getTitleId(),
                             media.getName(),
                             title.getTrackingStatus(),
-                            title.getUserTitleRating(),
+                            title.getTitleRating(),
                             media.getTmdbRating(),
                             media.getReleaseDate()
                     );
@@ -58,7 +58,7 @@ public class ListingQueryService {
         return new ListItemsDetailsView(
                 watchlist.id().value(),
                 watchlist.getName(),
-                watchlist.getUserTitleIdReferences().size(),
+                watchlist.getTitleIdReferences().size(),
                 itemsDetails
         );
     }

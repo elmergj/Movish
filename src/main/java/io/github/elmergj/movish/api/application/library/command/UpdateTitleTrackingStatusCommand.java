@@ -4,7 +4,7 @@ import io.github.elmergj.movish.api.application.Command;
 
 public record UpdateTitleTrackingStatusCommand(
         String userId,
-        String userTitleId,
+        String titleId,
         String trackingStatus
 ) implements Command {
 }

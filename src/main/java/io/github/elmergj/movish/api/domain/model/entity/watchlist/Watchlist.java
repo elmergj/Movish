@@ -55,7 +55,7 @@ public class Watchlist extends BaseEntity<Watchlist, WatchlistId> implements Use
         return dateCreated;
     }
 
-    public Set<TitleId> getUserTitleIdReferences(){
+    public Set<TitleId> getTitleIdReferences(){
         return Set.copyOf(titleIdReferences);
     }
 
@@ -77,7 +77,7 @@ public class Watchlist extends BaseEntity<Watchlist, WatchlistId> implements Use
         this.name = name;
     }
 
-    public void addUserTitle(TitleId titleId) {
+    public void addTitle(TitleId titleId) {
 
         if (listType != WatchlistType.CUSTOM_USER_WATCHLIST){
             throw new DomainRuleViolationException("Unable to add the user title to the list");
@@ -89,7 +89,7 @@ public class Watchlist extends BaseEntity<Watchlist, WatchlistId> implements Use
         titleIdReferences.add(titleId);
     }
 
-    public void removeUserTitle(TitleId titleId) {
+    public void removeTitle(TitleId titleId) {
 
         if (listType != WatchlistType.CUSTOM_USER_WATCHLIST){
             throw new DomainRuleViolationException("Unable to remove the user title from the list");

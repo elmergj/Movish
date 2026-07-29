@@ -53,6 +53,6 @@ public class TitleEntity {
 
     private int titleUserRating;
 
-    private String userTitleReview;
+    private String titleReview;
 
 }

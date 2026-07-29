@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 
 public record MediaAverageRating(
         double averageRating,
-        MediaProvider provider,
+        String provider,
         int votesCount,
         RatingScale scale
 ) {
@@ -22,20 +22,20 @@ public record MediaAverageRating(
     }
 
     // Factory Methods with default scale (ONE_TO_TEN)
-    public static MediaAverageRating of(double rating, MediaProvider provider, int votesCount) {
+    public static MediaAverageRating of(double rating, String provider, int votesCount) {
         return new MediaAverageRating(rating, provider, votesCount, RatingScale.ONE_TO_TEN);
     }
 
-    public static MediaAverageRating of(String rating, MediaProvider provider, int votesCount) {
+    public static MediaAverageRating of(String rating, String provider, int votesCount) {
         Ensure.that(rating, "MediaAverageRating").isNotBlank();
         return new MediaAverageRating(Double.parseDouble(rating), provider, votesCount, RatingScale.ONE_TO_TEN);
     }
 
-    public static MediaAverageRating of(double rating, MediaProvider provider, int votesCount, RatingScale scale) {
+    public static MediaAverageRating of(double rating, String provider, int votesCount, RatingScale scale) {
         return new MediaAverageRating(rating, provider, votesCount, scale);
     }
 
-    public static MediaAverageRating of(String rating, MediaProvider provider, int votesCount, RatingScale scale) {
+    public static MediaAverageRating of(String rating, String provider, int votesCount, RatingScale scale) {
         Ensure.that(rating, "MediaAverageRating").isNotBlank();
         return new MediaAverageRating(Double.parseDouble(rating), provider, votesCount, scale);
     }

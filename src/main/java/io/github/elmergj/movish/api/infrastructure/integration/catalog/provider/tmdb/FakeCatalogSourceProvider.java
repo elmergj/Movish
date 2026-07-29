@@ -25,7 +25,7 @@ public class FakeCatalogSourceProvider implements MediaCatalogSource {
     }
 
     @Override
-    public MediaDetailsResult fetchMediaDetails(String externalTitleId, MediaType mediaType) {
+    public MediaDetailsResult fetchMediaDetails(String mediaExternalId, MediaType mediaType) {
         throw new UnsupportedOperationException("Fake details not implemented yet");
     }
 }

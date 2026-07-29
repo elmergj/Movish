@@ -2,8 +2,7 @@ package io.github.elmergj.movish.api.application.catalog;
 
 import io.github.elmergj.movish.api.application.catalog.command.SearchMediaCommand;
 import io.github.elmergj.movish.api.domain.model.entity.catalog.MediaCatalogSource;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaAverageRating;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaProvider;
+import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaExternalId;
 import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaSummaryResult;
 import io.github.elmergj.movish.api.domain.model.entity.catalog.search.SearchResultSet;
 import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaDetailsResult;
@@ -15,6 +14,7 @@ import io.github.elmergj.movish.api.domain.shared.EntityIdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -24,6 +24,7 @@ public class MediaCatalogService {
     private final MediaCatalogSource mediaCatalogSource;
     private final MediaRepository mediaRepository;
     private final EntityIdGenerator entityIdGenerator;
+    private final MediaProviderPriorityPolicy providerPriorityPolicy;
 
     public SearchResultSet<MediaSummaryResult> searchMediaByQuery(SearchMediaCommand command) {
 
@@ -31,11 +32,6 @@ public class MediaCatalogService {
                command.pageSize());
 
     }
-
-    private MediaDetailsResult fetchMediaDetails(String externalMediaId, MediaType mediaType) {
-        return mediaCatalogSource.fetchMediaDetails(externalMediaId, mediaType);
-    }
-
 
     public Media getMedia(String externalMediaId, MediaType mediaType) {
 
@@ -47,7 +43,7 @@ public class MediaCatalogService {
                             List.of(mediaDetails.externalMediaId()),
                             mediaDetails.name(),
                             mediaDetails.mediaType(),
-                            List.of(MediaAverageRating.of(10.0, new MediaProvider("Provider"), 10)),
+                            null,
                             null, // Bug: to solve!
                             mediaDetails.releaseDate()
                             );
@@ -56,7 +52,18 @@ public class MediaCatalogService {
                 });
     }
 
+
+    // Internal Methods
     private void saveMediaToCatalog(Media media) {
         mediaRepository.save(media);
+    }
+
+    private MediaDetailsResult fetchMediaDetails(String externalMediaId, MediaType mediaType) {
+        return mediaCatalogSource.fetchMediaDetails(externalMediaId, mediaType);
+    }
+
+    // Raw method
+    private MediaExternalId selectMediaProvider(Collection<MediaExternalId> externalIds){
+        return providerPriorityPolicy.select(externalIds);
     }
 }

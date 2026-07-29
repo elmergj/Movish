@@ -8,8 +8,8 @@ import io.github.elmergj.movish.api.application.listing.command.CustomListDeleti
 import io.github.elmergj.movish.api.application.listing.command.DeleteCustomListCommand;
 import io.github.elmergj.movish.api.application.listing.command.ListNameUpdateOutcome;
 import io.github.elmergj.movish.api.application.listing.command.RemoveTitleFromListCommand;
-import io.github.elmergj.movish.api.application.listing.command.UserTitleAdditionToListOutcome;
-import io.github.elmergj.movish.api.application.listing.command.UserTitleRemovalFromListOutcome;
+import io.github.elmergj.movish.api.application.listing.command.TitleAdditionToListOutcome;
+import io.github.elmergj.movish.api.application.listing.command.TitleRemovalFromListOutcome;
 import io.github.elmergj.movish.api.application.listing.query.ListDetailsQuery;
 import io.github.elmergj.movish.api.application.listing.query.ListDetailsView;
 import io.github.elmergj.movish.api.application.listing.query.ListItemsDetailsView;
@@ -58,7 +58,7 @@ public class ListingService {
         return new ListDetailsView(
                 watchlist.id().value(),
                 watchlist.getName(),
-                watchlist.getUserTitleIdReferences().size()
+                watchlist.getTitleIdReferences().size()
         );
     }
 
@@ -80,20 +80,20 @@ public class ListingService {
     }
 
     @Transactional
-    public UserTitleAdditionToListOutcome addTitleToList(AddTitleToListCommand command){
+    public TitleAdditionToListOutcome addTitleToList(AddTitleToListCommand command){
 
         Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserWatchlist.addUserTitle(TitleId.from(command.titleId()));
+        customUserWatchlist.addTitle(TitleId.from(command.titleId()));
 
         titleListRepository.save(customUserWatchlist);
 
-        return new UserTitleAdditionToListOutcome(
+        return new TitleAdditionToListOutcome(
                 customUserWatchlist.id().value(),
                 command.titleId(),
-                customUserWatchlist.getUserTitleIdReferences().size()
+                customUserWatchlist.getTitleIdReferences().size()
         );
     }
 
@@ -107,21 +107,21 @@ public class ListingService {
     }
 
     @Transactional
-    public UserTitleRemovalFromListOutcome removeTitleFromList(RemoveTitleFromListCommand command){
+    public TitleRemovalFromListOutcome removeTitleFromList(RemoveTitleFromListCommand command){
 
         Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
 
-        customUserWatchlist.removeUserTitle(TitleId.from(command.titleId()));
+        customUserWatchlist.removeTitle(TitleId.from(command.titleId()));
 
         titleListRepository.save(customUserWatchlist);
 
-        return new UserTitleRemovalFromListOutcome(
+        return new TitleRemovalFromListOutcome(
                 customUserWatchlist.id().value(),
                 command.titleId(),
-                customUserWatchlist.getUserTitleIdReferences().size()
+                customUserWatchlist.getTitleIdReferences().size()
         );
     }
 
@@ -139,6 +139,6 @@ public class ListingService {
         return new ListNameUpdateOutcome(
                 customUserWatchlist.id().value(),
                 customUserWatchlist.getName(),
-                customUserWatchlist.getUserTitleIdReferences().size());
+                customUserWatchlist.getTitleIdReferences().size());
     }
 }
