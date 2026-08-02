@@ -1,7 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaExternalId;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaId;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaId;
 import io.github.elmergj.movish.api.domain.model.entity.library.Title;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
@@ -10,7 +9,6 @@ import io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers.Title
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collection;
 import java.util.Optional;
 
 @Repository
@@ -48,10 +46,6 @@ public class TitleRepositoryJpaAdapter implements TitleRepository {
         return jpaTitleRepository.existsByMediaIdAndUserEntity_Id(id.value(), userId.value());
     }
 
-    @Override
-    public boolean existsByMediaExternalIds(UserId userId, Collection<MediaExternalId> externalIds) {
-        return false;
-    }
 
     @Override
     public void delete(Title title) {

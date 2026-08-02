@@ -16,14 +16,12 @@ import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrack
 import io.github.elmergj.movish.api.application.library.query.TitleDetails;
 import io.github.elmergj.movish.api.application.library.query.TitleDetailsQuery;
 import io.github.elmergj.movish.api.application.library.query.TitleDetailsView;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.Media;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaExternalId;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaType;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaId;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaType;
 import io.github.elmergj.movish.api.domain.model.entity.library.Title;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.library.TrackingStatus;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
-import io.github.elmergj.movish.api.domain.repository.MediaRepository;
 import io.github.elmergj.movish.api.domain.repository.TitleRepository;
 import io.github.elmergj.movish.api.domain.shared.EntityIdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +29,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-
 @Service
 @RequiredArgsConstructor
 public class LibraryService {
 
     private final TitleRepository titleRepository;
-    private final MediaRepository mediaRepository;
     private final MediaCatalogService mediaCatalogService;
     private final EntityIdGenerator entityIdGenerator;
     private final ApplicationEventPublisher publisher;
@@ -48,30 +43,21 @@ public class LibraryService {
     @Transactional
     public Result<TitleAdditionOutcome, TitleAlreadyInLibrary> addTitleToLibrary(AddTitleToLibraryCommand command){
 
-        //Mapeo de media_external_ids externos a internos (con Id)
-        Collection<MediaExternalId> externalIds =
-                command.mediaExternalReferences().stream()
-                        .map(ref -> new MediaExternalId(
-                                mediaProviderRegistry.findByExternalName(ref.mediaProvider()),
-                                ref.value()))
-                        .toList();
-
-        //Resolver media_id interno mediante los external_ids
-        var mediaId = titleIdentityResolver.resolveByExternalIds(externalIds);
         var userId = UserId.from(command.userId());
+        var mediaId = MediaId.from(command.mediaId());
 
-        //Si el media_id existe para el mismo user_id
+//        Si el media_id existe para el mismo user_id
         if (titleRepository.existsByMediaIdAndUserId(mediaId, userId)){
-            return Result.failure(new TitleAlreadyInLibrary(null));
+            return Result.failure(new TitleAlreadyInLibrary(null)); // bug: to handle null.
         }
 
-        var media = mediaCatalogService.getMedia(
-                command.mediaId(),
-                MediaType.valueOf(command.mediaType()));
+        var media = mediaCatalogService.getMediaBasic(mediaId.value(), command.mediaType());
 
         var title = Title.create(
                 entityIdGenerator.generate(TitleId::from),
-                media.id(),
+                MediaId.from(media.mediaId()),
+                media.mediaName(),
+                MediaType.fromExternalValue(media.mediaType()),
                 userId
         );
 
@@ -79,9 +65,8 @@ public class LibraryService {
 
         return Result.success(new TitleAdditionOutcome(
                 title.id().value(),
-                media.externalIds().stream()
-                        .map(),
-                media.name(),
+                title.getMediaId().value(),
+                title.getName(),
                 title.getDateAdded().toString()
         ));
     }
@@ -92,12 +77,13 @@ public class LibraryService {
                 TitleId.from(query.titleId()), UserId.from(query.userId()))
                 .orElseThrow();
 
-        Media media = mediaRepository.findById(title.getMediaId()).orElseThrow();
+        var media = mediaCatalogService.getMediaSummary(title.getMediaId().value(), title.getMediaType().externalValue());
 
-        TitleDetails titleDetails = new TitleDetails(
-                media.id().value(),
-                media.name(),
-                media.releaseDate().toString()
+        var titleDetails = new TitleDetails(
+                title.getMediaId().value(),
+                title.getName(),
+                media.releaseDate()
+
         );
 
         return new TitleDetailsView(

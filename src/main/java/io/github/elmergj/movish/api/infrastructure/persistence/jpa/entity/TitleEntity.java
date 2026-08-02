@@ -1,6 +1,7 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity;
 
 
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaType;
 import io.github.elmergj.movish.api.domain.model.entity.library.TrackingStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,13 @@ public class TitleEntity {
 
     @Column(nullable = false)
     private String mediaId;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MediaType mediaType;
 
     @Column(nullable = false)
     private LocalDate createdDate;

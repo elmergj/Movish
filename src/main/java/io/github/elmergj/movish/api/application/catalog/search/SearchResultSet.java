@@ -1,4 +1,4 @@
-package io.github.elmergj.movish.api.domain.model.entity.catalog.search;
+package io.github.elmergj.movish.api.application.catalog.search;
 
 import java.util.List;
 

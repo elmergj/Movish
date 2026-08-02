@@ -37,7 +37,7 @@ public class ListingQueryService {
 
         Map<String, MediaSummaryQueryResult> mediaSummaryMap = catalogMediaQueries.getMediaSummaryMatching(mediaExternalIds)
                 .stream()
-                .collect(Collectors.toMap(MediaSummaryQueryResult::getTitleId, t -> t));
+                .collect(Collectors.toMap(MediaSummaryQueryResult::getMediaId, t -> t));
 
         List<ListItemsDetailsView.Items> itemsDetails = titleSummary
                 .stream()

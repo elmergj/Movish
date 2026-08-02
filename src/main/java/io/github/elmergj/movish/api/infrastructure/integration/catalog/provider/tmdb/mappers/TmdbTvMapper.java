@@ -1,7 +1,7 @@
 package io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.mappers;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaDetailsResult;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaType;
+import io.github.elmergj.movish.api.application.catalog.search.MediaDetailsResult;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaType;
 import io.github.elmergj.movish.api.infrastructure.integration.catalog.TitleCatalogMapper;
 import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.dtos.tv.TvDetailsResponse;
 import org.springframework.stereotype.Component;

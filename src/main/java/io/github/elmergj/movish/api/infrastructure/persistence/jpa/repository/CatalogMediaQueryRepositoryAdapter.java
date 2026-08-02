@@ -23,7 +23,8 @@ public class CatalogMediaQueryRepositoryAdapter implements CatalogMediaQueries {
 
     @Override
     public List<MediaSummaryQueryResult> getMediaSummaryMatching(Collection<String> externalIds) {
-        return repository.findAllByIdIn(externalIds.stream().toList());
+//        return repository.findAllByIdIn(externalIds.stream().toList());
+        return null;
     }
 
     @Override

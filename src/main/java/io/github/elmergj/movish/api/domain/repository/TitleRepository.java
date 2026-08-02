@@ -1,12 +1,10 @@
 package io.github.elmergj.movish.api.domain.repository;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaExternalId;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaId;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaId;
 import io.github.elmergj.movish.api.domain.model.entity.library.Title;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 
-import java.util.Collection;
 import java.util.Optional;
 
 public interface TitleRepository {
@@ -20,8 +18,6 @@ public interface TitleRepository {
     Optional<Title> findByMediaIdAndUserId(MediaId mediaId, UserId userId);
 
     boolean existsByMediaIdAndUserId(MediaId id, UserId userId);
-
-    boolean existsByMediaExternalIds(UserId userId, Collection<MediaExternalId> externalIds);
 
     void delete(Title title);
 }

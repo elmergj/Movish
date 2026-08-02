@@ -1,10 +1,10 @@
 package io.github.elmergj.movish.api.domain.model.entity.catalog;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaSummaryResult;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.SearchFilter;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.SearchResultSet;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.search.MediaDetailsResult;
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaType;
+import io.github.elmergj.movish.api.application.catalog.search.MediaBasicResult;
+import io.github.elmergj.movish.api.application.catalog.search.MediaDetailsResult;
+import io.github.elmergj.movish.api.application.catalog.search.MediaSummaryResult;
+import io.github.elmergj.movish.api.application.catalog.search.SearchFilter;
+import io.github.elmergj.movish.api.application.catalog.search.SearchResultSet;
 
 public interface MediaCatalogSource {
 
@@ -12,5 +12,9 @@ public interface MediaCatalogSource {
 
     SearchResultSet<MediaSummaryResult> searchTitleByFilters(SearchFilter filter, int page, int pageSize);
 
-    MediaDetailsResult fetchMediaDetails(String mediaExternalId, MediaType mediaType);
+    MediaDetailsResult fetchMediaDetails(String mediaId, String mediaType);
+
+    MediaSummaryResult fetchMediaSummary(String mediaId, String mediaType);
+
+    MediaBasicResult fetchMediaBasicData(String mediaId, String mediaType);
 }

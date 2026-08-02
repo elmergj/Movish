@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.interfaces.rest.catalog;
 
-import io.github.elmergj.movish.api.application.catalog.command.SearchMediaCommand;
+import io.github.elmergj.movish.api.application.catalog.search.SearchMediaCommand;
 import io.github.elmergj.movish.api.application.catalog.MediaCatalogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

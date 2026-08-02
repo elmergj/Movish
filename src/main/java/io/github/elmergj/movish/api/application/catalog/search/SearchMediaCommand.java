@@ -1,4 +1,4 @@
-package io.github.elmergj.movish.api.application.catalog.command;
+package io.github.elmergj.movish.api.application.catalog.search;
 
 import io.github.elmergj.movish.api.application.Command;
 

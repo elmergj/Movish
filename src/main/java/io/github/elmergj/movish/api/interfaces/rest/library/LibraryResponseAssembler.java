@@ -9,11 +9,7 @@ public class LibraryResponseAssembler {
     TitleCreationResponse assemble(TitleAdditionOutcome outcome) {
         return new TitleCreationResponse(
                 outcome.titleId(),
-                outcome.externalIdReferences().stream()
-                        .map(ref -> new MediaExternalIdPair(
-                                ref.mediaProvider(),
-                                ref.value()))
-                        .toList(),
+                outcome.mediaId(),
                 outcome.titleName(),
                 outcome.dateAdded()
         );

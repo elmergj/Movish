@@ -1,6 +1,6 @@
-package io.github.elmergj.movish.api.domain.model.entity.catalog.search;
+package io.github.elmergj.movish.api.application.catalog.search;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaType;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaType;
 
 import java.time.LocalDate;
 

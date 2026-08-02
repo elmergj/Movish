@@ -13,5 +13,4 @@ public interface JpaTitleRepository extends JpaRepository<TitleEntity, String> {
 
     boolean existsByMediaIdAndUserEntity_Id(String mediaId, String userEntityId);
 
-    boolean existsByE (String mediaId, String userEntityId);
 }
