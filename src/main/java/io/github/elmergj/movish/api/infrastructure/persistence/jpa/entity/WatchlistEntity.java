@@ -22,7 +22,7 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "title_list")
+@Table(name = "watchlist")
 public class WatchlistEntity {
 
     @Id

@@ -5,8 +5,8 @@ import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
-import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
-import io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers.TitleListJpaMapper;
+import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
+import io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers.WatchlistJpaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,32 +14,32 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class TitleListRepositoryJpaAdapter implements TitleListRepository {
+public class WatchlistRepositoryJpaAdapter implements WatchlistRepository {
 
     private final JpaTitleListRepository jpaTitleListRepository;
-    private final TitleListJpaMapper titleListJpaMapper;
+    private final WatchlistJpaMapper watchlistJpaMapper;
 
     @Override
     public void save(Watchlist watchlist) {
-        jpaTitleListRepository.save(titleListJpaMapper.toJpaTitleList(watchlist));
+        jpaTitleListRepository.save(watchlistJpaMapper.toJpaTitleList(watchlist));
     }
 
     @Override
     public Optional<Watchlist> findById(WatchlistId id) {
         return jpaTitleListRepository.findById(id.value())
-                .map(titleListJpaMapper::toDomain);
+                .map(watchlistJpaMapper::toDomain);
     }
 
     @Override
     public Optional<Watchlist> findByIdAndUserOwnerId(WatchlistId id, UserId userId) {
         return jpaTitleListRepository.findByIdAndUserEntity_Id(id.value(), userId.value())
-                .map(titleListJpaMapper::toDomain);
+                .map(watchlistJpaMapper::toDomain);
     }
 
     @Override
     public Optional<Watchlist> findByUserOwnerId(UserId userId) {
         return jpaTitleListRepository.findByUserEntity_Id(userId.value())
-                .map(titleListJpaMapper::toDomain);
+                .map(watchlistJpaMapper::toDomain);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class TitleListRepositoryJpaAdapter implements TitleListRepository {
     @Override
     public Optional<Watchlist> findByUserOwnerIdAndListType(UserId userId, WatchlistType watchlistType) {
         return jpaTitleListRepository.findByUserEntity_IdAndListTypeEquals(userId.value(), watchlistType)
-                .map(titleListJpaMapper::toDomain);
+                .map(watchlistJpaMapper::toDomain);
     }
 
     @Override
@@ -60,6 +60,6 @@ public class TitleListRepositoryJpaAdapter implements TitleListRepository {
 
     @Override
     public void delete(Watchlist watchlist) {
-        jpaTitleListRepository.delete(titleListJpaMapper.toJpaTitleList(watchlist));
+        jpaTitleListRepository.delete(watchlistJpaMapper.toJpaTitleList(watchlist));
     }
 }

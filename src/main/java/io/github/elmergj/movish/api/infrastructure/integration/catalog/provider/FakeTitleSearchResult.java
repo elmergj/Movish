@@ -14,13 +14,13 @@ public class FakeTitleSearchResult {
     public static SearchResultSet<MediaSummaryResult> getFakeTitleSearchResult(){
 
         List<MediaSummaryResult> results = new ArrayList<>();
-//        MediaSummaryResult fakeMediaSummaryResult = new MediaSummaryResult(
-//                "597",
-//                "Titanic",
-//                "/image.jpg",
-//                null, //Bug: to solve!
-//                MediaType.MOVIE.name());
-//        results.add(fakeMediaSummaryResult);
+        MediaSummaryResult fakeMediaSummaryResult = new MediaSummaryResult(
+                "Titanic",
+                "/image.jpg",
+                8.90,
+                "movie",
+                "2000-12-12");
+        results.add(fakeMediaSummaryResult);
 
         return new SearchResultSet<>(results, 1, 12, false);
     }

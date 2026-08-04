@@ -1,7 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
 import io.github.elmergj.movish.api.domain.repository.MediaRepository;
-import io.github.elmergj.movish.api.infrastructure.persistence.jpa.mappers.MediaJpaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -9,8 +8,8 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class MediaRepositoryJpaAdapter implements MediaRepository {
 
-    private final JpaMediaRepository jpaMediaRepository;
-    private final MediaJpaMapper mediaJpaMapper;
+//    private final JpaMediaRepository jpaMediaRepository;
+//    private final MediaJpaMapper mediaJpaMapper;
 //
 //    @Override
 //    public void save(Media media) {

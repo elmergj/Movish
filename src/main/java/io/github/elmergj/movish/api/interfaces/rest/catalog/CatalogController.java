@@ -17,7 +17,7 @@ public class CatalogController {
     private final MediaCatalogService mediaCatalogService;
 
     @GetMapping()
-    public ResponseEntity<MediaSearchResponse> getTitleSearchResults(@Valid MediaSearchRequest request) {
+    public ResponseEntity<MediaSearchResponse> getTitleSearchResults(@Valid MediaSearchQuery request) {
         var command = new SearchMediaCommand(request.query(), request.page(), request.size());
 
         var results = mediaCatalogService.searchMediaByQuery(command);

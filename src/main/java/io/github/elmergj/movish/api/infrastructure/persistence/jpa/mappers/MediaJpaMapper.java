@@ -9,10 +9,10 @@ public class MediaJpaMapper {
 //        MediaEntity mediaEntity = new MediaEntity();
 //
 //        mediaEntity.setId(media.id().value());
-////        mediaEntity.setExternalMediaId(media.externalIds().get()); //Bug: to solve!
+//        mediaEntity.setExternalMediaId(media.externalIds().get()); //Bug: to solve!
 //        mediaEntity.setName(media.name());
 //        mediaEntity.setReleaseDate(media.releaseDate());
-////        mediaEntity.setTmdbRating(media.mediaAverageRatings().); //Bug: to solve!
+//        mediaEntity.setTmdbRating(media.mediaAverageRatings().); //Bug: to solve!
 //        mediaEntity.setMediaType(media.mediaType());
 //
 //        return mediaEntity;

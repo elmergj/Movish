@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CatalogMediaQueryRepositoryAdapter implements CatalogMediaQueries {
 
-    private final JpaMediaReadOnlyRepository repository;
+//    private final JpaMediaReadOnlyRepository repository;
 
     @Override
     public Optional<MediaSummaryQueryResult> getMediaSummary(String externalId) {

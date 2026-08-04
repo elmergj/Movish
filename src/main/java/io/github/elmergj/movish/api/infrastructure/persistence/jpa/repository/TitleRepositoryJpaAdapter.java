@@ -1,6 +1,7 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
 import io.github.elmergj.movish.api.domain.model.entity.library.MediaId;
+import io.github.elmergj.movish.api.domain.model.entity.library.MediaType;
 import io.github.elmergj.movish.api.domain.model.entity.library.Title;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
@@ -36,14 +37,14 @@ public class TitleRepositoryJpaAdapter implements TitleRepository {
     }
 
     @Override
-    public Optional<Title> findByMediaIdAndUserId(MediaId mediaId, UserId userId) {
-        return jpaTitleRepository.findByMediaIdAndUserEntity_Id(mediaId.value(), userId.value())
+    public Optional<Title> findUniqueTitle(UserId userId, MediaId mediaId, MediaType mediaType) {
+        return jpaTitleRepository.findByUserEntity_IdAndMediaIdAndAndMediaType(userId.value(), mediaId.value(), mediaType)
                 .map(titleJpaMapper::toDomain);
     }
 
     @Override
-    public boolean existsByMediaIdAndUserId(MediaId id, UserId userId) {
-        return jpaTitleRepository.existsByMediaIdAndUserEntity_Id(id.value(), userId.value());
+    public boolean existsUniqueTitle(UserId userId, MediaId mediaId, MediaType mediaType) {
+        return jpaTitleRepository.existsByUserEntity_IdAndMediaIdAndMediaType(userId.value(), mediaId.value(), mediaType);
     }
 
 

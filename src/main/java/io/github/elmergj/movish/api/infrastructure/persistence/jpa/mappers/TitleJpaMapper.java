@@ -11,6 +11,8 @@ import io.github.elmergj.movish.api.infrastructure.persistence.jpa.entity.TitleE
 import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class TitleJpaMapper {
 
@@ -30,7 +32,10 @@ public class TitleJpaMapper {
         titleEntity.setFavorite(title.isFavorite());
         titleEntity.setStatus(title.getTrackingStatus());
         titleEntity.setTimesWatched(title.getTimesWatched());
-        titleEntity.setTitleUserRating(title.getUserRating().value());
+        titleEntity.setTitleUserRating(
+                title.getUserRating()
+                        .map(TitleUserRating::value)
+                        .orElse(null));
         titleEntity.setTitleReview(title.getUserReview().value());
 
 
@@ -48,7 +53,9 @@ public class TitleJpaMapper {
                 jpaTitle.getCreatedDate(),
                 jpaTitle.getStatus(),
                 jpaTitle.getTimesWatched(),
-                TitleUserRating.of(jpaTitle.getTitleUserRating()),
+                Optional.ofNullable(jpaTitle.getTitleUserRating()   )
+                        .map(TitleUserRating::of)
+                        .orElse(null),
                 TitleReview.from(jpaTitle.getTitleReview())
         );
     }

@@ -1,8 +1,6 @@
 package io.github.elmergj.movish.api.infrastructure.persistence.jpa.repository;
 
-import org.springframework.data.repository.Repository;
-
-public interface JpaMediaReadOnlyRepository extends Repository<Object, String> {
+public interface JpaMediaReadOnlyRepository {}
 //public interface JpaMediaReadOnlyRepository extends Repository<MediaEntity, String> {
 
 //    @Query("""
@@ -15,4 +13,4 @@ public interface JpaMediaReadOnlyRepository extends Repository<Object, String> {
 //        """)
 //    List<MediaSummaryQueryResult> findAllByIdIn(@Param("ids") Collection<String> ids);
 
-}
+//}

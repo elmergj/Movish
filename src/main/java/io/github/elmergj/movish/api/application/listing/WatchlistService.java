@@ -14,24 +14,24 @@ import io.github.elmergj.movish.api.application.listing.query.ListDetailsQuery;
 import io.github.elmergj.movish.api.application.listing.query.ListDetailsView;
 import io.github.elmergj.movish.api.application.listing.query.ListItemsDetailsView;
 import io.github.elmergj.movish.api.application.listing.query.ListItemsQuery;
-import io.github.elmergj.movish.api.application.listing.query.ListingQueryService;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistQueryService;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.CustomListFactory;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
-import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
+import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ListingService {
+public class WatchlistService {
 
-    private final TitleListRepository titleListRepository;
+    private final WatchlistRepository watchlistRepository;
     private final CustomListFactory customListFactory;
-    private final ListingQueryService listingQueryService;
+    private final WatchlistQueryService watchlistQueryService;
 
     @Transactional
     public CustomListCreationOutcome createCustomTitleList(CreateCustomTitleListCommand command){
@@ -40,7 +40,7 @@ public class ListingService {
                 UserId.from(command.userId()),
                 command.name());
 
-        titleListRepository.save(customListCreated);
+        watchlistRepository.save(customListCreated);
 
         return new CustomListCreationOutcome(
                 customListCreated.id().value(),
@@ -51,7 +51,7 @@ public class ListingService {
 
     public ListDetailsView getListDetails(ListDetailsQuery query){
 
-        Watchlist watchlist = titleListRepository.findByIdAndUserOwnerId(
+        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
                 WatchlistId.from(query.titleListId()), UserId.from(query.userId()))
                 .orElseThrow();
 
@@ -65,13 +65,13 @@ public class ListingService {
     @Transactional
     public CustomListDeletionOutcome deleteCustomTitleList(DeleteCustomListCommand command){
 
-        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
                 WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
         customUserWatchlist.canBeDeleted();
 
-        titleListRepository.delete(customUserWatchlist);
+        watchlistRepository.delete(customUserWatchlist);
 
         return new CustomListDeletionOutcome(
                 customUserWatchlist.id().value(),
@@ -82,13 +82,13 @@ public class ListingService {
     @Transactional
     public TitleAdditionToListOutcome addTitleToList(AddTitleToListCommand command){
 
-        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
         customUserWatchlist.addTitle(TitleId.from(command.titleId()));
 
-        titleListRepository.save(customUserWatchlist);
+        watchlistRepository.save(customUserWatchlist);
 
         return new TitleAdditionToListOutcome(
                 customUserWatchlist.id().value(),
@@ -99,24 +99,24 @@ public class ListingService {
 
 
     public ListItemsDetailsView getListItemsDetails(ListItemsQuery query){
-        Watchlist watchlist = titleListRepository.findByIdAndUserOwnerId(
+        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(query.titleListId()), UserId.from(query.userId()))
                 .orElseThrow();
 
-        return listingQueryService.getListItemsDetails(watchlist);
+        return watchlistQueryService.getListItemsDetails(watchlist);
     }
 
     @Transactional
     public TitleRemovalFromListOutcome removeTitleFromList(RemoveTitleFromListCommand command){
 
-        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
 
         customUserWatchlist.removeTitle(TitleId.from(command.titleId()));
 
-        titleListRepository.save(customUserWatchlist);
+        watchlistRepository.save(customUserWatchlist);
 
         return new TitleRemovalFromListOutcome(
                 customUserWatchlist.id().value(),
@@ -128,13 +128,13 @@ public class ListingService {
     @Transactional
     public ListNameUpdateOutcome updateCustomTitleListName(UpdateCustomListNameCommand command){
 
-        Watchlist customUserWatchlist = titleListRepository.findByIdAndUserOwnerId(
+        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
         customUserWatchlist.updateListName(command.newName());
 
-        titleListRepository.save(customUserWatchlist);
+        watchlistRepository.save(customUserWatchlist);
 
         return new ListNameUpdateOutcome(
                 customUserWatchlist.id().value(),

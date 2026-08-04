@@ -3,7 +3,6 @@ package io.github.elmergj.movish.api.application.library;
 import io.github.elmergj.movish.api.application.Result;
 import io.github.elmergj.movish.api.application.Result.FailureOutcome;
 import io.github.elmergj.movish.api.application.catalog.MediaCatalogService;
-import io.github.elmergj.movish.api.application.catalog.MediaProviderRegistry;
 import io.github.elmergj.movish.api.application.library.command.AddTitleToLibraryCommand;
 import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.TitleAlreadyInLibrary;
 import io.github.elmergj.movish.api.application.library.command.LibraryManagementOutcome.TitleAdditionOutcome;
@@ -37,18 +36,17 @@ public class LibraryService {
     private final MediaCatalogService mediaCatalogService;
     private final EntityIdGenerator entityIdGenerator;
     private final ApplicationEventPublisher publisher;
-    private final TitleInternalIdentityResolver titleIdentityResolver;
-    private final MediaProviderRegistry mediaProviderRegistry;
 
     @Transactional
     public Result<TitleAdditionOutcome, TitleAlreadyInLibrary> addTitleToLibrary(AddTitleToLibraryCommand command){
 
         var userId = UserId.from(command.userId());
         var mediaId = MediaId.from(command.mediaId());
+        var mediaType = MediaType.fromExternalValue(command.mediaType());
 
 //        Si el media_id existe para el mismo user_id
-        if (titleRepository.existsByMediaIdAndUserId(mediaId, userId)){
-            return Result.failure(new TitleAlreadyInLibrary(null)); // bug: to handle null.
+        if (titleRepository.existsUniqueTitle(userId, mediaId, mediaType)) {
+            return Result.failure(new TitleAlreadyInLibrary(mediaId.value())); // bug: to handle null.
         }
 
         var media = mediaCatalogService.getMediaBasic(mediaId.value(), command.mediaType());
@@ -73,7 +71,7 @@ public class LibraryService {
 
     public TitleDetailsView getTitleDetails(TitleDetailsQuery query){
 
-        Title title = titleRepository.findByIdAndUserId(
+        var title = titleRepository.findByIdAndUserId(
                 TitleId.from(query.titleId()), UserId.from(query.userId()))
                 .orElseThrow();
 

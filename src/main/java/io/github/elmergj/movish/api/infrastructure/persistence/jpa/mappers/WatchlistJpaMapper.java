@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
 @Component
-public class TitleListJpaMapper {
+public class WatchlistJpaMapper {
 
     public @NonNull WatchlistEntity toJpaTitleList(Watchlist watchlist){
         UserEntity userEntity = new UserEntity();
@@ -33,15 +33,15 @@ public class TitleListJpaMapper {
         return watchlistEntity;
     }
 
-    public Watchlist toDomain(WatchlistEntity jpaTitleList){
+    public Watchlist toDomain(WatchlistEntity watchlistEntity){
         return Watchlist.fromExisting(
-                WatchlistId.from(jpaTitleList.getId()),
-                UserId.from(jpaTitleList.getUserEntity().getId()),
-                jpaTitleList.getName(),
-                jpaTitleList.getDateCreated(),
-                jpaTitleList.getListType(),
+                WatchlistId.from(watchlistEntity.getId()),
+                UserId.from(watchlistEntity.getUserEntity().getId()),
+                watchlistEntity.getName(),
+                watchlistEntity.getDateCreated(),
+                watchlistEntity.getListType(),
                 //Passing a mutable list
-                jpaTitleList.getTitleIds().stream().map(TitleId::from)
+                watchlistEntity.getTitleIds().stream().map(TitleId::from)
                         .collect(Collectors.toSet())
         );
     }

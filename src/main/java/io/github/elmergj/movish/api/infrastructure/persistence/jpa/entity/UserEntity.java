@@ -26,7 +26,7 @@ import lombok.Setter;
 public class UserEntity {
 
     @Id
-    @Column(nullable = false, updatable = false, length = 16)
+    @Column(nullable = false, updatable = false)
     private String id;
 
     @Column(name = "auth_id", unique = true, nullable = false, length = 64)

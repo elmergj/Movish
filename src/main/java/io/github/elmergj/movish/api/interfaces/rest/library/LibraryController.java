@@ -51,7 +51,7 @@ public class LibraryController {
                                     .path("/{uriResponse}")
                                     .buildAndExpand(result.titleId()).toUri())
                             .body(responseAssembler.assemble(result));
-            case FailureResult(TitleAlreadyInLibrary failure) -> ResponseEntity.badRequest().body("The title with id" + failure.titleId() + " already exists");
+            case FailureResult(TitleAlreadyInLibrary failure) -> ResponseEntity.badRequest().body("The title with media id " + failure.titleId() + " already exists");
         };
     }
 

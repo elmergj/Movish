@@ -4,7 +4,7 @@ import io.github.elmergj.movish.api.domain.model.entity.library.TitleMarkedAsFav
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleUnmarkedAsFavoriteEvent;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
-import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
+import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class FavoriteListTitleAdditionHandler {
 
-    private final TitleListRepository repository;
+    private final WatchlistRepository repository;
 
     @EventListener
     @Transactional

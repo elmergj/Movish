@@ -15,6 +15,7 @@ import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
 
@@ -23,8 +24,10 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @Table(
-        name = "user_media",
-        uniqueConstraints = @UniqueConstraint(name = "unique_title_constraint", columnNames = {"user_id", "media_id"}
+        name = "title",
+        uniqueConstraints = @UniqueConstraint(
+                name = "unique_title_constraint",
+                columnNames = {"user_id", "media_id", "media_type"}
 ))
 public class TitleEntity {
 
@@ -59,7 +62,8 @@ public class TitleEntity {
     @Column(nullable = false)
     private int timesWatched;
 
-    private int titleUserRating;
+    @Nullable
+    private Integer titleUserRating;
 
     private String titleReview;
 

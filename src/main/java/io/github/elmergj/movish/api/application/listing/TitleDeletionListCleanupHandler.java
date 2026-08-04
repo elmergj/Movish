@@ -1,7 +1,7 @@
 package io.github.elmergj.movish.api.application.listing;
 
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleUnlinkedEvent;
-import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
+import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TitleDeletionListCleanupHandler {
 
-    private final TitleListRepository repository;
+    private final WatchlistRepository repository;
 
     @EventListener
     @Transactional

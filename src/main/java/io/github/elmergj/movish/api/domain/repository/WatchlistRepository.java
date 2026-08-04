@@ -8,7 +8,7 @@ import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 
 import java.util.Optional;
 
-public interface TitleListRepository {
+public interface WatchlistRepository {
 
     void save(Watchlist list);
 

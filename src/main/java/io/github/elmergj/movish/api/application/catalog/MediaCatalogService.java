@@ -30,7 +30,7 @@ public class MediaCatalogService {
     }
 
 
-    public MediaBasicResult  getMediaBasic(String mediaId, String mediaType) {
+    public MediaBasicResult getMediaBasic(String mediaId, String mediaType) {
         return mediaCatalogSource.fetchMediaBasicData(mediaId, mediaType);
     }
 

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ListingQueryService {
+public class WatchlistQueryService {
 
     private final TitleQueries titleQueries;
     private final CatalogMediaQueries catalogMediaQueries;

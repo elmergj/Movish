@@ -9,5 +9,5 @@
             "name": "api.catalog.token",
             "type": "java.lang.String",
             "description": "Description for api.catalog.token."
-        },
+        }
     ] }

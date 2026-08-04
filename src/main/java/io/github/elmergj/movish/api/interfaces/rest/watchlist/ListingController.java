@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.interfaces.rest.watchlist;
 
-import io.github.elmergj.movish.api.application.listing.ListingService;
+import io.github.elmergj.movish.api.application.listing.WatchlistService;
 import io.github.elmergj.movish.api.application.listing.command.AddTitleToListCommand;
 import io.github.elmergj.movish.api.application.listing.command.CreateCustomTitleListCommand;
 import io.github.elmergj.movish.api.application.listing.command.DeleteCustomListCommand;
@@ -29,14 +29,14 @@ import java.net.URI;
 @RequestMapping("/list")
 public class ListingController {
 
-    private final ListingService listingService;
+    private final WatchlistService watchlistService;
 
     @PostMapping()
     public ResponseEntity<ListCreationResponse> qcreateList(
             @AuthenticationPrincipal String userId, @Valid @RequestBody CreateListRequest request){
         var command = new CreateCustomTitleListCommand(userId, request.name());
 
-        var outcome = listingService.createCustomTitleList(command);
+        var outcome = watchlistService.createCustomTitleList(command);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{uriResponse}")
@@ -56,7 +56,7 @@ public class ListingController {
 
         var query = new ListDetailsQuery(userId, listId);
 
-        var view = listingService.getListDetails(query);
+        var view = watchlistService.getListDetails(query);
 
         var response = new ListDetailsResponse(
                 view.listId(),
@@ -72,7 +72,7 @@ public class ListingController {
             @AuthenticationPrincipal String userId, @PathVariable String listId, @Valid @RequestBody AddTitleToListRequest request){
         var command = new AddTitleToListCommand(userId, listId, request.titleId());
 
-        var outcome = listingService.addTitleToList(command);
+        var outcome = watchlistService.addTitleToList(command);
 
         var response = new TitleAdditionResponse(
                 outcome.customListId(),
@@ -89,7 +89,7 @@ public class ListingController {
 
         var query = new ListItemsQuery(userId, listId);
 
-        var view = listingService.getListItemsDetails(query);
+        var view = watchlistService.getListItemsDetails(query);
 
         var response = new ListItemsDetailsResponse(
                 view.titleListId(),
@@ -107,7 +107,7 @@ public class ListingController {
 
         var command = new RemoveTitleFromListCommand(userId, listId, titleId);
 
-        var outcome = listingService.removeTitleFromList(command);
+        var outcome = watchlistService.removeTitleFromList(command);
 
         var response = new TitleRemovalResponse(
                 outcome.customListId(),
@@ -123,7 +123,7 @@ public class ListingController {
 
         var command = new DeleteCustomListCommand(userId, listId);
 
-        var outcome = listingService.deleteCustomTitleList(command);
+        var outcome = watchlistService.deleteCustomTitleList(command);
 
         var response = new ListDeletionResponse(
                 "The " + outcome.name() + " list with id " + outcome.customListId() + " was successful deleted" );
@@ -137,7 +137,7 @@ public class ListingController {
 
         var command = new UpdateCustomListNameCommand(userId, listId, request.newName());
 
-        var outcome = listingService.updateCustomTitleListName(command);
+        var outcome = watchlistService.updateCustomTitleListName(command);
 
         var response = new ListNameUpdateResponse(
                 outcome.listId(),

@@ -6,7 +6,9 @@ import io.github.elmergj.movish.api.application.catalog.search.MediaSummaryResul
 import io.github.elmergj.movish.api.application.catalog.search.SearchFilter;
 import io.github.elmergj.movish.api.application.catalog.search.SearchResultSet;
 import io.github.elmergj.movish.api.domain.model.entity.catalog.MediaCatalogSource;
-import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.mappers.TmdbMovieDetailsMapper;
+import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.dtos.movie.MovieDetailsResponse;
+import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.dtos.tv.TvDetailsResponse;
+import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.mappers.TmdbMovieMapper;
 import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.mappers.TmdbTvMapper;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -15,14 +17,16 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import java.util.Objects;
+
 @Component
-@Profile("prod")
 @RequiredArgsConstructor
+@Profile("default")
 public class TmdbCatalogSourceProvider implements MediaCatalogSource {
 
     private static final Logger log = LoggerFactory.getLogger(TmdbCatalogSourceProvider.class);
 
-    private final TmdbMovieDetailsMapper movieMapper;
+    private final TmdbMovieMapper movieMapper;
     private final TmdbTvMapper tvMapper;
     private final RestClient restClient;
 
@@ -50,28 +54,22 @@ public class TmdbCatalogSourceProvider implements MediaCatalogSource {
 
     @Override
     public MediaBasicResult fetchMediaBasicData(String mediaId, String mediaType) {
-        return null;
+        return switch (mediaType) {
+            case "movie" -> {
+                var clientResponse = restClient.get()
+                        .uri("/movie/{id}", mediaId)
+                        .retrieve()
+                        .body(MovieDetailsResponse.class);
+                yield movieMapper.toMediaBasicResult(Objects.requireNonNull(clientResponse));
+            }
+            case "tv" -> {
+                var clientResponse = restClient.get()
+                        .uri("/tv/{id}", mediaId)
+                        .retrieve()
+                        .body(TvDetailsResponse.class);
+                yield tvMapper.toMediaBasicResult(Objects.requireNonNull(clientResponse));
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + mediaType);
+        };
     }
-
-//    @Override
-//    public MediaDetailsResult fetchMediaDetails(String mediaId, MediaType mediaType) {
-//        return switch (mediaType) {
-//            case MOVIE -> {
-//                var clientResponse = restClient.get()
-//                        .uri("/movie/{id}", mediaId)
-//                        .retrieve()
-//                        .body(MovieDetailsResponse.class);
-//
-//                yield movieMapper.toCatalogResult(Objects.requireNonNull(clientResponse));
-//            }
-//            case TV_SHOW -> {
-//                var clientResponse = restClient.get()
-//                        .uri("/tv/{id}", mediaId)
-//                        .retrieve()
-//                        .body(TvDetailsResponse.class);
-//
-//                yield tvMapper.toCatalogResult(Objects.requireNonNull(clientResponse));
-//            }
-//        };
-//    }
 }

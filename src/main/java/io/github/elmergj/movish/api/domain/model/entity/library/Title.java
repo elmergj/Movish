@@ -8,6 +8,7 @@ import io.github.elmergj.movish.api.domain.shared.UserAsset;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class Title extends BaseEntity<Title, TitleId> implements UserAsset {
 
@@ -45,12 +46,11 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
     public static Title create(TitleId id, MediaId mediaId, String name, MediaType mediaType, UserId userId) {
         TrackingStatus trackingStatus = TrackingStatus.NOT_TRACKED;
         int timesWatched = 0;
-        TitleUserRating titleUserRating = TitleUserRating.of(1);
         TitleReview userReview = TitleReview.from("No review");
         LocalDate dateAdded = LocalDate.now();
 
         return new Title(id, mediaId, mediaType, name, userId, dateAdded,
-                false, trackingStatus, timesWatched, titleUserRating, userReview);
+                false, trackingStatus, timesWatched, null, userReview);
     }
 
     public static Title fromExisting(
@@ -71,8 +71,8 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
     }
 
     //Getters
-    public TitleUserRating getUserRating() {
-        return titleUserRating;
+    public Optional<TitleUserRating> getUserRating() {
+        return Optional.ofNullable(titleUserRating);
     }
 
     public TitleReview getUserReview() {
