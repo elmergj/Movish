@@ -32,7 +32,7 @@ public class ListingController {
     private final WatchlistService watchlistService;
 
     @PostMapping()
-    public ResponseEntity<ListCreationResponse> qcreateList(
+    public ResponseEntity<ListCreationResponse> createList(
             @AuthenticationPrincipal String userId, @Valid @RequestBody CreateListRequest request){
         var command = new CreateCustomTitleListCommand(userId, request.name());
 

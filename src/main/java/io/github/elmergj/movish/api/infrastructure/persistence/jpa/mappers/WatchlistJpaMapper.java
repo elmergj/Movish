@@ -33,7 +33,9 @@ public class WatchlistJpaMapper {
         return watchlistEntity;
     }
 
-    public Watchlist toDomain(WatchlistEntity watchlistEntity){
+    public Watchlist toDomain(WatchlistEntity watchlistEntity) {
+        System.out.println("watchlist ID: " + watchlistEntity.getId());
+
         return Watchlist.fromExisting(
                 WatchlistId.from(watchlistEntity.getId()),
                 UserId.from(watchlistEntity.getUserEntity().getId()),

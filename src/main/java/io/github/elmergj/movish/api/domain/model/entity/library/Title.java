@@ -105,18 +105,24 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
     }
 
     // Methods
-    public void updateTrackingStatus(TrackingStatus trackingStatus) {
+    public boolean canUpdateTrackingStatus(TrackingStatus trackingStatus) {
+        if (trackingStatus == this.trackingStatus) return false;
+
         this.trackingStatus = trackingStatus;
+
+        return true;
     }
 
-    public void updateFavoriteStatus(UserId userId, boolean favorite){
-        if (this.isFavorite == favorite) return;
+    public boolean canUpdateFavoriteStatus(UserId userId, boolean favorite){
+        if (favorite == this.isFavorite) return false;
 
         if (favorite) {
             markAsFavorite(userId);
         } else {
             unmarkAsFavorite(userId);
         }
+
+        return true;
     }
 
     private void markAsFavorite(UserId userId) {

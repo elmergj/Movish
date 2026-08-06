@@ -100,7 +100,8 @@ public class WatchlistService {
 
     public ListItemsDetailsView getListItemsDetails(ListItemsQuery query){
         Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
-                        WatchlistId.from(query.titleListId()), UserId.from(query.userId()))
+                        WatchlistId.from(query.titleListId()),
+                        UserId.from(query.userId()))
                 .orElseThrow();
 
         return watchlistQueryService.getListItemsDetails(watchlist);

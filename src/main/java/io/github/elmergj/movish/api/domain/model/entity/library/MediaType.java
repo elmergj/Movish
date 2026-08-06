@@ -4,10 +4,6 @@ public enum MediaType  {
     MOVIE("movie"),
     TV("tv");
 
-    public static MediaType fromExternalValue(String value) {
-        return MediaType.valueOf(value.toUpperCase());
-    }
-
     private final String externalValue;
 
     MediaType(String externalValue) {
@@ -16,6 +12,15 @@ public enum MediaType  {
 
     public String externalValue() {
         return externalValue;
+    }
+
+    public static MediaType fromExternalValue(String value) {
+        for (MediaType mediaType : values()) {
+            if (mediaType.externalValue.equals(value)) {
+                return mediaType;
+            }
+        }
+        throw new IllegalArgumentException("Invalid media type: " + value);
     }
 }
 

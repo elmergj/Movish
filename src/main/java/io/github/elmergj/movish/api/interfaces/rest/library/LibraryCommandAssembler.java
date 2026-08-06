@@ -15,14 +15,20 @@ public class LibraryCommandAssembler {
                 userId);
     }
 
-    UpdateTitleFavoriteStatusCommand assemble(UpdateTitleFavoriteRequest request) {
-        return null;
-//        return new UpdateTitleFavoriteStatusCommand();
+    UpdateTitleFavoriteStatusCommand assemble(UpdateTitleFavoriteRequest request, String titleId, String userId) {
+        return new UpdateTitleFavoriteStatusCommand(
+                titleId,
+                userId,
+                request.favorite()
+        );
     }
 
-    UpdateTitleTrackingStatusCommand assemble(UpdateTitleTrackingStatusRequest request) {
-        return null;
-//        return new UpdateTitleTrackingStatusCommand();
+    UpdateTitleTrackingStatusCommand assemble(UpdateTitleTrackingStatusRequest request,  String titleId, String userId) {
+        return new UpdateTitleTrackingStatusCommand(
+                userId,
+                titleId,
+                request.trackingStatus()
+        );
     }
 
 

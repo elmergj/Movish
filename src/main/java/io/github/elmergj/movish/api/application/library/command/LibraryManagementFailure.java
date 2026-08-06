@@ -9,5 +9,13 @@ public sealed interface LibraryManagementFailure extends FailureOutcome {
     ) implements LibraryManagementFailure {
     }
 
-    
+    record TitleFavoriteStatusAlreadyUpdated(
+            String titleId
+    ) implements LibraryManagementFailure {
+    }
+
+    record TitleTrackingStatusAlreadyUpdated(
+            String titleId
+    ) implements LibraryManagementFailure {
+    }
 }

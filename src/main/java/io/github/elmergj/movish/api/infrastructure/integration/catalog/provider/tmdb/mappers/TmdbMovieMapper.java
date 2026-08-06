@@ -1,27 +1,24 @@
 package io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.mappers;
 
-import io.github.elmergj.movish.api.application.catalog.search.MediaBasicResult;
-import io.github.elmergj.movish.api.application.catalog.search.MediaDetailsResult;
-import io.github.elmergj.movish.api.domain.model.entity.library.MediaType;
+import io.github.elmergj.movish.api.application.catalog.MediaDetails;
+import io.github.elmergj.movish.api.application.catalog.MediaOverview;
 import io.github.elmergj.movish.api.infrastructure.integration.catalog.provider.tmdb.dtos.movie.MovieDetailsResponse;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 public final class TmdbMovieMapper{
 
-    public MediaDetailsResult toMediaDetailResult(MovieDetailsResponse response) {
-        return new MediaDetailsResult(
+    public MediaDetails toMediaDetails(MovieDetailsResponse response) {
+        return new MediaDetails(
                 response.id().toString(),
                 response.originalTitle(),
-                LocalDate.parse(response.releaseDate()),
-                MediaType.MOVIE,
+                response.releaseDate(),
+                "movie",
                 response.voteAverage());
     }
 
-    public MediaBasicResult toMediaBasicResult(MovieDetailsResponse response) {
-        return new MediaBasicResult(
+    public MediaOverview toMediaOverview(MovieDetailsResponse response) {
+        return new MediaOverview(
                 response.id().toString(),
                 "movie",
                 response.originalTitle()

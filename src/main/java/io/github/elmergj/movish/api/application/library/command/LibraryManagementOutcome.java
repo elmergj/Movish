@@ -18,18 +18,16 @@ public sealed interface LibraryManagementOutcome extends Result.SuccessOutcome{
     }
 
     record TitleFavoriteOutcome(
-            String mediaExternalId,
+            String titleId,
             boolean isFavorite
     ) implements LibraryManagementOutcome {
     }
 
     record TitleTrackingUpdateOutcome(
-            String mediaExternalId,
+            String titleId,
             String trackingStatus,
             String dateAdded,
             boolean isFavorite
     ) implements LibraryManagementOutcome {
     }
-
-
 }

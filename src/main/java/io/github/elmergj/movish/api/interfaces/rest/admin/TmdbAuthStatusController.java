@@ -1,4 +1,4 @@
-package io.github.elmergj.movish.api.interfaces.rest.admin.media_provider;
+package io.github.elmergj.movish.api.interfaces.rest.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 
 @RestController
 @RequiredArgsConstructor
-public class TmdbMediaProviderAuthStatusController {
+public class TmdbAuthStatusController {
 
     private final RestClient restClient;
 

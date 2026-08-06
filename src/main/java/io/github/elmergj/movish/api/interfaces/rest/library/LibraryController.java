@@ -5,11 +5,13 @@ import io.github.elmergj.movish.api.application.Result.SuccessResult;
 import io.github.elmergj.movish.api.application.library.LibraryService;
 import io.github.elmergj.movish.api.application.library.command.AddTitleToLibraryCommand;
 import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.TitleAlreadyInLibrary;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.TitleFavoriteStatusAlreadyUpdated;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementFailure.TitleTrackingStatusAlreadyUpdated;
 import io.github.elmergj.movish.api.application.library.command.LibraryManagementOutcome.TitleAdditionOutcome;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementOutcome.TitleFavoriteOutcome;
+import io.github.elmergj.movish.api.application.library.command.LibraryManagementOutcome.TitleTrackingUpdateOutcome;
 import io.github.elmergj.movish.api.application.library.command.RemoveTitleCommand;
-import io.github.elmergj.movish.api.application.library.command.UpdateTitleFavoriteStatusCommand;
-import io.github.elmergj.movish.api.application.library.command.UpdateTitleTrackingStatusCommand;
-import io.github.elmergj.movish.api.application.library.query.TitleDetailsQuery;
+import io.github.elmergj.movish.api.application.library.query.TitleQuery.TitleDetailsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +53,8 @@ public class LibraryController {
                                     .path("/{uriResponse}")
                                     .buildAndExpand(result.titleId()).toUri())
                             .body(responseAssembler.assemble(result));
-            case FailureResult(TitleAlreadyInLibrary failure) -> ResponseEntity.badRequest().body("The title with media id " + failure.titleId() + " already exists");
+            case FailureResult(TitleAlreadyInLibrary failure) -> ResponseEntity.badRequest()
+                    .body("The title with media id " + failure.titleId() + " already exists");
         };
     }
 
@@ -64,49 +67,47 @@ public class LibraryController {
 
         var view = libraryService.getTitleDetails(query);
 
-        var response = new TitleDetailsResponse(
-                view.titleId(),
-                view.trackingStatus(),
-                view.dateAdded(),
-                view.isFavorite(),
-                view.titleDetails()
+        return ResponseEntity.ok(
+                responseAssembler.assemble(view)
         );
-
-        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/title/{titleId}/favorite")
-    public ResponseEntity<TitleFavoriteStatusResponse> updateFavoriteTitle(
+    public ResponseEntity<?> updateFavoriteTitle(
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId,
             @Valid @RequestBody UpdateTitleFavoriteRequest request){
 
-        var command = new UpdateTitleFavoriteStatusCommand(titleId, userId, request.favorite());
+        var command = commandAssembler.assemble(request, titleId, userId);
 
         var outcome = libraryService.updateTitleFavoriteStatus(command);
 
-        var response = new TitleFavoriteStatusResponse(
-                null, // Bug: to solve!
-                false // Bug: to solve!
-        );
-        return ResponseEntity.ok(response);
+        return switch (outcome){
+            case SuccessResult(TitleFavoriteOutcome result) ->
+                    ResponseEntity.ok(responseAssembler.assemble(result));
+            case FailureResult(TitleFavoriteStatusAlreadyUpdated failure) ->
+                    ResponseEntity.badRequest()
+                            .body("The title with id " + failure.titleId() + " is up to date");
+        };
     }
 
     @PutMapping("/title/{titleId}/tracking")
-    public ResponseEntity<UpdateTitleTrackingStatusResponse> updateTrackingStatus(
+    public ResponseEntity<?> updateTrackingStatus(
             @AuthenticationPrincipal String userId,
             @PathVariable String titleId,
             @Valid @RequestBody UpdateTitleTrackingStatusRequest request){
 
-        var command = new UpdateTitleTrackingStatusCommand(userId, titleId, request.trackingStatus());
+        var command = commandAssembler.assemble(request, titleId, userId);
 
         var outcome = libraryService.updateTitleTrackingStatus(command);
 
-        var response = new UpdateTitleTrackingStatusResponse(
-                null, // Bug: to solve!
-                "The title with id " + titleId + " was successful updated");
-
-        return ResponseEntity.ok(response);
+        return switch (outcome){
+            case SuccessResult(TitleTrackingUpdateOutcome result) ->
+                    ResponseEntity.ok(responseAssembler.assemble(result));
+            case FailureResult(TitleTrackingStatusAlreadyUpdated failure) ->
+                    ResponseEntity.badRequest()
+                            .body("The title with id " + failure.titleId() + " is up to date");
+        };
     }
 
     @DeleteMapping("/title/{titleId}")
@@ -119,7 +120,7 @@ public class LibraryController {
         var outcome = libraryService.deleteTitle(command);
 
         var response = new RemoveTitleResponse(
-                "The title with id " + "outcome.titleId()" + " was successful deleted from the library"); // Bug: to solve!
+                "The title with id " + outcome.titleId() + " was successful deleted from the library");
 
         return ResponseEntity.ok(response);
     }
