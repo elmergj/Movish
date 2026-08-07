@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.application.listing.query;
 
-public record ListDetailsQuery(
+public record WatchlistDetailsQuery(
         String userId,
         String titleListId
 ) {

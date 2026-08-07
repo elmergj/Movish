@@ -37,7 +37,7 @@ public class WatchlistEntity {
     private String name;
 
     @ElementCollection
-    @CollectionTable(name = "list_titles_ids", joinColumns = @JoinColumn(name = "list_id"))
+    @CollectionTable(name = "watchlist_title_ids", joinColumns = @JoinColumn(name = "list_id"))
     @Column(name = "title_id")
     private Set<String> titleIds;
 

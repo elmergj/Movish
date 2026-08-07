@@ -1,13 +1,13 @@
 package io.github.elmergj.movish.api.interfaces.rest.watchlist;
 
 import io.github.elmergj.movish.api.application.listing.WatchlistService;
-import io.github.elmergj.movish.api.application.listing.command.AddTitleToListCommand;
-import io.github.elmergj.movish.api.application.listing.command.CreateCustomTitleListCommand;
-import io.github.elmergj.movish.api.application.listing.command.DeleteCustomListCommand;
-import io.github.elmergj.movish.api.application.listing.command.RemoveTitleFromListCommand;
-import io.github.elmergj.movish.api.application.listing.command.UpdateCustomListNameCommand;
-import io.github.elmergj.movish.api.application.listing.query.ListDetailsQuery;
-import io.github.elmergj.movish.api.application.listing.query.ListItemsQuery;
+import io.github.elmergj.movish.api.application.listing.command.AddTitleToWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.CreateWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.DeleteWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.RemoveTitleFromWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.UpdateWatchlistNameCommand;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistOverviewQuery;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistDetailsQuery;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,22 +27,23 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/list")
-public class ListingController {
+public class WatchlistController {
 
     private final WatchlistService watchlistService;
+    private final WatchlistResponseAssembler responseAssembler;
 
     @PostMapping()
-    public ResponseEntity<ListCreationResponse> createList(
+    public ResponseEntity<WatchlistCreationResponse> createList(
             @AuthenticationPrincipal String userId, @Valid @RequestBody CreateListRequest request){
-        var command = new CreateCustomTitleListCommand(userId, request.name());
+        var command = new CreateWatchlistCommand(userId, request.name());
 
-        var outcome = watchlistService.createCustomTitleList(command);
+        var outcome = watchlistService.createCustomWatchlist(command);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{uriResponse}")
                 .buildAndExpand(outcome.customListId()).toUri();
 
-        var response = new ListCreationResponse(
+        var response = new WatchlistCreationResponse(
                 outcome.name(),
                 outcome.dateCreated()
         );
@@ -51,14 +52,14 @@ public class ListingController {
     }
 
     @GetMapping("/{listId}")
-    public ResponseEntity<ListDetailsResponse> getListDetails(
+    public ResponseEntity<WatchlistOverviewResponse> getListDetails(
             @AuthenticationPrincipal String userId, @PathVariable String listId){
 
-        var query = new ListDetailsQuery(userId, listId);
+        var query = new WatchlistOverviewQuery(userId, listId);
 
-        var view = watchlistService.getListDetails(query);
+        var view = watchlistService.getWatchlistOverview(query);
 
-        var response = new ListDetailsResponse(
+        var response = new WatchlistOverviewResponse(
                 view.listId(),
                 view.name(),
                 view.totalElements()
@@ -70,48 +71,41 @@ public class ListingController {
     @PostMapping("/{listId}/titles")
     public ResponseEntity<TitleAdditionResponse> addTitle(
             @AuthenticationPrincipal String userId, @PathVariable String listId, @Valid @RequestBody AddTitleToListRequest request){
-        var command = new AddTitleToListCommand(userId, listId, request.titleId());
+        var command = new AddTitleToWatchlistCommand(userId, listId, request.titleId());
 
         var outcome = watchlistService.addTitleToList(command);
 
         var response = new TitleAdditionResponse(
                 outcome.customListId(),
                 outcome.totalElements(),
-                "The title with id " + outcome.titleId() + " was successful added to the list"
+                "The title with titleId " + outcome.titleId() + " was successful added to the list"
         );
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{listId}/titles")
-    public ResponseEntity<ListItemsDetailsResponse> getListItemsDetails(
+    public ResponseEntity<WatchlistDetailsResponse> getListItemsDetails(
             @AuthenticationPrincipal String userId, @PathVariable String listId){
 
-        var query = new ListItemsQuery(userId, listId);
+        var query = new WatchlistDetailsQuery(userId, listId);
 
         var view = watchlistService.getListItemsDetails(query);
 
-        var response = new ListItemsDetailsResponse(
-                view.titleListId(),
-                view.listName(),
-                view.totalElements(),
-                view.itemsDetails()
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(responseAssembler.assemble(view));
     }
 
     @DeleteMapping("/{listId}/title/{titleId}")
     public ResponseEntity<TitleRemovalResponse> removeTitleFromList(
             @AuthenticationPrincipal String userId, @PathVariable String listId, @PathVariable String titleId){
 
-        var command = new RemoveTitleFromListCommand(userId, listId, titleId);
+        var command = new RemoveTitleFromWatchlistCommand(userId, listId, titleId);
 
         var outcome = watchlistService.removeTitleFromList(command);
 
         var response = new TitleRemovalResponse(
                 outcome.customListId(),
-                "The title with id " + outcome.titleId() + " was successful removed to the list"
+                "The title with titleId " + outcome.titleId() + " was successful removed to the list"
         );
 
         return ResponseEntity.ok(response);
@@ -121,12 +115,12 @@ public class ListingController {
     public ResponseEntity<ListDeletionResponse> deleteList(
             @AuthenticationPrincipal String userId, @PathVariable String listId){
 
-        var command = new DeleteCustomListCommand(userId, listId);
+        var command = new DeleteWatchlistCommand(userId, listId);
 
-        var outcome = watchlistService.deleteCustomTitleList(command);
+        var outcome = watchlistService.deleteWatchlist(command);
 
         var response = new ListDeletionResponse(
-                "The " + outcome.name() + " list with id " + outcome.customListId() + " was successful deleted" );
+                "The " + outcome.name() + " list with titleId " + outcome.customListId() + " was successful deleted" );
 
         return ResponseEntity.ok(response);
     }
@@ -135,7 +129,7 @@ public class ListingController {
     public ResponseEntity<ListNameUpdateResponse> updateCustomListName(
             @AuthenticationPrincipal String userId, @PathVariable String listId, @Valid @RequestBody ChangeListNameRequest request){
 
-        var command = new UpdateCustomListNameCommand(userId, listId, request.newName());
+        var command = new UpdateWatchlistNameCommand(userId, listId, request.newName());
 
         var outcome = watchlistService.updateCustomTitleListName(command);
 

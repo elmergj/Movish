@@ -6,6 +6,7 @@ import io.github.elmergj.movish.api.domain.model.entity.library.Title;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 
+import java.util.Collection;
 import java.util.Optional;
 
 public interface TitleRepository {
@@ -17,6 +18,8 @@ public interface TitleRepository {
     Optional<Title> findByIdAndUserId(TitleId id, UserId userId);
 
     Optional<Title> findUniqueTitle( UserId userId, MediaId mediaId, MediaType mediaType);
+
+    Collection<Title> findAllByIds(Collection<TitleId> ids);
 
     boolean existsUniqueTitle(UserId userId, MediaId id, MediaType mediaType);
 

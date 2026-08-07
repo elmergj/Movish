@@ -1,8 +1,7 @@
 package io.github.elmergj.movish.api.application.listing.command;
 
-public record RemoveTitleFromListCommand(
-        String userId,
+public record WatchlistDeletionOutcome(
         String customListId,
-        String titleId
+        String name
 ) {
 }

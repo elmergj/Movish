@@ -1,25 +1,26 @@
 package io.github.elmergj.movish.api.application.listing;
 
-import io.github.elmergj.movish.api.application.listing.command.AddTitleToListCommand;
-import io.github.elmergj.movish.api.application.listing.command.UpdateCustomListNameCommand;
-import io.github.elmergj.movish.api.application.listing.command.CreateCustomTitleListCommand;
-import io.github.elmergj.movish.api.application.listing.command.CustomListCreationOutcome;
-import io.github.elmergj.movish.api.application.listing.command.CustomListDeletionOutcome;
-import io.github.elmergj.movish.api.application.listing.command.DeleteCustomListCommand;
-import io.github.elmergj.movish.api.application.listing.command.ListNameUpdateOutcome;
-import io.github.elmergj.movish.api.application.listing.command.RemoveTitleFromListCommand;
-import io.github.elmergj.movish.api.application.listing.command.TitleAdditionToListOutcome;
-import io.github.elmergj.movish.api.application.listing.command.TitleRemovalFromListOutcome;
-import io.github.elmergj.movish.api.application.listing.query.ListDetailsQuery;
-import io.github.elmergj.movish.api.application.listing.query.ListDetailsView;
-import io.github.elmergj.movish.api.application.listing.query.ListItemsDetailsView;
-import io.github.elmergj.movish.api.application.listing.query.ListItemsQuery;
-import io.github.elmergj.movish.api.application.listing.query.WatchlistQueryService;
+import io.github.elmergj.movish.api.application.listing.command.AddTitleToWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.CreateWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.DeleteWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.RemoveTitleFromWatchlistCommand;
+import io.github.elmergj.movish.api.application.listing.command.TitleAdditionToWatchlistOutcome;
+import io.github.elmergj.movish.api.application.listing.command.TitleRemovalFromWatchlistOutcome;
+import io.github.elmergj.movish.api.application.listing.command.UpdateWatchlistNameCommand;
+import io.github.elmergj.movish.api.application.listing.command.WatchlistCreationOutcome;
+import io.github.elmergj.movish.api.application.listing.command.WatchlistDeletionOutcome;
+import io.github.elmergj.movish.api.application.listing.command.WatchlistNameUpdateOutcome;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistDetailsQuery;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistDetailsView;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistDetailsView.WatchlistItem;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistOverviewQuery;
+import io.github.elmergj.movish.api.application.listing.query.WatchlistOverviewView;
 import io.github.elmergj.movish.api.domain.model.entity.library.TitleId;
+import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.CustomListFactory;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
 import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
-import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
+import io.github.elmergj.movish.api.domain.repository.TitleRepository;
 import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,32 +31,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class WatchlistService {
 
     private final WatchlistRepository watchlistRepository;
+    private final TitleRepository titleRepository;
     private final CustomListFactory customListFactory;
-    private final WatchlistQueryService watchlistQueryService;
 
     @Transactional
-    public CustomListCreationOutcome createCustomTitleList(CreateCustomTitleListCommand command){
+    public WatchlistCreationOutcome createCustomWatchlist(CreateWatchlistCommand command){
 
-        Watchlist customListCreated = customListFactory.create(
+        Watchlist watchlist = customListFactory.create(
                 UserId.from(command.userId()),
                 command.name());
 
-        watchlistRepository.save(customListCreated);
+        watchlistRepository.save(watchlist);
 
-        return new CustomListCreationOutcome(
-                customListCreated.id().value(),
-                customListCreated.getName(),
-                customListCreated.getDateCreated().toString()
+        return new WatchlistCreationOutcome(
+                watchlist.id().value(),
+                watchlist.getName(),
+                watchlist.getDateCreated().toString()
         );
     }
 
-    public ListDetailsView getListDetails(ListDetailsQuery query){
+    public WatchlistOverviewView getWatchlistOverview(WatchlistOverviewQuery query){
 
         Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
                 WatchlistId.from(query.titleListId()), UserId.from(query.userId()))
                 .orElseThrow();
 
-        return new ListDetailsView(
+        return new WatchlistOverviewView(
                 watchlist.id().value(),
                 watchlist.getName(),
                 watchlist.getTitleIdReferences().size()
@@ -63,83 +64,98 @@ public class WatchlistService {
     }
 
     @Transactional
-    public CustomListDeletionOutcome deleteCustomTitleList(DeleteCustomListCommand command){
+    public WatchlistDeletionOutcome deleteWatchlist(DeleteWatchlistCommand command){
 
-        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
+        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
                 WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserWatchlist.canBeDeleted();
+        watchlist.canBeDeleted();
 
-        watchlistRepository.delete(customUserWatchlist);
+        watchlistRepository.delete(watchlist);
 
-        return new CustomListDeletionOutcome(
-                customUserWatchlist.id().value(),
-                customUserWatchlist.getName()
+        return new WatchlistDeletionOutcome(
+                watchlist.id().value(),
+                watchlist.getName()
         );
     }
 
     @Transactional
-    public TitleAdditionToListOutcome addTitleToList(AddTitleToListCommand command){
+    public TitleAdditionToWatchlistOutcome addTitleToList(AddTitleToWatchlistCommand command){
 
-        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
+        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserWatchlist.addTitle(TitleId.from(command.titleId()));
+        watchlist.addTitle(TitleId.from(command.titleId()));
 
-        watchlistRepository.save(customUserWatchlist);
+        watchlistRepository.save(watchlist);
 
-        return new TitleAdditionToListOutcome(
-                customUserWatchlist.id().value(),
+        return new TitleAdditionToWatchlistOutcome(
+                watchlist.id().value(),
                 command.titleId(),
-                customUserWatchlist.getTitleIdReferences().size()
+                watchlist.getTitleIdReferences().size()
         );
     }
 
 
-    public ListItemsDetailsView getListItemsDetails(ListItemsQuery query){
-        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
+    public WatchlistDetailsView getListItemsDetails(WatchlistDetailsQuery query){
+        var watchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(query.titleListId()),
                         UserId.from(query.userId()))
                 .orElseThrow();
 
-        return watchlistQueryService.getListItemsDetails(watchlist);
-    }
 
-    @Transactional
-    public TitleRemovalFromListOutcome removeTitleFromList(RemoveTitleFromListCommand command){
+        var watchlistItems = titleRepository.findAllByIds(watchlist.getTitleIdReferences()).stream()
+                .map(title -> new WatchlistItem(
+                        title.id().value(),
+                        title.getTrackingStatus().externalValue(),
+                        title.getDateAdded().toString(),
+                        title.getMediaType().externalValue()
+                ))
+                .toList();
 
-        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
-                        WatchlistId.from(command.customListId()), UserId.from(command.userId()))
-                .orElseThrow();
-
-
-        customUserWatchlist.removeTitle(TitleId.from(command.titleId()));
-
-        watchlistRepository.save(customUserWatchlist);
-
-        return new TitleRemovalFromListOutcome(
-                customUserWatchlist.id().value(),
-                command.titleId(),
-                customUserWatchlist.getTitleIdReferences().size()
+        return new WatchlistDetailsView(
+                watchlist.id().value(),
+                watchlist.getName(),
+                watchlist.getTitleIdReferences().size(),
+                watchlistItems
         );
     }
 
     @Transactional
-    public ListNameUpdateOutcome updateCustomTitleListName(UpdateCustomListNameCommand command){
+    public TitleRemovalFromWatchlistOutcome removeTitleFromList(RemoveTitleFromWatchlistCommand command){
 
-        Watchlist customUserWatchlist = watchlistRepository.findByIdAndUserOwnerId(
+        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
                         WatchlistId.from(command.customListId()), UserId.from(command.userId()))
                 .orElseThrow();
 
-        customUserWatchlist.updateListName(command.newName());
 
-        watchlistRepository.save(customUserWatchlist);
+        watchlist.removeTitle(TitleId.from(command.titleId()));
 
-        return new ListNameUpdateOutcome(
-                customUserWatchlist.id().value(),
-                customUserWatchlist.getName(),
-                customUserWatchlist.getTitleIdReferences().size());
+        watchlistRepository.save(watchlist);
+
+        return new TitleRemovalFromWatchlistOutcome(
+                watchlist.id().value(),
+                command.titleId(),
+                watchlist.getTitleIdReferences().size()
+        );
+    }
+
+    @Transactional
+    public WatchlistNameUpdateOutcome updateCustomTitleListName(UpdateWatchlistNameCommand command){
+
+        Watchlist watchlist = watchlistRepository.findByIdAndUserOwnerId(
+                        WatchlistId.from(command.customListId()), UserId.from(command.userId()))
+                .orElseThrow();
+
+        watchlist.updateListName(command.newName());
+
+        watchlistRepository.save(watchlist);
+
+        return new WatchlistNameUpdateOutcome(
+                watchlist.id().value(),
+                watchlist.getName(),
+                watchlist.getTitleIdReferences().size());
     }
 }

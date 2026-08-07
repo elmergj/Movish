@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.interfaces.rest.watchlist;
 
-public record ListCreationResponse(
+public record WatchlistCreationResponse(
         String name,
         String dateCreated
 ) {

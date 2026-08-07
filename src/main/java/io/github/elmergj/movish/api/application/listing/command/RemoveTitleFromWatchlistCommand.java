@@ -1,8 +1,8 @@
 package io.github.elmergj.movish.api.application.listing.command;
 
-public record TitleAdditionToListOutcome(
+public record RemoveTitleFromWatchlistCommand(
+        String userId,
         String customListId,
-        String titleId,
-        int totalElements
+        String titleId
 ) {
 }

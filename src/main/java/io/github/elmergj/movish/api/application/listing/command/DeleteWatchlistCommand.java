@@ -1,7 +1,7 @@
 package io.github.elmergj.movish.api.application.listing.command;
 
-public record CreateCustomTitleListCommand(
+public record DeleteWatchlistCommand(
         String userId,
-        String name
+        String customListId
 ){
 }

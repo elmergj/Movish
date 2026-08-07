@@ -20,7 +20,7 @@ public enum TrackingStatus{
         return code;
     }
 
-    public String getExternalValue() {
+    public String externalValue() {
         return externalValue;
     }
 

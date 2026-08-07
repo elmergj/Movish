@@ -1,8 +1,8 @@
 package io.github.elmergj.movish.api.application.listing.command;
 
-public record CustomListCreationOutcome(
+public record UpdateWatchlistNameCommand(
+        String userId,
         String customListId,
-        String name,
-        String dateCreated
+        String newName
 ) {
 }
