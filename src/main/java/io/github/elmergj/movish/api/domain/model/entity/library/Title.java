@@ -1,6 +1,5 @@
 package io.github.elmergj.movish.api.domain.model.entity.library;
 
-import io.github.elmergj.movish.api.domain.model.entity.catalog.media.MediaId;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
 import io.github.elmergj.movish.api.domain.shared.BaseEntity;
 import io.github.elmergj.movish.api.domain.shared.Event;
@@ -9,10 +8,13 @@ import io.github.elmergj.movish.api.domain.shared.UserAsset;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class Title extends BaseEntity<Title, TitleId> implements UserAsset {
 
     private final MediaId mediaId;
+    private final MediaType mediaType;
+    private final String name;
     private final UserId userOwnerId;
     private final LocalDate dateAdded;
     private boolean isFavorite;
@@ -24,11 +26,13 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
     private final List<Event> events = new ArrayList<>();
 
     //Constructors
-    private Title(TitleId id, MediaId mediaId, UserId userOwnerId, LocalDate dateAdded,
+    private Title(TitleId id, MediaId mediaId, MediaType mediaType, String name, UserId userOwnerId, LocalDate dateAdded,
                   boolean isFavorite, TrackingStatus trackingStatus, int timesWatched,
                   TitleUserRating titleUserRating, TitleReview userReview) {
         super(id);
         this.mediaId = mediaId;
+        this.mediaType = mediaType;
+        this.name = name;
         this.userOwnerId = userOwnerId;
         this.isFavorite = isFavorite;
         this.dateAdded = dateAdded;
@@ -39,20 +43,21 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
     }
 
     // Creator
-    public static Title create(TitleId id, MediaId externalMediaId, UserId userId) {
+    public static Title create(TitleId id, MediaId mediaId, String name, MediaType mediaType, UserId userId) {
         TrackingStatus trackingStatus = TrackingStatus.NOT_TRACKED;
         int timesWatched = 0;
-        TitleUserRating titleUserRating = TitleUserRating.of(1);
         TitleReview userReview = TitleReview.from("No review");
         LocalDate dateAdded = LocalDate.now();
 
-        return new Title(id, externalMediaId, userId, dateAdded, false, trackingStatus,
-                timesWatched, titleUserRating, userReview);
+        return new Title(id, mediaId, mediaType, name, userId, dateAdded,
+                false, trackingStatus, timesWatched, null, userReview);
     }
 
     public static Title fromExisting(
             TitleId id,
             MediaId mediaId,
+            String name,
+            MediaType mediaType,
             UserId userId,
             boolean isFavorite,
             LocalDate dateAdded,
@@ -61,13 +66,13 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
             TitleUserRating titleUserRating,
             TitleReview userReview) {
 
-        return new Title(id, mediaId, userId, dateAdded, isFavorite, trackingStatus, timesWatched, titleUserRating,
-                userReview);
+        return new Title(id, mediaId, mediaType, name, userId, dateAdded, isFavorite, trackingStatus,
+                timesWatched, titleUserRating, userReview);
     }
 
     //Getters
-    public TitleUserRating getUserRating() {
-        return titleUserRating;
+    public Optional<TitleUserRating> getUserRating() {
+        return Optional.ofNullable(titleUserRating);
     }
 
     public TitleReview getUserReview() {
@@ -100,18 +105,24 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
     }
 
     // Methods
-    public void updateTrackingStatus(TrackingStatus trackingStatus) {
+    public boolean canUpdateTrackingStatus(TrackingStatus trackingStatus) {
+        if (trackingStatus == this.trackingStatus) return false;
+
         this.trackingStatus = trackingStatus;
+
+        return true;
     }
 
-    public void updateFavoriteStatus(UserId userId, boolean favorite){
-        if (this.isFavorite == favorite) return;
+    public boolean canUpdateFavoriteStatus(UserId userId, boolean favorite){
+        if (favorite == this.isFavorite) return false;
 
         if (favorite) {
             markAsFavorite(userId);
         } else {
             unmarkAsFavorite(userId);
         }
+
+        return true;
     }
 
     private void markAsFavorite(UserId userId) {
@@ -153,5 +164,13 @@ public final class Title extends BaseEntity<Title, TitleId> implements UserAsset
         List<Event> taken = new ArrayList<>(events);
         events.clear();
         return taken;
+    }
+
+    public MediaType getMediaType() {
+        return mediaType;
+    }
+
+    public String getName() {
+        return name;
     }
 }

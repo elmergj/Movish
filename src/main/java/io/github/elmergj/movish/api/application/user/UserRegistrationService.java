@@ -1,18 +1,17 @@
 package io.github.elmergj.movish.api.application.user;
 
 import io.github.elmergj.movish.api.domain.exception.ValidationException;
-import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
-import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
-import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.model.entity.user.AuthId;
 import io.github.elmergj.movish.api.domain.model.entity.user.Email;
 import io.github.elmergj.movish.api.domain.model.entity.user.ProfileImagePolicy;
 import io.github.elmergj.movish.api.domain.model.entity.user.User;
 import io.github.elmergj.movish.api.domain.model.entity.user.UserId;
-import io.github.elmergj.movish.api.domain.repository.TitleListRepository;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.Watchlist;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistId;
+import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.repository.UserRepository;
+import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
 import io.github.elmergj.movish.api.domain.shared.EntityIdGenerator;
-import io.github.elmergj.movish.api.infrastructure.integration.authentication.TestUserHolder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,13 +23,11 @@ import java.util.Random;
 public class UserRegistrationService {
 
     private final UserRepository userRepository;
-    private final TitleListRepository titleListRepository;
+    private final WatchlistRepository watchlistRepository;
 
     private final ProfileImagePolicy profileImagePolicy;
     private final EntityIdGenerator entityIdGenerator;
     private final UserProvisioningService userProvisioningService;
-
-    private final TestUserHolder testUserHolder; //Test: test only
 
     @Transactional
     public UserRegisteredView registerUser(RegisterUserCommand command) {
@@ -58,7 +55,7 @@ public class UserRegistrationService {
         //end
         userRepository.save(user);
 
-        titleListRepository.save(favoriteList); // Test: saving the default list
+        watchlistRepository.save(favoriteList); // Test: saving the default list
 
         return new UserRegisteredView(user.getEmail().value(),
                 user.getName(),

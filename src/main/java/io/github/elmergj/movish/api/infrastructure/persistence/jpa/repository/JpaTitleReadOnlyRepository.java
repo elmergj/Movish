@@ -12,12 +12,12 @@ import java.util.List;
 public interface JpaTitleReadOnlyRepository extends Repository<TitleEntity, String> {
 
     @Query("""
-        SELECT t.id as titleId,
+        select t.id as titleId,
                t.mediaId as mediaId,
                t.status as trackingStatus,
                t.titleUserRating as titleUserRating
-        FROM TitleEntity t
-        WHERE t.id IN :ids
+        from TitleEntity t
+        where t.id in :ids
         """)
     List<TitleSummaryQueryResult> findAllByIdIn(@Param("ids") Collection<String> ids);
 }

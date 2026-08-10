@@ -20,6 +20,6 @@ public interface JpaTitleListRepository extends JpaRepository<WatchlistEntity, S
     Optional<WatchlistEntity> findByIdAndUserEntity_Id(String id, String userEntityId);
 
     @Modifying
-    @Query(value = "DELETE FROM list_titles_ids WHERE user_title_id = :titleId", nativeQuery = true)
+    @Query(value = "DELETE FROM watchlist_title_ids WHERE title_id = :titleId", nativeQuery = true)
     void removeReferenceFromAllLists(@Param("titleId") String titleId);
 }

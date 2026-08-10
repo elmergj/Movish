@@ -3,11 +3,7 @@ package io.github.elmergj.movish.api.infrastructure.integration.catalog.provider
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/**
- * DTO for the full details of a movie.
- * Design note: The complete TMDB structure is mapped, but in the Mapper
- * we will decide which fields to send to the Domain to keep it clean.
- */
+
 public record MovieDetailsResponse(
         Long id,
         String title,

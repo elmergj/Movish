@@ -1,6 +1,6 @@
 package io.github.elmergj.movish.api.interfaces.rest.catalog;
 
-import io.github.elmergj.movish.api.application.catalog.command.SearchMediaCommand;
+import io.github.elmergj.movish.api.application.catalog.search.SearchMediaQuery;
 import io.github.elmergj.movish.api.application.catalog.MediaCatalogService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,13 @@ public class CatalogController {
     private final MediaCatalogService mediaCatalogService;
 
     @GetMapping()
-    public ResponseEntity<MediaSearchResponse> getTitleSearchResults(@Valid MediaSearchRequest request) {
-        var command = new SearchMediaCommand(request.query(), request.page(), request.size());
+    public ResponseEntity<MediaSearchResponse> searchMediaByQuery(@Valid MediaSearchQuery request) {
+        var command = new SearchMediaQuery(request.query(), request.page(), request.size());
 
         var results = mediaCatalogService.searchMediaByQuery(command);
 
-        var response = new MediaSearchResponse(results);
+//        var response = new MediaSearchResponse(results);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(null);
     }
 }
