@@ -50,6 +50,12 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 }
 
+tasks.withType<Test>().configureEach {
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
 }

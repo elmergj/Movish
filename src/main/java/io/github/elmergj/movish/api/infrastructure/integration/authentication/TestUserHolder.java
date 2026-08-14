@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile("dev") //Test: LaSingularidad only
+@Profile({"dev", "default"}) //Test: test only
 public class TestUserHolder {
     // Un UID por defecto para que los tests no fallen si no configuras nada
 

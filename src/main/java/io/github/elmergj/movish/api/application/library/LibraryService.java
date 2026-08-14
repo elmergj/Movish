@@ -144,7 +144,7 @@ public class LibraryService {
     @Transactional
     public TitleRemovalOutcome deleteTitle(RemoveTitleCommand command){
 
-        var userId = UserId.from(command.titleId());
+        var userId = UserId.from(command.userId());
 
         var title = titleRepository.findByIdAndUserId(
                         TitleId.from(command.titleId()), UserId.from(command.userId()))
