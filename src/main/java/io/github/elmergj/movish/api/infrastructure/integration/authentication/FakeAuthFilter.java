@@ -19,7 +19,7 @@ import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
-@Profile("dev") //Test: Test only
+@Profile({"dev", "default"}) //Test: Test only
 public class FakeAuthFilter extends OncePerRequestFilter {
 
     private final TestUserHolder testUserHolder;

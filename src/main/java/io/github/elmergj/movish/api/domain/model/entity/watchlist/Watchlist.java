@@ -41,7 +41,6 @@ public class Watchlist extends BaseEntity<Watchlist, WatchlistId> implements Use
         return new Watchlist(id, userOwnerId, name, dateCreated,listType, titleIds);
     }
 
-    //Getters
     @Override
     public UserId getUserOwnerId(){
         return userOwnerId;
@@ -67,7 +66,6 @@ public class Watchlist extends BaseEntity<Watchlist, WatchlistId> implements Use
         return listType != WatchlistType.CUSTOM_USER_WATCHLIST;
     }
 
-    // Public Methods
     public void updateListName(String name){
 
         if (this.isDefaultList()) throw new DomainRuleViolationException("Unable to rename this list");;

@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Profile({"dev"})
+@Profile({"dev", "test", "default"})
 public class FakeCatalogSource implements MediaCatalogSource {
 
     @Override

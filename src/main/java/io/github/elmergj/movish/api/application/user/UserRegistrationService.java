@@ -12,9 +12,9 @@ import io.github.elmergj.movish.api.domain.model.entity.watchlist.WatchlistType;
 import io.github.elmergj.movish.api.domain.repository.UserRepository;
 import io.github.elmergj.movish.api.domain.repository.WatchlistRepository;
 import io.github.elmergj.movish.api.domain.shared.EntityIdGenerator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
