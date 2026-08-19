@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1955.4305"
+   height="445.64307"
+   viewBox="0 0 1955.4305 445.64307"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch14">
+      <stop
+         style="stop-color:#346751;stop-opacity:1;"
+         offset="0"
+         id="stop14" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer2"
+     style="display:inline"
+     transform="translate(394.18773,-826.31836)">
+    <g
+       id="g3"
+       style="display:inline"
+       transform="matrix(0.87100383,0,0,0.87100383,-362.66808,280.79267)">
+      <path
+         id="path14-9-12"
+         style="display:inline;fill:#242424;fill-opacity:1;stroke:#ecdbba;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         d="m -812.99788,219.05078 h 119.81048 221.85242 a 20.651018,20.651018 120.00003 0 0 17.88431,-30.97651 L -514.68954,82.005181 -618.65634,-98.07099 a 28.686969,28.686969 0 0 0 -49.68732,0 L -722.62314,-4.0559614 -832.21577,185.76446 a 22.190895,22.190895 59.999972 0 0 19.21789,33.28632 z"
+         transform="matrix(0,1.3291335,-1.5441906,0,302.14975,1736.9806)" />
+      <path
+         id="text5-36-70"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:341.333px;line-height:1.4;font-family:Sono;-inkscape-font-specification:'Sono, @wght=400';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 400;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;fill:#9a77ec;fill-opacity:1;fill-rule:nonzero;stroke:#242424;stroke-width:12.199;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         d="M 58.277087,32.167565 -0.04106042,485.24394 A 23.792884,23.792884 44.528452 0 0 26.982607,511.82642 142.5844,142.5844 158.83246 0 0 63.07916,497.84901 38.100487,38.100487 123.11835 0 0 83.859235,465.99474 L 112.78678,201.30312 a 21.034124,21.034124 166.18953 0 1 38.37682,-9.43368 l 79.51752,118.52248 a 37.806921,37.806921 0.95501496 0 0 62.07187,1.03472 l 53.06226,-73.65944 a 38.229298,38.229298 2.2149358 0 1 63.67106,2.46262 78.254625,78.254625 29.463411 0 0 66.47474,37.55358 l 3.07671,0.0143 a 24.242115,24.242115 119.26769 0 0 20.73132,-36.99164 l -67.45161,-109.0804 a 56.962092,56.962092 28.769426 0 0 -49.1733,-26.99909 63.643995,63.643995 152.3667 0 0 -50.61575,26.49875 l -39.32797,54.26799 a 35.631757,35.631757 2.6921099 0 1 -59.53861,-2.79956 L 142.38447,28.023322 A 55.571867,55.571867 29.726702 0 0 94.525083,0.69524073 l -0.46504,0 A 36.078161,36.078161 138.66728 0 0 58.277087,32.167565 Z"
+         transform="matrix(0.99138398,0,0,0.97603695,-29.905889,631.59312)" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:341.333px;line-height:1.4;font-family:Sono;-inkscape-font-specification:'Sono, Normal';text-align:start;letter-spacing:40.96px;word-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#242424;fill-opacity:1;stroke:#242424;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       x="113.99022"
+       y="1162.688"
+       id="text2"><tspan
+         id="tspan2"
+         x="113.99022"
+         y="1162.688"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:341.333px;font-family:Cabin;-inkscape-font-specification:'Cabin, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:40.96px;writing-mode:lr-tb;direction:ltr">MOVISH</tspan></text>
+  </g>
+</svg>
