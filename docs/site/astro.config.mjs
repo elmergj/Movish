@@ -19,6 +19,8 @@ export const locales = locals
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://elmergj.github.io',
+  base: "/Movish/"
   image: {
     service: { entrypoint: "astro/assets/services/noop" },
   },
