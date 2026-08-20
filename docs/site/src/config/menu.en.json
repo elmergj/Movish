@@ -1,15 +1,15 @@
 {
   "main": [
     {
-      "name": "Home",
-      "url": "/"
+      "name": "Getting Started",
+      "url": "/getting-started/"
     },
     {
       "name": "Architecture",
       "url": "/architecture/"
     },
     {
-      "name": "API",
+      "name": "API Reference",
       "url": "/api/"
     },
     {
