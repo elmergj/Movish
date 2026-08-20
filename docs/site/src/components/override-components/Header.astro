@@ -16,6 +16,9 @@ const { settings } = config;
 const { main }: { main: any[] } = menu;
 const pathname = Astro.request.url;
 const baseUrl = import.meta.env.BASE_URL;
+const isHome =
+  Astro.url.pathname === baseUrl ||
+  Astro.url.pathname === baseUrl.replace(/\/$/, "");
 const withBase = (url: string) =>
   url.startsWith("http") ? url : `${baseUrl}${url.replace(/^\//, "")}`;
 
@@ -118,7 +121,7 @@ const hasSidebar = Astro.locals.starlightRoute.hasSidebar;
       )
     }
 
-    {!hasSidebar && <div class="mr-4"><LanguageSelect /></div> }
+    {(!hasSidebar || isHome) && <div class="mr-4"><LanguageSelect /></div> }
     {settings.theme_switcher && <ThemeSwitch className="lg:mx-6 mr-10" />}
 
   </div>
