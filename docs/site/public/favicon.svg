@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64.000008"
+   viewBox="0 0 64 64.000007"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="swatch14">
+      <stop
+         style="stop-color:#346751;stop-opacity:1;"
+         offset="0"
+         id="stop14" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-1588.1344,-224.00002)">
+    <path
+       id="path14-0-0-6"
+       style="display:inline;fill:#7b4de6;fill-opacity:1;fill-rule:nonzero;stroke:#755ae0;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="m -812.99429,219.05 h 119.80689 221.84883 a 20.651911,20.651911 120.0011 0 0 17.88548,-30.97718 L -514.68796,82.001503 a 1512653.6,1512653.6 60.000322 0 0 -49.68691,-86.0613738 l -54.28026,-94.0102582 a 28.688835,28.688835 0 0 0 -49.68974,0 l -54.28026,94.0102582 a 1512653.6,1512653.6 119.99968 0 0 -49.68691,86.0613738 l -59.90138,103.761457 a 22.191856,22.191856 59.998898 0 0 19.21913,33.28704 z"
+       transform="matrix(0,0.16645016,-0.19308289,0,1630.4292,363.0169)" />
+    <path
+       id="text5-3-5-7"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:341.333px;line-height:1.4;font-family:Sono;-inkscape-font-specification:'Sono, @wght=400';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 400;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;display:inline;fill:#ffffff;fill-opacity:1;stroke:#7b4de6;stroke-width:12.199;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+       d="M 58.277087,32.167565 -0.04106042,485.24394 A 23.792884,23.792884 44.528452 0 0 26.982607,511.82642 142.5844,142.5844 158.83246 0 0 63.07916,497.84901 38.100487,38.100487 123.11835 0 0 83.859235,465.99474 L 112.78678,201.30312 a 21.034124,21.034124 166.18953 0 1 38.37682,-9.43368 l 79.51752,118.52248 a 37.806921,37.806921 0.95501496 0 0 62.07187,1.03472 l 53.06226,-73.65944 a 38.229298,38.229298 2.2149358 0 1 63.67106,2.46262 78.254625,78.254625 29.463411 0 0 66.47474,37.55358 l 3.07671,0.0143 a 24.242115,24.242115 119.26769 0 0 20.73132,-36.99164 l -67.45161,-109.0804 a 56.962092,56.962092 28.769426 0 0 -49.1733,-26.99909 63.643995,63.643995 152.3667 0 0 -50.61575,26.49875 l -39.32797,54.26799 a 35.631757,35.631757 2.6921099 0 1 -59.53861,-2.79956 L 142.38447,28.023322 A 55.571867,55.571867 29.726702 0 0 94.525083,0.69524073 l -0.46504,0 A 36.078161,36.078161 138.66728 0 0 58.277087,32.167565 Z"
+       transform="matrix(0.12408752,0,0,0.12221427,1588.9208,224.6605)" />
+  </g>
+</svg>

@@ -3,7 +3,8 @@
 This document contains general information about the movish-server project.
 
 ## Description
-Movish-server consists of a backend project to be run on the server that provides the logic part of the [movish-platform]().
+Movish is a backend project that provides the logic to support the client application of the same name, Movish App. 
+
 Its main function is to 
 model the data provided by 
 the platform [The Movie Database (TMDB)](https://www.themoviedb.org/) so that movish users can track, list, and discover new series and movies.

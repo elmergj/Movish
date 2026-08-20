@@ -1,0 +1,37 @@
+---
+title: Getting Started
+description: Learn the basics of setting up and using Movish.
+---
+
+import Grid from "~/components/user-components/Grid.astro";
+import NewCard from "~/components/user-components/NewCard.astro";
+
+Welcome to the Movish documentation. This section introduces the project and guides you through the initial setup.
+
+## What is Movish?
+
+Movish is a platform for keeping track of your favorite movies and TV shows. It allows you to discover new movies and TV shows using search filters, create lists, and assign a status to each title based on your viewing progress.
+
+The platform consists of two independent projects. The first is Movish API, which serves as a server-side API and provides the data and services required by the platform. The second is Movish App, the application that allows users to enjoy all the features offered by the platform on their devices.
+
+<Grid columns={2}>
+  <NewCard title="Movish API" icon="document" size="sm">
+    The backend that provides the core logic, data services, authentication, and persistence used by Movish App.
+  </NewCard>
+
+  <NewCard title="Movish App" icon="rocket" size="sm">
+    The client application through which users discover, organize, and follow movies and TV shows.
+  </NewCard>
+</Grid>
+
+## What is Movish API?
+
+Movish API is the backend that manages the core logic that powers the Movish App mobile application.
+
+Its primary responsibility is to process and structure the data provided by The Movie Database (TMDB) so that Movish users can follow, organize, and discover new TV shows and movies.
+
+The Movie Database (TMDB) is the primary content provider used by the platform. Data is retrieved through its public API, available in the The Movie Database API Documentation, and is used in accordance with the terms outlined in The Movie Database API Terms of Use.
+
+In addition, Movish API provides the services required for user management and authentication. To accomplish this, it uses the Firebase Admin SDK to validate authentication tokens sent by the mobile application.
+
+The backend is also responsible for data persistence and for providing other essential functionality required by the application, acting as the central layer between the mobile application, external services, and the data layer.
