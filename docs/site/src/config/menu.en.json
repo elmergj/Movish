@@ -1,0 +1,21 @@
+{
+  "main": [
+    {
+      "name": "Getting Started",
+      "url": "/getting-started/"
+    },
+    {
+      "name": "Architecture",
+      "url": "/architecture/"
+    },
+    {
+      "name": "API Reference",
+      "url": "/api/"
+    },
+    {
+      "name": "About",
+      "url": "/about/"
+    }
+  ],
+  "footer": {}
+}

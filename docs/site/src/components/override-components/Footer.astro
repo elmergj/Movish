@@ -1,0 +1,52 @@
+---
+---
+
+<footer class="site-footer">
+  <div class="footer-copyright">
+    <p>&copy; 2026 Elmer Gonzalez. All rights reserved.</p>
+  </div>
+  <div class="footer-attribution">
+    <p>
+      This site was generated using a template from
+      {" "}
+      <a href="https://themefisher.com/products/dockit-astro" target="_blank" rel="noopener"
+        >Themefisher</a
+      >.
+    </p>
+  </div>
+</footer>
+
+<style>
+  @layer starlight.core {
+    .site-footer {
+      width: 100%;
+      background: #000;
+      color: #fff;
+    }
+    .footer-attribution,
+    .footer-copyright {
+      padding: 1rem var(--sl-nav-pad-x);
+      text-align: center;
+    }
+    .footer-attribution {
+      border-top: 1px solid #292929;
+      color: #a3a3a3;
+      font-family: var(--sl-font-system);
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .footer-attribution a {
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .footer-attribution a:hover {
+      color: var(--sl-color-blue-high);
+    }
+    .footer-copyright {
+      color: #f5f5f5;
+      font-size: 0.875rem;
+    }
+  }
+</style>

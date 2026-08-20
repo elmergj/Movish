@@ -1,0 +1,36 @@
+{
+  "main": [
+    {
+      "label": "Getting Started",
+      "items": [
+        { "label": "Configuration", "slug": "getting-started/configuration" },
+        { "label": "First Steps", "slug": "getting-started/first-steps" },
+        { "label": "Installation", "slug": "getting-started/installation" }
+      ]
+    },
+    {
+      "label": "Architecture",
+      "items": [
+        { "label": "Overview", "slug": "architecture" },
+        { "label": "System Components", "slug": "architecture/system-components" },
+        { "label": "Data Flow", "slug": "architecture/data-flow" },
+        { "label": "Technology Stack", "slug": "architecture/technology-stack" },
+        { "label": "Responsibilities", "slug": "architecture/responsibilities" },
+        { "label": "Integrations", "slug": "architecture/integrations" },
+        { "label": "Use Cases", "slug": "architecture/use-cases" },
+        { "label": "Domain Model", "slug": "architecture/domain-model" },
+        { "label": "Deployment", "slug": "deployment" }
+      ]
+    },
+    {
+      "label": "API Reference",
+      "items": [
+        { "label": "Overview", "slug": "api" },
+        { "label": "Authentication", "slug": "api/authentication" },
+        { "label": "Endpoints", "slug": "api/endpoints" },
+        { "label": "Data Models", "slug": "api/data-models" },
+        { "label": "Errors", "slug": "api/errors" }
+      ]
+    }
+  ]
+}

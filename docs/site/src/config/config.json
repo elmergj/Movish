@@ -1,0 +1,15 @@
+{
+  "site": {
+    "title": "Movish API",
+    "logo": "/src/assets/movish-logo-light.svg",
+    "logo_darkmode": "/src/assets/movish-logo-dark.svg",
+    "logo_width": "127",
+    "logo_height": "32",
+    "logo_text": "Movish API"
+  },
+
+  "settings": {
+    "search": true,
+    "theme_switcher": true
+  }
+}
