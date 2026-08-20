@@ -4,9 +4,9 @@
 
 docs/site/** linguist-documentation=false
 
-*.svg linguist-detectable=false
-*.md linguist-detectable=false
-*.mdx linguist-detectable=false
+docs/site/**/*.svg linguist-vendored=true
+docs/site/**/*.md linguist-documentation=true
+docs/site/**/*.mdx linguist-documentation=true
 
 *.astro linguist-detectable=true
 *.ts linguist-detectable=true
