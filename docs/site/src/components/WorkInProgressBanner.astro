@@ -1,0 +1,164 @@
+<aside class="work-in-progress is-primary" aria-label="Work in progress" aria-live="polite">
+  <span class="work-in-progress__dot" aria-hidden="true"></span>
+  <span class="work-in-progress__message">
+    <span class="work-in-progress__message-content">Work in progress: this site is still being built.</span>
+  </span>
+</aside>
+
+<style>
+  .work-in-progress {
+    --work-in-progress-dot-color: var(--sl-color-accent);
+    position: sticky;
+    top: 0;
+    z-index: calc(var(--sl-z-index-navbar) + 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 2.8rem;
+    overflow: hidden;
+    padding: 0.45rem 1rem;
+    color: color-mix(in srgb, var(--sl-color-white) 78%, transparent);
+    background: var(--sl-color-black);
+    border-bottom: 1px solid color-mix(in srgb, var(--sl-color-white) 12%, transparent);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  .work-in-progress::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 20%,
+      color-mix(in srgb, var(--sl-color-accent) 14%, transparent) 48%,
+      transparent 76%
+    );
+    background-size: 220% 100%;
+    content: "";
+    pointer-events: none;
+    animation: work-in-progress-shimmer 14s ease-in-out infinite;
+  }
+
+  .work-in-progress > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .work-in-progress__dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--work-in-progress-dot-color);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--work-in-progress-dot-color) 35%, transparent);
+    animation: work-in-progress-pulse 4s ease-in-out infinite;
+  }
+
+  .work-in-progress.is-secondary {
+    --work-in-progress-dot-color: #9a77ec;
+  }
+
+  .work-in-progress__message {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .work-in-progress__message.is-changing {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+
+  .work-in-progress__message.is-entering {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+
+  .work-in-progress.is-primary .work-in-progress__message-content {
+    display: inline-block;
+    animation: work-in-progress-primary-zoom 8s ease-in-out infinite;
+  }
+
+  @keyframes work-in-progress-shimmer {
+    0%,
+    100% {
+      background-position: 120% 0;
+    }
+    50% {
+      background-position: -20% 0;
+    }
+  }
+
+  @keyframes work-in-progress-pulse {
+    50% {
+      box-shadow: 0 0 0 0.3rem color-mix(in srgb, var(--work-in-progress-dot-color) 0%, transparent);
+      opacity: 0.65;
+    }
+  }
+
+  @keyframes work-in-progress-primary-zoom {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.025);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-in-progress::after,
+    .work-in-progress__dot,
+    .work-in-progress__message,
+    .work-in-progress__message-content {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const workInProgressBanner = document.querySelector(".work-in-progress");
+  const workInProgressMessage = workInProgressBanner?.querySelector(
+    ".work-in-progress__message"
+  );
+  const workInProgressMessageContent = workInProgressBanner?.querySelector(
+    ".work-in-progress__message-content"
+  );
+
+  const workInProgressMessages = [
+    "Work in progress: this site is still being built.",
+    "Discover what the Movish API can do for your projects.",
+    "Find the documentation you need to build with confidence.",
+    "Learn how to implement Movish locally and get started faster.",
+  ];
+
+  if (workInProgressBanner && workInProgressMessage && workInProgressMessageContent) {
+    let messageIndex = 0;
+
+    const scheduleNextMessage = () => {
+      const delay = messageIndex === 0 ? 8000 : 4000;
+
+      window.setTimeout(() => {
+        workInProgressMessage.classList.add("is-changing");
+
+        window.setTimeout(() => {
+          messageIndex = (messageIndex + 1) % workInProgressMessages.length;
+          workInProgressMessageContent.textContent = workInProgressMessages[messageIndex];
+          workInProgressBanner.classList.toggle("is-primary", messageIndex === 0);
+          workInProgressBanner.classList.toggle("is-secondary", messageIndex !== 0);
+          workInProgressMessage.classList.remove("is-changing");
+          workInProgressMessage.classList.add("is-entering");
+
+          requestAnimationFrame(() => {
+            workInProgressMessage.classList.remove("is-entering");
+          });
+
+          scheduleNextMessage();
+        }, 350);
+      }, delay);
+    };
+
+    scheduleNextMessage();
+  }
+</script>
