@@ -1,0 +1,455 @@
+---
+const baseUrl = import.meta.env.BASE_URL;
+const withBase = (path: string) => `${baseUrl}${path.replace(/^\//, "")}`;
+const movishAppUrl = import.meta.env.DEV
+  ? "/Movish-app/"
+  : "https://elmergj.github.io/Movish-app/";
+---
+
+<section class="home-landing" aria-labelledby="home-title">
+  <div class="landing-copy">
+    <p class="eyebrow">MOVISH / DOCUMENTATION</p>
+    <h1 id="home-title">The system behind Movish.</h1>
+    <p class="intro">
+      Explore the app, API, and architecture that bring your movie and TV show
+      experience together.
+    </p>
+    <a class="start-link" href={withBase("/getting-started/")}>
+      Start with the docs
+      <span aria-hidden="true">&#8594;</span>
+    </a>
+  </div>
+
+  <div class="system-stage" aria-label="Movish system overview">
+    <div class="stage-glow stage-glow-one"></div>
+    <div class="stage-glow stage-glow-two"></div>
+
+    <a class="app-mockup" href={movishAppUrl} aria-label="Open Movish App">
+      <div class="phone-speaker"></div>
+      <div class="app-screen">
+        <div class="app-topbar">
+          <span class="app-mark">M</span>
+          <span class="app-label">MOVISH</span>
+          <span class="app-menu">&#8942;</span>
+        </div>
+        <div class="app-heading">
+          <span>Discover</span>
+          <span class="app-filter">&#9776;</span>
+        </div>
+        <div class="poster-row">
+          <div class="poster poster-one"><span>NOW</span></div>
+          <div class="poster poster-two"><span>WATCH</span></div>
+          <div class="poster poster-three"><span>LIST</span></div>
+        </div>
+        <div class="app-section-label">Your collection</div>
+        <div class="show-row">
+          <span class="show-thumb"></span>
+          <span class="show-lines"><i></i><i></i></span>
+          <span class="show-status">+</span>
+        </div>
+        <div class="show-row">
+          <span class="show-thumb show-thumb-alt"></span>
+          <span class="show-lines"><i></i><i></i></span>
+          <span class="show-status">&#10003;</span>
+        </div>
+      </div>
+      <span class="app-caption">View the app <span aria-hidden="true">&#8594;</span></span>
+    </a>
+
+    <div class="server-stack">
+      <span class="connection connection-app-api" aria-hidden="true"></span>
+
+      <a class="server-rack" href={withBase("/api/")} aria-label="Open API Reference">
+        <div class="rack-topline"><span>MOVISH API</span><span class="online-dot"></span></div>
+        <div class="rack-unit"><span class="rack-led"></span><span>AUTH SERVICE</span><b>200</b></div>
+        <div class="rack-unit"><span class="rack-led rack-led-blue"></span><span>CATALOG SERVICE</span><b>200</b></div>
+        <div class="rack-unit"><span class="rack-led rack-led-purple"></span><span>LIST SERVICE</span><b>200</b></div>
+        <div class="rack-footer">api.movish / v1</div>
+      </a>
+
+      <div class="service-nodes" aria-label="Connected services">
+        <a href={withBase("/architecture/")} class="service-node node-tmdb">
+          <span class="node-icon">T</span>
+          <span><b>TMDB</b><small>content source</small></span>
+        </a>
+        <a href={withBase("/architecture/")} class="service-node node-firebase">
+          <span class="node-icon">F</span>
+          <span><b>Firebase</b><small>identity layer</small></span>
+        </a>
+        <a href={withBase("/architecture/")} class="service-node node-data">
+          <span class="node-icon">D</span>
+          <span><b>Data layer</b><small>persistence</small></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<style>
+  @layer starlight.components {
+    .home-landing {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(15rem, 0.75fr) minmax(34rem, 1.25fr);
+      align-items: center;
+      gap: clamp(2rem, 7vw, 8rem);
+      width: min(100%, 1280px);
+      min-height: calc(100vh - var(--sl-nav-height));
+      padding: clamp(1rem, 2vw, 2rem) 1.5rem 4rem;
+      overflow: hidden;
+    }
+
+    .landing-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 34rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 1.5rem;
+      color: #a9e8d4;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    .landing-copy h1 {
+      margin: 0;
+      color: var(--sl-color-white);
+      font-size: clamp(3rem, 4.5vw, 5.2rem) !important;
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+    }
+
+    .intro {
+      max-width: 28rem;
+      margin: 2rem 0;
+      color: color-mix(in srgb, var(--sl-color-white) 68%, transparent);
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+      line-height: 1.6;
+    }
+
+    .start-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.85rem 1.15rem;
+      border: 1px solid color-mix(in srgb, #a9e8d4 65%, transparent);
+      border-radius: 999px;
+      color: var(--sl-color-white);
+      text-decoration: none;
+      transition: background-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .start-link:hover {
+      background: color-mix(in srgb, #a9e8d4 14%, transparent);
+      transform: translateX(4px);
+    }
+
+    .system-stage {
+      position: relative;
+      min-height: 38rem;
+      isolation: isolate;
+    }
+
+    .server-stack {
+      position: absolute;
+      top: 15%;
+      left: 8%;
+      display: grid;
+      gap: 1.25rem;
+      width: min(20rem, 46%);
+    }
+
+    .stage-glow {
+      position: absolute;
+      z-index: -1;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none;
+    }
+
+    .stage-glow-one {
+      top: 8%;
+      right: 8%;
+      width: 20rem;
+      height: 20rem;
+      background: color-mix(in srgb, #5c4de8 19%, transparent);
+    }
+
+    .stage-glow-two {
+      bottom: 4%;
+      left: 8%;
+      width: 15rem;
+      height: 15rem;
+      background: color-mix(in srgb, #55d6be 12%, transparent);
+    }
+
+    .app-mockup {
+      position: absolute;
+      top: 22%;
+      right: -2%;
+      z-index: 4;
+      width: clamp(10rem, 21vw, 15rem);
+      aspect-ratio: 0.51;
+      padding: 0.55rem;
+      border: 1px solid #7068a8;
+      border-radius: 2rem;
+      background: #17172a;
+      box-shadow: 1.5rem 2rem 4rem #0008, 0 0 2rem #6d61e244;
+      color: var(--sl-color-white);
+      text-decoration: none;
+      transform: rotate(0) scale(1);
+      opacity: 0.9;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      animation: float-app 6s ease-in-out infinite;
+    }
+
+    .app-mockup:hover {
+      box-shadow: 1.5rem 2rem 4rem #000b, 0 0 3rem #8c80ff66;
+      transform: translateY(-0.5rem) scale(1.03);
+    }
+
+    .app-caption {
+      position: absolute;
+      right: 0;
+      bottom: -2.1rem;
+      left: 0;
+      color: #a9e8d4;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .app-caption span {
+      display: inline-block;
+      margin-left: 0.35rem;
+      transition: transform 0.25s ease;
+    }
+
+    .app-mockup:hover .app-caption span {
+      transform: translateX(0.25rem);
+    }
+
+    .phone-speaker {
+      position: absolute;
+      top: 0.7rem;
+      left: 50%;
+      z-index: 3;
+      width: 4rem;
+      height: 0.25rem;
+      border-radius: 1rem;
+      background: #05050b;
+      transform: translateX(-50%);
+    }
+
+    .app-screen {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 1.5rem 0.85rem 0.85rem;
+      overflow: hidden;
+      border-radius: 1.55rem;
+      background: linear-gradient(160deg, #26234b, #11121d 58%, #101c29);
+    }
+
+    .app-topbar,
+    .app-heading,
+    .show-row,
+    .rack-topline,
+    .rack-unit {
+      display: flex;
+      align-items: center;
+    }
+
+    .app-topbar {
+      gap: 0.4rem;
+      color: #d4d0ff;
+      font-size: 0.56rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .app-mark {
+      display: grid;
+      width: 1.3rem;
+      height: 1.3rem;
+      place-items: center;
+      border-radius: 0.35rem;
+      background: #8f79ff;
+      color: white;
+      font-size: 0.75rem;
+    }
+
+    .app-menu {
+      margin-left: auto;
+      font-size: 1rem;
+    }
+
+    .app-heading {
+      justify-content: space-between;
+      margin: 2rem 0 0.8rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .app-filter {
+      display: grid;
+      width: 1.5rem;
+      height: 1.5rem;
+      place-items: center;
+      border: 1px solid #ffffff33;
+      border-radius: 0.5rem;
+      color: #a9e8d4;
+      font-size: 0.7rem;
+    }
+
+    .poster-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.45rem;
+    }
+
+    .poster {
+      display: flex;
+      aspect-ratio: 0.68;
+      align-items: end;
+      padding: 0.35rem;
+      border-radius: 0.45rem;
+      background: linear-gradient(145deg, #e7a477, #6e2650 70%);
+      color: #fff;
+      font-size: 0.42rem;
+      font-weight: 700;
+    }
+
+    .poster-two { background: linear-gradient(145deg, #62b8bd, #202b62 70%); }
+    .poster-three { background: linear-gradient(145deg, #e3c36a, #86415c 70%); }
+
+    .app-section-label {
+      margin: 1.1rem 0 0.5rem;
+      color: #a7a4bd;
+      font-size: 0.62rem;
+    }
+
+    .show-row {
+      gap: 0.55rem;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid #ffffff12;
+    }
+
+    .show-thumb {
+      width: 1.8rem;
+      height: 2.2rem;
+      border-radius: 0.3rem;
+      background: linear-gradient(145deg, #c87c71, #38305f);
+    }
+
+    .show-thumb-alt { background: linear-gradient(145deg, #7bb2a7, #253852); }
+    .show-lines { flex: 1; }
+    .show-lines i { display: block; width: 80%; height: 0.25rem; margin: 0.3rem 0; border-radius: 1rem; background: #ffffff44; }
+    .show-lines i + i { width: 52%; background: #ffffff1f; }
+    .show-status { color: #a9e8d4; font-size: 0.9rem; }
+
+    .server-rack {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid #a9e8d455;
+      border-radius: 0.8rem;
+      background: #10191beF;
+      box-shadow: 0 1.5rem 3rem #0009, inset 0 0 2rem #55d6be0c;
+      color: #d7fff4;
+      text-decoration: none;
+      transform: perspective(900px) rotateY(-8deg);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .server-rack:hover {
+      border-color: #a9e8d4;
+      transform: perspective(900px) rotateY(-3deg) translateY(-0.3rem);
+    }
+
+    .rack-topline {
+      justify-content: space-between;
+      padding-bottom: 0.8rem;
+      color: #a9e8d4;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .online-dot,
+    .rack-led {
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: #a9e8d4;
+      box-shadow: 0 0 0.6rem #a9e8d4;
+    }
+
+    .rack-unit {
+      gap: 0.65rem;
+      padding: 0.72rem 0;
+      border-top: 1px solid #ffffff13;
+      color: #aab6b7;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+    }
+
+    .rack-unit b { margin-left: auto; color: #a9e8d4; font-size: 0.6rem; }
+    .rack-led-blue { background: #80c9ff; box-shadow: 0 0 0.6rem #80c9ff; }
+    .rack-led-purple { background: #b2a1ff; box-shadow: 0 0 0.6rem #b2a1ff; }
+    .rack-footer { padding-top: 0.75rem; color: #ffffff55; font-family: monospace; font-size: 0.62rem; }
+
+    .connection {
+      position: absolute;
+      z-index: 1;
+      height: 1px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, #a9e8d4, transparent);
+      opacity: 0.7;
+    }
+
+    .connection::after {
+      position: absolute;
+      top: -0.18rem;
+      left: 30%;
+      width: 0.35rem;
+      height: 0.35rem;
+      border-radius: 50%;
+      background: #a9e8d4;
+      box-shadow: 0 0 0.8rem #a9e8d4;
+      content: "";
+      animation: data-pulse 2.4s linear infinite;
+    }
+
+    .connection-app-api { top: 24%; left: 82%; width: 32%; transform: rotate(12deg); }
+
+    .service-nodes { display: grid; gap: 0.7rem; width: 100%; }
+    .service-node { display: flex; align-items: center; gap: 0.7rem; padding: 0.55rem 0.65rem; border: 1px solid #ffffff1f; border-radius: 0.55rem; background: #10151cdd; color: var(--sl-color-white); text-decoration: none; transition: transform 0.25s ease, border-color 0.25s ease; }
+    .service-node:hover { border-color: #a9e8d4; transform: translateX(-0.35rem); }
+    .node-icon { display: grid; width: 1.6rem; height: 1.6rem; place-items: center; border-radius: 0.4rem; background: #ffffff12; color: #a9e8d4; font-size: 0.72rem; font-weight: 700; }
+    .service-node b, .service-node small { display: block; }
+    .service-node b { font-size: 0.72rem; }
+    .service-node small { margin-top: 0.15rem; color: #ffffff66; font-size: 0.58rem; }
+
+    @keyframes float-app { 0%, 100% { margin-top: 0; } 50% { margin-top: -0.75rem; } }
+    @keyframes data-pulse { from { transform: translateX(0); opacity: 0; } 20% { opacity: 1; } to { transform: translateX(8rem); opacity: 0; } }
+
+    @media (max-width: 900px) {
+      .home-landing { grid-template-columns: 1fr; gap: 1rem; padding-top: 3rem; }
+      .landing-copy { max-width: 40rem; }
+      .system-stage { min-height: 32rem; width: min(100%, 38rem); margin: 0 auto; transform: scale(0.9); transform-origin: top center; }
+    }
+
+    @media (max-width: 560px) {
+      .home-landing { padding-inline: 1rem; }
+      .landing-copy h1 { font-size: clamp(2.8rem, 15vw, 4.5rem); }
+      .system-stage { min-height: 27rem; transform: scale(0.72); width: 139%; margin-left: -19.5%; }
+    }
+  }
+</style>

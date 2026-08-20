@@ -1,16 +1,19 @@
 ---
 import MobileMenuToggle from "./MobileMenuToggle.astro";
 import Footer from "./Footer.astro";
-import SidebarNav from "../SidebarNav.astro";
 import ImageMod from "../ImageMod.astro";
 
-const { hasSidebar } = Astro.locals.starlightRoute;
+const baseUrl = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const configuredBase = baseUrl.replace(/\/$/, "");
+const isHome = currentPath === "" || currentPath === configuredBase;
+const hasSidebar = Astro.locals.starlightRoute.hasSidebar && !isHome;
 ---
 
-<div class="page sl-flex">
+<div class:list={["page sl-flex", isHome && "home-page"]}>
   {
     !hasSidebar ? (
-      <div class="hero-bg">
+      <div class:list={["hero-bg", isHome && "home-hero-bg"]}>
         <ImageMod
           src="/src/assets/hero-bg-light.png"
           alt="Hero Background Light"
@@ -44,10 +47,14 @@ const { hasSidebar } = Astro.locals.starlightRoute;
       </div>
     )
   }
-  <header class={"header" + (hasSidebar ? " has-sidebar" : " no-sidebar")}>
+  <header
+    class={
+      "header" +
+      (hasSidebar ? " has-sidebar" : " no-sidebar")
+    }
+  >
     <slot name="header" />
   </header>
-  {hasSidebar && <SidebarNav />}
   <div class="main-frame">
     <div class="container flex relative">
       {
@@ -75,8 +82,26 @@ const { hasSidebar } = Astro.locals.starlightRoute;
 <style>
   @layer starlight.core {
     .page {
+      position: relative;
+      isolation: isolate;
       flex-direction: column;
       min-height: 100vh;
+    }
+
+    .home-hero-bg {
+      position: fixed;
+      inset: 0;
+      height: 100vh;
+      min-height: 100vh;
+      background: #050509;
+      z-index: -1;
+    }
+
+    .home-page,
+    .home-page .main-frame,
+    .home-page .container,
+    .home-page .content-panel {
+      background: transparent;
     }
     .header {
       z-index: var(--sl-z-index-navbar);

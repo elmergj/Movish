@@ -1,5 +1,21 @@
-<div class="content-panel">
-	<div class="sl-container"><slot /></div>
+---
+import HomeLanding from "../HomeLanding.astro";
+
+const baseUrl = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const configuredBase = baseUrl.replace(/\/$/, "");
+const isHome = currentPath === "" || currentPath === configuredBase;
+const pageState = Astro.locals as unknown as Record<string, number>;
+const panelIndex = pageState.__movishContentPanelIndex ?? 0;
+pageState.__movishContentPanelIndex = panelIndex + 1;
+const showLanding = isHome && panelIndex === 1;
+const hideHomeTitle = isHome && panelIndex === 0;
+---
+
+<div class:list={["content-panel", isHome && "home-content-panel"]}>
+	<div class="sl-container">
+		{showLanding ? <HomeLanding /> : hideHomeTitle ? null : <slot />}
+	</div>
 </div>
 
 <style>
@@ -9,6 +25,14 @@
 		}
 		.content-panel + .content-panel {
 			border-top: 1px solid var(--sl-color-hairline);
+		}
+		.content-panel.home-content-panel {
+			padding-top: 0;
+			border-top: none;
+			background: transparent;
+		}
+		:global(.home-page) .main-pane > .content-panel.home-content-panel:first-child {
+			display: none;
 		}
 		.sl-container {
 			max-width: var(--sl-content-width);
