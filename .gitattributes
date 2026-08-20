@@ -3,4 +3,12 @@
 *.jar binary
 
 docs/site/** linguist-documentation=false
-docs/site/** linguist-detectable=true
+
+*.svg linguist-detectable=false
+*.md linguist-detectable=false
+*.mdx linguist-detectable=false
+
+*.astro linguist-detectable=true
+*.ts linguist-detectable=true
+*.js linguist-detectable=true
+*.css linguist-detectable=true
