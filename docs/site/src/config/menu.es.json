@@ -1,0 +1,21 @@
+{
+  "main": [
+    {
+      "name": "Primeros pasos",
+      "url": "/es/getting-started/"
+    },
+    {
+      "name": "Arquitectura",
+      "url": "/es/architecture/"
+    },
+    {
+      "name": "Referencia de la API",
+      "url": "/es/api/"
+    },
+    {
+      "name": "Acerca de",
+      "url": "/es/about/"
+    }
+  ],
+  "footer": {}
+}

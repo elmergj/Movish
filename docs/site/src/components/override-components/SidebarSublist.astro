@@ -6,6 +6,30 @@ import { flattenSidebar } from "node_modules/@astrojs/starlight/utils/navigation
 import { plainLabel, getIconFromLabel } from "@/lib/utils/textConverter";
 
 const { sublist, nested } = Astro.props;
+const locale = Astro.currentLocale || "en";
+const sidebarTranslations: Record<string, string> = {
+  "Getting Started": "Primeros pasos",
+  Configuration: "Configuración",
+  "First Steps": "Primeros pasos",
+  Installation: "Instalación",
+  Architecture: "Arquitectura",
+  Overview: "Resumen",
+  "System Components": "Componentes del sistema",
+  "Data Flow": "Flujo de datos",
+  "Technology Stack": "Stack tecnológico",
+  Responsibilities: "Responsabilidades",
+  Integrations: "Integraciones",
+  "Use Cases": "Casos de uso",
+  "Domain Model": "Modelo de dominio",
+  Deployment: "Despliegue",
+  "API Reference": "Referencia de la API",
+  Authentication: "Autenticación",
+  Endpoints: "Endpoints",
+  "Data Models": "Modelos de datos",
+  Errors: "Errores",
+};
+const translateSidebarLabel = (label: string) =>
+  locale === "es" ? sidebarTranslations[plainLabel(label)] || plainLabel(label) : plainLabel(label);
 ---
 
 <ul class:list={{ "top-level": !nested }}>
@@ -26,7 +50,7 @@ const { sublist, nested } = Astro.props;
                 class="mr-2.5"
               />
             )}
-            <span>{plainLabel(entry.label)}</span>
+            <span>{translateSidebarLabel(entry.label)}</span>
             {entry.badge && (
               <Badge
                 variant={entry.badge.variant}
@@ -58,7 +82,7 @@ const { sublist, nested } = Astro.props;
                   />
                 )}
 
-                <span class="large">{plainLabel(entry.label)}</span>
+                <span class="large">{translateSidebarLabel(entry.label)}</span>
                 {entry.badge && (
                   <Badge
                     variant={entry.badge.variant}
