@@ -1,30 +1,68 @@
 ---
 const baseUrl = import.meta.env.BASE_URL;
-const withBase = (path: string) => `${baseUrl}${path.replace(/^\//, "")}`;
 const movishAppUrl = import.meta.env.DEV
   ? "/Movish-app/"
   : "https://elmergj.github.io/Movish-app/";
+const isSpanish = Astro.currentLocale === "es";
+const withBase = (path: string) =>
+  `${baseUrl}${isSpanish ? "es/" : ""}${path.replace(/^\//, "")}`;
+const copy = isSpanish
+  ? {
+      eyebrow: "MOVISH / DOCUMENTACIÓN",
+      title: "El sistema detrás de Movish.",
+      intro: "Explora la app, la API y la arquitectura que conectan tu experiencia con películas y series.",
+      start: "Comenzar con la documentación",
+      overview: "Resumen del sistema Movish",
+      openApp: "Abrir Movish App",
+      discover: "Descubrir",
+      collection: "Tu colección",
+      viewApp: "Ver la app",
+      openApi: "Abrir referencia de la API",
+      auth: "SERVICIO DE AUTENTICACIÓN",
+      catalog: "SERVICIO DE CATÁLOGO",
+      lists: "SERVICIO DE LISTAS",
+      content: "fuente de contenido",
+      identity: "capa de identidad",
+      data: "capa de datos",
+      services: "Servicios conectados",
+    }
+  : {
+      eyebrow: "MOVISH / DOCUMENTATION",
+      title: "The system behind Movish.",
+      intro: "Explore the app, API, and architecture that bring your movie and TV show experience together.",
+      start: "Start with the docs",
+      overview: "Movish system overview",
+      openApp: "Open Movish App",
+      discover: "Discover",
+      collection: "Your collection",
+      viewApp: "View the app",
+      openApi: "Open API Reference",
+      auth: "AUTH SERVICE",
+      catalog: "CATALOG SERVICE",
+      lists: "LIST SERVICE",
+      content: "content source",
+      identity: "identity layer",
+      data: "Data layer",
+      services: "Connected services",
+    };
 ---
 
 <section class="home-landing" aria-labelledby="home-title">
   <div class="landing-copy">
-    <p class="eyebrow">MOVISH / DOCUMENTATION</p>
-    <h1 id="home-title">The system behind Movish.</h1>
-    <p class="intro">
-      Explore the app, API, and architecture that bring your movie and TV show
-      experience together.
-    </p>
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h1 id="home-title">{copy.title}</h1>
+    <p class="intro">{copy.intro}</p>
     <a class="start-link" href={withBase("/getting-started/")}>
-      Start with the docs
+      {copy.start}
       <span aria-hidden="true">&#8594;</span>
     </a>
   </div>
 
-  <div class="system-stage" aria-label="Movish system overview">
+  <div class="system-stage" aria-label={copy.overview}>
     <div class="stage-glow stage-glow-one"></div>
     <div class="stage-glow stage-glow-two"></div>
 
-    <a class="app-mockup" href={movishAppUrl} aria-label="Open Movish App">
+    <a class="app-mockup" href={movishAppUrl} aria-label={copy.openApp}>
       <div class="phone-speaker"></div>
       <div class="app-screen">
         <div class="app-topbar">
@@ -33,7 +71,7 @@ const movishAppUrl = import.meta.env.DEV
           <span class="app-menu">&#8942;</span>
         </div>
         <div class="app-heading">
-          <span>Discover</span>
+          <span>{copy.discover}</span>
           <span class="app-filter">&#9776;</span>
         </div>
         <div class="poster-row">
@@ -41,7 +79,7 @@ const movishAppUrl = import.meta.env.DEV
           <div class="poster poster-two"><span>WATCH</span></div>
           <div class="poster poster-three"><span>LIST</span></div>
         </div>
-        <div class="app-section-label">Your collection</div>
+        <div class="app-section-label">{copy.collection}</div>
         <div class="show-row">
           <span class="show-thumb"></span>
           <span class="show-lines"><i></i><i></i></span>
@@ -53,32 +91,32 @@ const movishAppUrl = import.meta.env.DEV
           <span class="show-status">&#10003;</span>
         </div>
       </div>
-      <span class="app-caption">View the app <span aria-hidden="true">&#8594;</span></span>
+      <span class="app-caption">{copy.viewApp} <span aria-hidden="true">&#8594;</span></span>
     </a>
 
     <div class="server-stack">
       <span class="connection connection-app-api" aria-hidden="true"></span>
 
-      <a class="server-rack" href={withBase("/api/")} aria-label="Open API Reference">
+      <a class="server-rack" href={withBase("/api/")} aria-label={copy.openApi}>
         <div class="rack-topline"><span>MOVISH API</span><span class="online-dot"></span></div>
-        <div class="rack-unit"><span class="rack-led"></span><span>AUTH SERVICE</span><b>200</b></div>
-        <div class="rack-unit"><span class="rack-led rack-led-blue"></span><span>CATALOG SERVICE</span><b>200</b></div>
-        <div class="rack-unit"><span class="rack-led rack-led-purple"></span><span>LIST SERVICE</span><b>200</b></div>
+        <div class="rack-unit"><span class="rack-led"></span><span>{copy.auth}</span><b>200</b></div>
+        <div class="rack-unit"><span class="rack-led rack-led-blue"></span><span>{copy.catalog}</span><b>200</b></div>
+        <div class="rack-unit"><span class="rack-led rack-led-purple"></span><span>{copy.lists}</span><b>200</b></div>
         <div class="rack-footer">api.movish / v1</div>
       </a>
 
-      <div class="service-nodes" aria-label="Connected services">
+      <div class="service-nodes" aria-label={copy.services}>
         <a href={withBase("/architecture/")} class="service-node node-tmdb">
           <span class="node-icon">T</span>
-          <span><b>TMDB</b><small>content source</small></span>
+          <span><b>TMDB</b><small>{copy.content}</small></span>
         </a>
         <a href={withBase("/architecture/")} class="service-node node-firebase">
           <span class="node-icon">F</span>
-          <span><b>Firebase</b><small>identity layer</small></span>
+          <span><b>Firebase</b><small>{copy.identity}</small></span>
         </a>
         <a href={withBase("/architecture/")} class="service-node node-data">
           <span class="node-icon">D</span>
-          <span><b>Data layer</b><small>persistence</small></span>
+          <span><b>{copy.data}</b><small>{isSpanish ? "persistencia" : "persistence"}</small></span>
         </a>
       </div>
     </div>

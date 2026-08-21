@@ -1,13 +1,16 @@
 ---
+const isSpanish = Astro.currentLocale === "es";
 ---
 
 <footer class="site-footer">
   <div class="footer-copyright">
-    <p>&copy; 2026 Elmer Gonzalez. All rights reserved.</p>
+    <p>
+      &copy; 2026 Elmer Gonzalez. {isSpanish ? "Todos los derechos reservados." : "All rights reserved."}
+    </p>
   </div>
   <div class="footer-attribution">
     <p>
-      This site was generated using a template from
+      {isSpanish ? "Este sitio se generó utilizando una plantilla de" : "This site was generated using a template from"}
       {" "}
       <a href="https://themefisher.com/products/dockit-astro" target="_blank" rel="noopener"
         >Themefisher</a
