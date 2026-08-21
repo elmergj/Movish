@@ -16,14 +16,64 @@
 .has-sidebar .navbar-actions{
   @apply ml-auto;
 }
+.navbar-actions {
+  gap: 0.75rem;
+}
+.navbar-actions .search-bar,
+.navbar-actions .language-select {
+  margin-inline-end: 0 !important;
+}
 .has-sidebar .search-bar button[data-open-modal]{
-  @apply md:h-[2.7rem] h-[2rem] rounded-full p-1 md:p-1.5 md:px-2.5 md:rounded-lg
+  @apply md:h-[2.7rem] h-[2rem] p-1 md:p-1.5 md:px-2.5;
+  border-radius: 0.7rem;
 }
 .has-sidebar .search-bar span {
   @apply hidden md:inline-block
 }
 .has-sidebar .search-bar kbd {
   @apply hidden md:inline-block
+}
+
+/* Language control */
+.language-select {
+  display: inline-flex;
+  align-items: center;
+}
+
+.language-select starlight-lang-select label {
+  min-height: 2.7rem;
+  border: 1px solid color-mix(in srgb, var(--sl-color-white) 14%, transparent);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--sl-color-white) 6%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--sl-color-white) 8%, transparent);
+  color: color-mix(in srgb, var(--sl-color-white) 72%, transparent);
+  transition: border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.language-select starlight-lang-select label select {
+  min-height: 2.7rem;
+}
+
+.language-select starlight-lang-select label:hover,
+.language-select starlight-lang-select label:focus-within {
+  border-color: color-mix(in srgb, var(--sl-color-accent) 58%, transparent);
+  background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
+  color: var(--sl-color-white);
+}
+
+.language-select starlight-lang-select label .label-icon {
+  color: var(--sl-color-accent);
+}
+
+.language-select starlight-lang-select label .caret {
+  color: color-mix(in srgb, var(--sl-color-white) 58%, transparent);
+}
+
+.language-select starlight-lang-select select {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .navbar {
