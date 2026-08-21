@@ -6,13 +6,15 @@ description: Learn the basics of setting up and using Movish.
 import Grid from "~/components/user-components/Grid.astro";
 import NewCard from "~/components/user-components/NewCard.astro";
 
-Welcome to the Movish documentation. This section introduces the project and guides you through the initial setup.
+Welcome to the Movish API documentation. This section introduces the project and guides you through the initial setup for local development.
+
+> **Development status:** Movish is actively evolving. Some features and implementation details are provisional and may change as the domain model and API mature.
 
 ## What is Movish?
 
-Movish is a platform for keeping track of your favorite movies and TV shows. It allows you to discover new movies and TV shows using search filters, create lists, and assign a status to each title based on your viewing progress.
+Movish is a platform for discovering, organizing, and following movies and TV shows. It is designed to let users search external catalogs, manage a personal library, create watchlists, mark favorites, and track the status of each title.
 
-The platform consists of two independent projects. The first is Movish API, which serves as a server-side API and provides the data and services required by the platform. The second is Movish App, the application that allows users to enjoy all the features offered by the platform on their devices.
+The platform consists of two independent projects. Movish API is the server-side application that provides the data and services required by the platform. Movish App is the client application that consumes the API and gives users access to those features on their devices.
 
 <Grid columns={2}>
   <NewCard title="Movish API" icon="document" size="sm">
@@ -26,12 +28,12 @@ The platform consists of two independent projects. The first is Movish API, whic
 
 ## What is Movish API?
 
-Movish API is the backend that manages the core logic that powers the Movish App mobile application.
+Movish API is a Java and Spring Boot backend that manages the core logic behind Movish App.
 
-Its primary responsibility is to process and structure the data provided by The Movie Database (TMDB) so that Movish users can follow, organize, and discover new TV shows and movies.
+Its primary responsibility is to coordinate catalog data from external providers so that users can discover, organize, and follow movies and TV shows. The current codebase includes provider integrations and is designed to keep those external details behind application and domain-level boundaries.
 
-The Movie Database (TMDB) is the primary content provider used by the platform. Data is retrieved through its public API, available in the The Movie Database API Documentation, and is used in accordance with the terms outlined in The Movie Database API Terms of Use.
+The project includes integration code for providers such as The Movie Database (TMDB). Provider credentials and URLs are configured through environment variables and must not be committed to source control. Review each provider's documentation and terms of use before using its data.
 
-In addition, Movish API provides the services required for user management and authentication. To accomplish this, it uses the Firebase Admin SDK to validate authentication tokens sent by the mobile application.
+Movish API also provides services for user registration, account management, authentication, libraries, and watchlists.
 
-The backend is also responsible for data persistence and for providing other essential functionality required by the application, acting as the central layer between the mobile application, external services, and the data layer.
+The backend is responsible for persistence and acts as the central layer between the client application, external services, and the data layer.

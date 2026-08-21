@@ -3,15 +3,20 @@ title: Use Cases
 description: Capture the main user and system use cases supported by Movish.
 ---
 
-This page is the starting point for documenting the behavior that Movish API supports for Movish App.
+Movish API organizes user behavior through application commands, queries, and services. These use cases coordinate domain rules and repository ports without exposing infrastructure details to the client.
 
 Initial use-case areas include:
 
-- Discovering movies and TV shows.
-- Searching and filtering catalog content.
-- Viewing normalized content details from TMDB.
-- Creating and managing personal lists.
-- Assigning viewing status to a movie or TV show.
-- Managing authenticated user actions.
+- Searching catalog content through `SearchMediaQuery`.
+- Viewing media details and normalized catalog data.
+- Adding and removing titles from a personal library.
+- Updating favorite and tracking status for library titles.
+- Creating, renaming, and deleting watchlists.
+- Adding and removing titles from watchlists.
+- Registering users and updating account profiles.
 
-Each use case should later describe its actor, goal, request, expected result, relevant domain rules, and failure cases. Detailed flows should be added only after they are confirmed against the API and application behavior.
+## Application Flow
+
+Commands represent state-changing operations, while queries represent reads. Application services coordinate these operations and return explicit success or failure outcomes to the REST layer.
+
+Each use case should describe its actor, goal, request, expected result, relevant domain rules, and failure cases. Detailed endpoint examples can be added as the API contracts stabilize.
