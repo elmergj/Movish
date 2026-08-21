@@ -1,0 +1,39 @@
+---
+title: Primeros pasos
+description: Aprende a configurar Movish y comenzar el desarrollo local.
+---
+
+import Grid from "~/components/user-components/Grid.astro";
+import NewCard from "~/components/user-components/NewCard.astro";
+
+Bienvenido a la documentación de Movish API. Esta sección presenta el proyecto y te guía durante la configuración inicial para el desarrollo local.
+
+> **Estado de desarrollo:** Movish evoluciona activamente. Algunas funcionalidades y detalles de implementación son provisionales y pueden cambiar mientras maduran el modelo de dominio y la API.
+
+## ¿Qué es Movish?
+
+Movish es una plataforma para descubrir, organizar y seguir películas y series. Está diseñada para permitir buscar en catálogos externos, gestionar una biblioteca personal, crear listas de seguimiento, marcar favoritos y controlar el estado de cada título.
+
+La plataforma consta de dos proyectos independientes. Movish API es la aplicación del lado del servidor que proporciona los datos y servicios necesarios. Movish App es la aplicación cliente que consume la API y ofrece esas funcionalidades en los dispositivos de los usuarios.
+
+<Grid columns={2}>
+  <NewCard title="Movish API" icon="document" size="sm">
+    El backend que proporciona la lógica principal, los servicios de datos, la autenticación y la persistencia utilizados por Movish App.
+  </NewCard>
+
+  <NewCard title="Movish App" icon="rocket" size="sm">
+    La aplicación cliente desde la que los usuarios descubren, organizan y siguen sus películas y series.
+  </NewCard>
+</Grid>
+
+## ¿Qué es Movish API?
+
+Movish API es un backend Java y Spring Boot que gestiona la lógica principal de Movish App.
+
+Su responsabilidad principal es coordinar los datos de catálogos externos para que los usuarios puedan descubrir, organizar y seguir películas y series. El código actual incluye integraciones con proveedores y está diseñado para mantener esos detalles externos detrás de límites de aplicación y dominio.
+
+El proyecto incluye código de integración para proveedores como The Movie Database (TMDB). Las credenciales y URLs de los proveedores se configuran mediante variables de entorno y nunca deben incluirse en el control de versiones. Revisa la documentación y las condiciones de uso de cada proveedor antes de utilizar sus datos.
+
+Movish API también proporciona servicios para el registro de usuarios, la gestión de cuentas, la autenticación, las bibliotecas y las listas de seguimiento.
+
+El backend es responsable de la persistencia y funciona como capa central entre la aplicación cliente, los servicios externos y la capa de datos.

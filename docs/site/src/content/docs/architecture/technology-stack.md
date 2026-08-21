@@ -7,14 +7,19 @@ Movish API is built with a focused backend stack:
 
 | Technology | Role |
 | --- | --- |
-| Java | Backend programming language. |
-| Spring Boot | Application framework for the API and backend services. |
-| Gradle | Build automation and dependency management. |
+| Java 21 | Backend programming language and runtime target. |
+| Spring Boot 3.5 | Application framework for the API and backend services. |
+| Spring Web | REST controllers and HTTP API support. |
+| Spring Data JPA | Persistence abstraction for the relational data model. |
+| Spring Security | Authentication and request security support. |
+| Gradle Kotlin DSL | Build automation and dependency management. |
 | PostgreSQL | Relational database and persistence layer. |
-| Firebase | Authentication provider and token verification source. |
-| TMDB API | External source for movie and TV show content. |
+| MapStruct | Mapping between application and integration models. |
+| Lombok | Boilerplate reduction in Java classes. |
+| TMDB / OMDb adapters | External movie and TV catalog integrations. |
+| Firebase integration | Authentication and token validation support. |
 
-This page describes the technologies at a high level. Version-specific details, local development requirements, and environment configuration should be added after they are confirmed in the backend repository.
+Local development requires JDK 21 and PostgreSQL. See [Getting Started](../getting-started/) for installation and environment configuration.
 
 ## Useful References
 

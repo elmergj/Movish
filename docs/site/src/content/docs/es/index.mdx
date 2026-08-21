@@ -1,20 +1,20 @@
 ---
-title: Primeros pasos
-description: Aprende los conceptos básicos para configurar y utilizar Movish.
+title: Documentación de Movish
+description: Documentación del proyecto Movish API.
 ---
 
 import Grid from "~/components/user-components/Grid.astro";
 import NewCard from "~/components/user-components/NewCard.astro";
 
-# Primeros pasos
+Bienvenido a la documentación en español de Movish API. Aquí encontrarás información sobre el proyecto, la arquitectura, la configuración local y el contrato HTTP de la API.
 
-Bienvenido a la documentación de Movish. En esta sección se presenta el proyecto y se explica cómo realizar la configuración inicial.
+> **Estado de desarrollo:** Movish está en desarrollo activo. Algunas funcionalidades, decisiones de arquitectura y contratos pueden cambiar mientras evoluciona el proyecto.
 
 ## ¿Qué es Movish?
 
-Movish es una plataforma para dar seguimiento a tus películas y series favoritas. Te permite descubrir nuevas películas y series mediante filtros de búsqueda, crear listas y asignarles un estado según cómo las estés viendo.
+Movish es una plataforma para descubrir, organizar y seguir películas y series. Está diseñada para buscar en catálogos externos, gestionar una biblioteca personal, crear listas de seguimiento, marcar favoritos y controlar el estado de cada título.
 
-La plataforma consta de dos proyectos independientes. El primero es Movish API, que funciona como un servicio backend y proporciona los datos y servicios necesarios para la plataforma. El segundo es Movish App, la aplicación que permite a los usuarios disfrutar de todas las funcionalidades que ofrece la plataforma desde sus dispositivos.
+La plataforma consta de dos proyectos independientes. Movish API es la aplicación backend que proporciona los datos y servicios necesarios. Movish App es la aplicación cliente que consume la API y ofrece estas funcionalidades desde los dispositivos de los usuarios.
 
 <Grid columns={2}>
   <NewCard title="Movish API" icon="document" size="sm">
@@ -28,15 +28,15 @@ La plataforma consta de dos proyectos independientes. El primero es Movish API, 
 
 ## ¿Qué es Movish API?
 
-Movish API es el backend que gestiona la lógica principal que sustenta la aplicación móvil Movish App.
+Movish API es un backend Java y Spring Boot que gestiona la lógica principal de Movish App.
 
-Su función principal es procesar y estructurar los datos proporcionados por The Movie Database (TMDB) para que los usuarios de Movish puedan seguir, organizar y descubrir nuevas series y películas.
+Su responsabilidad principal es coordinar datos de catálogos externos para que los usuarios puedan descubrir, organizar y seguir películas y series. El código actual incluye integraciones con proveedores y mantiene esos detalles externos detrás de límites de aplicación y dominio.
 
-The Movie Database (TMDB) es el principal proveedor de contenido utilizado por la plataforma. Los datos se obtienen a través de su API pública, disponible en la Documentación de la API de The Movie Database, y se utilizan de acuerdo con las condiciones establecidas en las Condiciones de uso de la API de The Movie Database.
+El proyecto incluye código de integración para proveedores como The Movie Database (TMDB). Las credenciales y URLs de proveedores se configuran mediante variables de entorno y no deben incluirse en el control de versiones. Revisa la documentación y las condiciones de uso de cada proveedor antes de utilizar sus datos.
 
-Además, Movish API proporciona los servicios necesarios para la gestión de usuarios y la autenticación. Para ello, utiliza el Firebase Admin SDK para validar los tokens de autenticación enviados por la aplicación móvil.
+Movish API también proporciona servicios para el registro de usuarios, la gestión de cuentas, la autenticación, las bibliotecas y las listas de seguimiento.
 
-Por otra parte, el backend es responsable de gestionar la persistencia de los datos y de proporcionar otras funcionalidades esenciales para el funcionamiento de la aplicación, actuando como punto central entre la aplicación móvil, los servicios externos y la capa de datos.
+El backend es responsable de la persistencia y actúa como capa central entre la aplicación cliente, los servicios externos y la capa de datos.
 
 <Grid columns={2}>
   <NewCard title="Documentación de la API" icon="document" size="sm">
@@ -47,3 +47,9 @@ Por otra parte, el backend es responsable de gestionar la persistencia de los da
     Comprende cómo trabajan conjuntamente la aplicación, la API, los servicios externos y la capa de datos.
   </NewCard>
 </Grid>
+
+## Comenzar
+
+Empieza por [Primeros pasos](./getting-started/) para instalar el proyecto, configurar PostgreSQL y preparar las variables de entorno.
+
+Después consulta la [Arquitectura](./architecture/) y la [Referencia de la API](./api/) para conocer las capas del backend, las integraciones y los endpoints disponibles.

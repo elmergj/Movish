@@ -15,14 +15,18 @@ The backend exists between the mobile client, external providers, and the data l
 ## Movish API
 
 - Exposes the API consumed by Movish App.
+- Translates HTTP requests into application commands and queries.
 - Coordinates application behavior and data access.
-- Wraps and normalizes content received from TMDB.
-- Validates authentication information supplied by the client.
+- Applies business rules through domain entities and services.
+- Normalizes content received from external catalog providers.
+- Resolves authenticated users and enforces protected operations.
 - Manages access to PostgreSQL-backed application data.
+
+The backend keeps these responsibilities separated across its application, domain, infrastructure, and REST interface packages.
 
 ## External Providers
 
-- TMDB provides movie and TV show content.
-- Firebase provides authentication services.
+- TMDB and OMDb provide movie and TV show content through provider adapters.
+- Firebase authentication support validates identity information when configured.
 
-These providers remain external boundaries. Their APIs should not define the complete public contract of Movish App.
+These providers remain external boundaries. Their APIs should not define the complete public contract of Movish App or the internal domain model.
